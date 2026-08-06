@@ -2,5 +2,5 @@
     autostage = true
     remote = r2
 ['remote "r2"']
-    url = s3://kopdes-dvc-bucket
-    endpointurl = https://YOUR_CLOUDFLARE_ACCOUNT_ID.r2.cloudflarestorage.com
+    url = s3://kopdes
+    endpointurl = https://d506d851c5b269e38a2a0efd6cbf9a01.r2.cloudflarestorage.com
