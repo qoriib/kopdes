@@ -1,4 +1,12 @@
 stages:
+  fetch_geo_json:
+    cmd: python scrape/fetch_openadmin.py
+    deps:
+      - scrape/fetch_openadmin.py
+    outs:
+      - data/raw/province.json
+      - data/raw/regency.json
+
   scrape_provinces:
     cmd: python scrape/scrape_provinces.py
     deps:

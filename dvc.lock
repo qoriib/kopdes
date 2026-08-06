@@ -32,3 +32,19 @@ stages:
       hash: md5
       md5: 3aa8a3dfb414bdd861695947cade938b
       size: 35922
+  fetch_geo_json:
+    cmd: python scrape/fetch_openadmin.py
+    deps:
+    - path: scrape/fetch_openadmin.py
+      hash: md5
+      md5: 7973369cda4eb6bc78eae320444d01aa
+      size: 3152
+    outs:
+    - path: data/raw/province.json
+      hash: md5
+      md5: 930e32a7a814510473e217dae4b23b4b
+      size: 8282
+    - path: data/raw/regency.json
+      hash: md5
+      md5: 98f57cbc7c7352e19b820416bdebfeca
+      size: 182678
