@@ -355,62 +355,6 @@ jobs:
           dvc add reports/clustering_report.md reports/model_metrics.json
           dvc push
 
-      - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-files-evaluate
-          path: |
-            data/**/*.dvc
-            data/**/.gitignore
-            models/*.dvc
-            models/.gitignore
-            reports/*.dvc
-            reports/.gitignore
-
-  # ──────────────────────────────────────────────
-  # Stage 6: AI Interpretation
-  # ──────────────────────────────────────────────
-  interpret:
-    name: AI Interpretation
-    needs: evaluate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v8
-        with:
-          name: dvc-files-evaluate
-
-      - name: DVC Pull All Upstream Data
-        run: dvc pull
-
-      - name: Run AI Interpretation
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: python src/interpret.py
-
-      - name: DVC Add & Push
-        run: |
-          dvc add reports/ai_interpretation.md reports/cluster_labels.json
-          dvc push
-
       - name: Setup CML
         uses: iterative/setup-cml@v1
 
@@ -418,14 +362,11 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Pull report files for CML (already local from dvc pull + script output)
           echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > cml_report.md
           echo "" >> cml_report.md
           cat reports/eda_summary.md >> cml_report.md
           echo "" >> cml_report.md
           cat reports/clustering_report.md >> cml_report.md
-          echo "" >> cml_report.md
-          cat reports/ai_interpretation.md >> cml_report.md
           echo "" >> cml_report.md
 
           cml comment create cml_report.md || echo "CML comment created."
@@ -437,3 +378,4 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "auto: update DVC tracking files and reports [skip ci]"
           git push
+
