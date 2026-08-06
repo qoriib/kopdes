@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 import urllib.request
 import urllib.error
 import pandas as pd
@@ -19,7 +20,7 @@ def load_env():
                     os.environ[k.strip()] = v.strip()
 
 def main():
-    print("[+] Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI...")
+    print("[+] Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI (@cf/openai/gpt-oss-120b)...")
     load_env()
     
     account_id = os.environ.get("CF_ACCOUNT_ID")
@@ -30,8 +31,9 @@ def main():
         sys.exit(1)
         
     data_path = os.path.join(os.path.dirname(__file__), "..", "data", "model", "clustered_regencies.csv")
-    metrics_path = os.path.join(os.path.dirname(__file__), "..", "reports", "model_metrics.json")
-    output_path = os.path.join(os.path.dirname(__file__), "..", "reports", "ai_interpretation.md")
+    metrics_path = os.path.join(os.path.dirname(__file__), "..", "reports", "evaluate_metrics.json")
+    output_path = os.path.join(os.path.dirname(__file__), "..", "reports", "interpret_report.md")
+    labels_output_path = os.path.join(os.path.dirname(__file__), "..", "reports", "interpret_labels.json")
     
     if not os.path.exists(data_path) or not os.path.exists(metrics_path):
         print("[!] Error: Data atau metrik evaluasi tidak ditemukan.")
@@ -62,11 +64,8 @@ def main():
         profile_text += f"  - Rata-rata Nilai Transaksi: Rp {row['nilai_transaksi']:,}\n\n"
         
     prompt = f"""
-Analisis hasil pengelompokan (clustering) koperasi kabupaten/kota di Indonesia berikut.
-Berdasarkan karakteristik rata-rata tiap klaster di bawah ini, harap:
-1. Berikan nama yang representatif dan profesional untuk masing-masing klaster (misalnya, "Klaster 0: Pusat Koperasi Mikro Berkembang").
-2. Jelaskan interpretasi mendalam karakteristik unik dari masing-masing klaster (kekuatan, kelemahan, pola).
-3. Berikan rekomendasi kebijakan pembangunan daerah yang spesifik untuk setiap klaster.
+Anda adalah pakar analis data koperasi Indonesia.
+Analisis hasil pengelompokan (clustering) koperasi kabupaten/kota di Indonesia berikut:
 
 Karakteristik Klaster:
 {profile_text}
@@ -75,10 +74,26 @@ Metrik Nasional:
 - Jumlah klaster: {metrics['clustering_metrics']['number_of_clusters']}
 - Silhouette Score: {metrics['clustering_metrics']['silhouette_score']}
 
-Tuliskan output dalam Bahasa Indonesia, gunakan format Markdown yang rapi. Mulai langsung dengan '# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES'.
+Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
+{{
+  "labels": {{
+    "0": {{
+      "label_name": "Klaster 0 - [Berikan Nama Klaster yang Representatif dan Profesional]",
+      "description": "Klaster ini mencakup rata-rata [rata-rata koperasi] dengan rata-rata nilai transaksi Rp [nilai transaksi]..."
+    }},
+    "1": {{
+      "label_name": "Klaster 1 - [Berikan Nama Klaster yang Representatif dan Profesional]",
+      "description": "Klaster ini mencakup rata-rata [rata-rata koperasi] dengan rata-rata nilai transaksi Rp [nilai transaksi]..."
+    }}
+    // Dan seterusnya untuk semua klaster yang ada
+  }},
+  "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 3-4 paragraf. Jelaskan interpretasi mendalam karakteristik unik dari masing-masing klaster (kekuatan, kelemahan, pola) serta rekomendasi kebijakan pembangunan daerah yang spesifik untuk setiap klaster. Gunakan format Markdown untuk isi laporan ini.]"
+}}
+
+Pastikan output hanya berupa JSON valid dan tidak mengandung format markdown tambahan atau penjelasan lain di luar JSON tersebut.
 """
 
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/@cf/meta/llama-3-8b-instruct"
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/@cf/openai/gpt-oss-120b"
     headers = {
         "Authorization": f"Bearer {api_token}",
         "Content-Type": "application/json"
@@ -86,9 +101,10 @@ Tuliskan output dalam Bahasa Indonesia, gunakan format Markdown yang rapi. Mulai
     
     payload = {
         "messages": [
-            {"role": "system", "content": "Anda adalah asisten analisis data ahli perkoperasian Indonesia."},
+            {"role": "system", "content": "Anda adalah asisten analisis data ahli perkoperasian Indonesia yang hanya menjawab dalam format JSON sesuai spesifikasi."},
             {"role": "user", "content": prompt}
-        ]
+        ],
+        "max_tokens": 3000
     }
     
     req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
@@ -99,11 +115,47 @@ Tuliskan output dalam Bahasa Indonesia, gunakan format Markdown yang rapi. Mulai
             res_data = json.loads(res_body)
             
             if res_data.get("success"):
-                ai_text = res_data["result"]["response"]
-                os.makedirs(os.path.dirname(output_path), exist_ok=True)
-                with open(output_path, "w", encoding="utf-8") as f:
-                    f.write(ai_text)
-                print(f"[SAVED] Laporan Interpretasi AI -> {output_path}")
+                result_obj = res_data.get("result", {})
+                
+                # Try chat completions structure first
+                choices = result_obj.get("choices")
+                ai_text = None
+                if choices and len(choices) > 0:
+                    ai_text = choices[0].get("message", {}).get("content")
+                
+                # Fallback to response or text
+                if not ai_text:
+                    ai_text = result_obj.get("response") or result_obj.get("text")
+                    
+                if not ai_text:
+                    print("[!] Error: response/text/content tidak ditemukan dalam result:")
+                    print(res_data)
+                    sys.exit(1)
+                
+                # Clean up any potential markdown code block formatting
+                clean_text = ai_text.strip()
+                if clean_text.startswith("```"):
+                    clean_text = re.sub(r"^```(?:json)?\n", "", clean_text)
+                    clean_text = re.sub(r"\n```$", "", clean_text)
+                
+                try:
+                    result_json = json.loads(clean_text)
+                    report_text = result_json.get("report", "")
+                    labels_dict = result_json.get("labels", {})
+                    
+                    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                    with open(output_path, "w", encoding="utf-8") as f:
+                        f.write(report_text)
+                    print(f"[SAVED] Laporan Interpretasi AI -> {output_path}")
+                    
+                    with open(labels_output_path, "w", encoding="utf-8") as f:
+                        json.dump(labels_dict, f, indent=2, ensure_ascii=False)
+                    print(f"[SAVED] Cluster Labels JSON -> {labels_output_path}")
+                except Exception as parse_err:
+                    print(f"[!] Gagal mem-parse output AI ke JSON: {parse_err}")
+                    print("Output raw dari AI:")
+                    print(ai_text)
+                    sys.exit(1)
             else:
                 print(f"[!] Gagal: {res_data.get('errors')}")
                 sys.exit(1)

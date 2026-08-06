@@ -353,7 +353,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create reports/clustering_report.md
+          cml comment create reports/evaluate_report.md
 
       - name: Upload DVC Lock
         uses: actions/upload-artifact@v7
@@ -407,7 +407,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create reports/ai_interpretation.md
+          cml comment create reports/interpret_report.md
 
       - name: Commit & Push to GitHub
         run: |

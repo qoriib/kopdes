@@ -14,8 +14,8 @@ REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
 SCALED_FEATURES_CSV = os.path.join(PREPROCESS_DIR, "scaled_features.csv")
 CLUSTERED_REGENCIES_CSV = os.path.join(DATA_MODEL_DIR, "clustered_regencies.csv")
 
-MODEL_METRICS_JSON = os.path.join(REPORTS_DIR, "model_metrics.json")
-CLUSTERING_REPORT_MD = os.path.join(REPORTS_DIR, "clustering_report.md")
+MODEL_METRICS_JSON = os.path.join(REPORTS_DIR, "evaluate_metrics.json")
+CLUSTERING_REPORT_MD = os.path.join(REPORTS_DIR, "evaluate_report.md")
 
 def main():
     print("[+] Memulai Stage Evaluasi Model Clustering...")

@@ -1,7 +1,9 @@
 /eda_summary.md
-/clustering_report.md
+/eda_metrics.json
+/evaluate_report.md
+/evaluate_metrics.json
+/interpret_report.md
+/interpret_labels.json
 /cluster_labels.json
-/ai_interpretation.md
-/metrics.json
-/model_metrics.json
 /cml_report.md
+

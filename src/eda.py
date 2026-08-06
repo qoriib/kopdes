@@ -12,7 +12,7 @@ REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
 TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.csv")
 TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
 
-METRICS_JSON = os.path.join(REPORTS_DIR, "metrics.json")
+METRICS_JSON = os.path.join(REPORTS_DIR, "eda_metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
 
 def read_csv_data(filepath):

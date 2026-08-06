@@ -35,7 +35,7 @@ stages:
       - data/transform/transformed_regencies.csv
     outs:
       - reports/eda_summary.md
-      - reports/metrics.json
+      - reports/eda_metrics.json
 
   preprocess:
     cmd: python src/preprocess.py
@@ -64,14 +64,15 @@ stages:
       - data/preprocess/scaled_features.csv
       - data/model/clustered_regencies.csv
     outs:
-      - reports/clustering_report.md
-      - reports/model_metrics.json
+      - reports/evaluate_report.md
+      - reports/evaluate_metrics.json
 
   interpret:
     cmd: python src/interpret.py
     deps:
       - src/interpret.py
-      - reports/model_metrics.json
+      - reports/evaluate_metrics.json
       - data/model/clustered_regencies.csv
     outs:
-      - reports/ai_interpretation.md
+      - reports/interpret_labels.json
+      - reports/interpret_report.md

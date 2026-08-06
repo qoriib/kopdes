@@ -13,17 +13,17 @@ stages:
       size: 39249
     - path: src/eda.py
       hash: md5
-      md5: d37fdf76a6e07b7539305193f8400a40
-      size: 5477
+      md5: 75134152726afe7de5db364a5d4a22e1
+      size: 5481
     outs:
+    - path: reports/eda_metrics.json
+      hash: md5
+      md5: fc97a1abeffb151f2378d31d00205989
+      size: 592
     - path: reports/eda_summary.md
       hash: md5
       md5: 2d3791ac554897c8809eb54a7c5aa920
       size: 1517
-    - path: reports/metrics.json
-      hash: md5
-      md5: fc97a1abeffb151f2378d31d00205989
-      size: 592
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -37,17 +37,17 @@ stages:
       size: 102948
     - path: src/evaluate.py
       hash: md5
-      md5: 606dfc5ee3dacc731b8234c7625af5c1
-      size: 4198
+      md5: f64cf0570d7380e02002d8f0e8e1e77c
+      size: 4199
     outs:
-    - path: reports/clustering_report.md
-      hash: md5
-      md5: 48b8db03ca495db78743ec9a2d079bc7
-      size: 1790
-    - path: reports/model_metrics.json
+    - path: reports/evaluate_metrics.json
       hash: md5
       md5: d55929a88eae43e8d5897c4e37c909b8
       size: 175
+    - path: reports/evaluate_report.md
+      hash: md5
+      md5: 48b8db03ca495db78743ec9a2d079bc7
+      size: 1790
   model:
     cmd: python src/model.py
     deps:
@@ -167,16 +167,20 @@ stages:
       hash: md5
       md5: 24ea5b3944414272966686e4b5b37a9b
       size: 41308
-    - path: reports/model_metrics.json
+    - path: reports/evaluate_metrics.json
       hash: md5
       md5: d55929a88eae43e8d5897c4e37c909b8
       size: 175
     - path: src/interpret.py
       hash: md5
-      md5: e5e926884cd75571071a520e3ddf920d
-      size: 4889
+      md5: 2307a08e900f2865fa9095267548ae3c
+      size: 7529
     outs:
-    - path: reports/ai_interpretation.md
+    - path: reports/interpret_labels.json
       hash: md5
-      md5: f4afc5ef4913b14b89074fecb8c172be
-      size: 2048
+      md5: 844c6991761ccb92fa8bf821cb104c1d
+      size: 2324
+    - path: reports/interpret_report.md
+      hash: md5
+      md5: 890b18f26a40f9896d10870efe9f2dee
+      size: 3013

@@ -1,5 +1,0 @@
-outs:
-- md5: 9d7ab9f0141558905618e02c77a3725c
-  size: 1426
-  hash: md5
-  path: cluster_labels.json
