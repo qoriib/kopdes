@@ -144,6 +144,8 @@ Pastikan output hanya berupa JSON valid dan tidak mengandung format markdown tam
                     labels_dict = result_json.get("labels", {})
                     
                     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                    if not report_text.strip().endswith("---"):
+                        report_text = report_text.strip() + "\n\n---\n"
                     with open(output_path, "w", encoding="utf-8") as f:
                         f.write(report_text)
                     print(f"[SAVED] Laporan Interpretasi AI -> {output_path}")

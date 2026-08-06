@@ -45,6 +45,7 @@ stages:
     outs:
       - data/preprocess/scaled_features.csv
       - data/preprocess/preprocess_meta.json
+      - reports/preprocess_report.md
 
   model:
     cmd: python src/model.py

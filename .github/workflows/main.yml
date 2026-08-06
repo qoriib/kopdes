@@ -38,7 +38,7 @@ jobs:
         run: cp dvc.lock dvc-lock-provinces.lock
 
       - name: Cache Provinces Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-provinces.lock
           key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
@@ -66,7 +66,7 @@ jobs:
         run: cp dvc.lock dvc-lock-regencies.lock
 
       - name: Cache Regencies Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-regencies.lock
           key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
@@ -87,13 +87,13 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore Provinces Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-provinces.lock
           key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Restore Regencies Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-regencies.lock
           key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
@@ -124,7 +124,7 @@ jobs:
         run: cp dvc.lock dvc-lock-transform.lock
 
       - name: Cache Transform Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-transform.lock
           key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
@@ -145,7 +145,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore Transform Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-transform.lock
           key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
@@ -175,7 +175,7 @@ jobs:
         run: cp dvc.lock dvc-lock-eda.lock
 
       - name: Cache EDA Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-eda.lock
           key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
@@ -196,7 +196,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore Transform Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-transform.lock
           key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
@@ -213,11 +213,20 @@ jobs:
       - name: DVC Push
         run: dvc push
 
+      - name: Post Preprocess Report to Step Summary
+        run: cat reports/preprocess_report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Preprocess Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprocess-report
+          path: reports/preprocess_report.md
+
       - name: Copy Lock for Caching
         run: cp dvc.lock dvc-lock-preprocess.lock
 
       - name: Cache Preprocess Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-preprocess.lock
           key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
@@ -238,7 +247,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore Preprocess Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-preprocess.lock
           key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
@@ -259,7 +268,7 @@ jobs:
         run: cp dvc.lock dvc-lock-model.lock
 
       - name: Cache Model Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-model.lock
           key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
@@ -280,13 +289,13 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore EDA Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-eda.lock
           key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Restore Model Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-model.lock
           key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
@@ -326,7 +335,7 @@ jobs:
         run: cp dvc.lock dvc-lock-evaluate.lock
 
       - name: Cache Evaluate Lock
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: dvc-lock-evaluate.lock
           key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
@@ -344,7 +353,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Restore Evaluate Lock
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: dvc-lock-evaluate.lock
           key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
