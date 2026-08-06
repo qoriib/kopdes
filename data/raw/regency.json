@@ -1,3600 +1,3600 @@
 [
   {
-    "id": "1101",
-    "province_id": "11",
-    "name": "Kabupaten Simeulue",
-    "latitude": 3.255,
-    "longitude": 97.174
-  },
-  {
-    "id": "1102",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Singkil",
-    "latitude": 3.473,
-    "longitude": 97.819
-  },
-  {
-    "id": "1103",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Selatan",
-    "latitude": 4.933,
-    "longitude": 97.784
-  },
-  {
-    "id": "1104",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Tenggara",
-    "latitude": 4.622,
-    "longitude": 96.846
-  },
-  {
-    "id": "1105",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Timur",
-    "latitude": 4.153,
-    "longitude": 96.131
-  },
-  {
-    "id": "1106",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Tengah",
-    "latitude": 5.297,
-    "longitude": 95.611
-  },
-  {
-    "id": "1107",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Barat",
+    "province_id": 1,
+    "regency_no": 1,
+    "name": "KAB. ACEH BARAT",
     "latitude": 5.368,
     "longitude": 95.958
   },
   {
-    "id": "1108",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Besar",
-    "latitude": 5.076,
-    "longitude": 97.303
-  },
-  {
-    "id": "1109",
-    "province_id": "11",
-    "name": "Kabupaten Pidie",
-    "latitude": 2.461,
-    "longitude": 96.38
-  },
-  {
-    "id": "1110",
-    "province_id": "11",
-    "name": "Kabupaten Bireuen",
-    "latitude": 2.271,
-    "longitude": 97.815
-  },
-  {
-    "id": "1111",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Utara",
-    "latitude": 5.208,
-    "longitude": 96.726
-  },
-  {
-    "id": "1112",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Barat Daya",
+    "province_id": 1,
+    "regency_no": 2,
+    "name": "KAB. ACEH BARAT DAYA",
     "latitude": 3.739,
     "longitude": 96.852
   },
   {
-    "id": "1113",
-    "province_id": "11",
-    "name": "Kabupaten Gayo Lues",
-    "latitude": 3.993,
-    "longitude": 97.325
+    "province_id": 1,
+    "regency_no": 3,
+    "name": "KAB. ACEH BESAR",
+    "latitude": 5.076,
+    "longitude": 97.303
   },
   {
-    "id": "1114",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Tamiang",
-    "latitude": 4.624,
-    "longitude": 95.617
-  },
-  {
-    "id": "1115",
-    "province_id": "11",
-    "name": "Kabupaten Nagan Raya",
-    "latitude": 4.169,
-    "longitude": 96.324
-  },
-  {
-    "id": "1116",
-    "province_id": "11",
-    "name": "Kabupaten Aceh Jaya",
+    "province_id": 1,
+    "regency_no": 4,
+    "name": "KAB. ACEH JAYA",
     "latitude": 4.301,
     "longitude": 98.046
   },
   {
-    "id": "1117",
-    "province_id": "11",
-    "name": "Kabupaten Bener Meriah",
+    "province_id": 1,
+    "regency_no": 5,
+    "name": "KAB. ACEH SELATAN",
+    "latitude": 4.933,
+    "longitude": 97.784
+  },
+  {
+    "province_id": 1,
+    "regency_no": 6,
+    "name": "KAB. ACEH SINGKIL",
+    "latitude": 3.473,
+    "longitude": 97.819
+  },
+  {
+    "province_id": 1,
+    "regency_no": 7,
+    "name": "KAB. ACEH TAMIANG",
+    "latitude": 4.624,
+    "longitude": 95.617
+  },
+  {
+    "province_id": 1,
+    "regency_no": 8,
+    "name": "KAB. ACEH TENGAH",
+    "latitude": 5.297,
+    "longitude": 95.611
+  },
+  {
+    "province_id": 1,
+    "regency_no": 9,
+    "name": "KAB. ACEH TENGGARA",
+    "latitude": 4.622,
+    "longitude": 96.846
+  },
+  {
+    "province_id": 1,
+    "regency_no": 10,
+    "name": "KAB. ACEH TIMUR",
+    "latitude": 4.153,
+    "longitude": 96.131
+  },
+  {
+    "province_id": 1,
+    "regency_no": 11,
+    "name": "KAB. ACEH UTARA",
+    "latitude": 5.208,
+    "longitude": 96.726
+  },
+  {
+    "province_id": 1,
+    "regency_no": 12,
+    "name": "KAB. BENER MERIAH",
     "latitude": 4.703,
     "longitude": 96.862
   },
   {
-    "id": "1118",
-    "province_id": "11",
-    "name": "Kabupaten Pidie Jaya",
+    "province_id": 1,
+    "regency_no": 13,
+    "name": "KAB. BIREUEN",
+    "latitude": 2.271,
+    "longitude": 97.815
+  },
+  {
+    "province_id": 1,
+    "regency_no": 14,
+    "name": "KAB. GAYO LUES",
+    "latitude": 3.993,
+    "longitude": 97.325
+  },
+  {
+    "province_id": 1,
+    "regency_no": 15,
+    "name": "KAB. NAGAN RAYA",
+    "latitude": 4.169,
+    "longitude": 96.324
+  },
+  {
+    "province_id": 1,
+    "regency_no": 16,
+    "name": "KAB. PIDIE",
+    "latitude": 2.461,
+    "longitude": 96.38
+  },
+  {
+    "province_id": 1,
+    "regency_no": 17,
+    "name": "KAB. PIDIE JAYA",
     "latitude": 5.229,
     "longitude": 96.245
   },
   {
-    "id": "1171",
-    "province_id": "11",
-    "name": "Kota Banda Aceh",
+    "province_id": 1,
+    "regency_no": 18,
+    "name": "KAB. SIMEULUE",
+    "latitude": 3.255,
+    "longitude": 97.174
+  },
+  {
+    "province_id": 1,
+    "regency_no": 19,
+    "name": "KOTA BANDA ACEH",
     "latitude": 5.55,
     "longitude": 95.318
   },
   {
-    "id": "1172",
-    "province_id": "11",
-    "name": "Kota Sabang",
-    "latitude": 5.893,
-    "longitude": 95.321
-  },
-  {
-    "id": "1173",
-    "province_id": "11",
-    "name": "Kota Langsa",
+    "province_id": 1,
+    "regency_no": 20,
+    "name": "KOTA LANGSA",
     "latitude": 5.179,
     "longitude": 97.149
   },
   {
-    "id": "1174",
-    "province_id": "11",
-    "name": "Kota Lhokseumawe",
+    "province_id": 1,
+    "regency_no": 21,
+    "name": "KOTA LHOKSEUMAWE",
     "latitude": 4.469,
     "longitude": 97.966
   },
   {
-    "id": "1175",
-    "province_id": "11",
-    "name": "Kota Subulussalam",
+    "province_id": 1,
+    "regency_no": 22,
+    "name": "KOTA SABANG",
+    "latitude": 5.893,
+    "longitude": 95.321
+  },
+  {
+    "province_id": 1,
+    "regency_no": 23,
+    "name": "KOTA SUBULUSSALAM",
     "latitude": 2.671,
     "longitude": 97.993
   },
   {
-    "id": "1201",
-    "province_id": "12",
-    "name": "Kabupaten Nias",
-    "latitude": 1.685,
-    "longitude": 98.828
-  },
-  {
-    "id": "1202",
-    "province_id": "12",
-    "name": "Kabupaten Mandailing Natal",
-    "latitude": 2.022,
-    "longitude": 98.962
-  },
-  {
-    "id": "1203",
-    "province_id": "12",
-    "name": "Kabupaten Tapanuli Selatan",
-    "latitude": 1.52,
-    "longitude": 99.303
-  },
-  {
-    "id": "1204",
-    "province_id": "12",
-    "name": "Kabupaten Tapanuli Tengah",
-    "latitude": 1.242,
-    "longitude": 97.65
-  },
-  {
-    "id": "1205",
-    "province_id": "12",
-    "name": "Kabupaten Tapanuli Utara",
-    "latitude": 3.743,
-    "longitude": 98.448
-  },
-  {
-    "id": "1206",
-    "province_id": "12",
-    "name": "Kabupaten Toba Samosir",
-    "latitude": 3.111,
-    "longitude": 98.501
-  },
-  {
-    "id": "1207",
-    "province_id": "12",
-    "name": "Kabupaten Labuhan Batu",
-    "latitude": 3.551,
-    "longitude": 98.866
-  },
-  {
-    "id": "1208",
-    "province_id": "12",
-    "name": "Kabupaten Asahan",
+    "province_id": 2,
+    "regency_no": 1,
+    "name": "KAB. ASAHAN",
     "latitude": 2.965,
     "longitude": 98.862
   },
   {
-    "id": "1209",
-    "province_id": "12",
-    "name": "Kabupaten Simalungun",
-    "latitude": 2.988,
-    "longitude": 99.613
-  },
-  {
-    "id": "1210",
-    "province_id": "12",
-    "name": "Kabupaten Dairi",
-    "latitude": 2.07,
-    "longitude": 99.857
-  },
-  {
-    "id": "1211",
-    "province_id": "12",
-    "name": "Kabupaten Karo",
-    "latitude": 2.748,
-    "longitude": 98.314
-  },
-  {
-    "id": "1212",
-    "province_id": "12",
-    "name": "Kabupaten Deli Serdang",
-    "latitude": 2.332,
-    "longitude": 99.051
-  },
-  {
-    "id": "1213",
-    "province_id": "12",
-    "name": "Kabupaten Langkat",
-    "latitude": 0.797,
-    "longitude": 99.579
-  },
-  {
-    "id": "1214",
-    "province_id": "12",
-    "name": "Kabupaten Nias Selatan",
-    "latitude": 0.583,
-    "longitude": 97.778
-  },
-  {
-    "id": "1215",
-    "province_id": "12",
-    "name": "Kabupaten Humbang Hasundutan",
-    "latitude": 2.541,
-    "longitude": 98.323
-  },
-  {
-    "id": "1216",
-    "province_id": "12",
-    "name": "Kabupaten Pakpak Bharat",
-    "latitude": 2.25,
-    "longitude": 98.79
-  },
-  {
-    "id": "1217",
-    "province_id": "12",
-    "name": "Kabupaten Samosir",
-    "latitude": 2.56,
-    "longitude": 98.722
-  },
-  {
-    "id": "1218",
-    "province_id": "12",
-    "name": "Kabupaten Serdang Bedagai",
-    "latitude": 3.491,
-    "longitude": 99.126
-  },
-  {
-    "id": "1219",
-    "province_id": "12",
-    "name": "Kabupaten Batu Bara",
+    "province_id": 2,
+    "regency_no": 2,
+    "name": "KAB. BATU BARA",
     "latitude": 3.172,
     "longitude": 99.421
   },
   {
-    "id": "1220",
-    "province_id": "12",
-    "name": "Kabupaten Padang Lawas Utara",
-    "latitude": 1.495,
-    "longitude": 99.62
+    "province_id": 2,
+    "regency_no": 3,
+    "name": "KAB. DAIRI",
+    "latitude": 2.07,
+    "longitude": 99.857
   },
   {
-    "id": "1221",
-    "province_id": "12",
-    "name": "Kabupaten Padang Lawas",
-    "latitude": 1.056,
-    "longitude": 99.776
+    "province_id": 2,
+    "regency_no": 4,
+    "name": "KAB. DELI SERDANG",
+    "latitude": 2.332,
+    "longitude": 99.051
   },
   {
-    "id": "1222",
-    "province_id": "12",
-    "name": "Kabupaten Labuhan Batu Selatan",
+    "province_id": 2,
+    "regency_no": 5,
+    "name": "KAB. HUMBANG HASUNDUTAN",
+    "latitude": 2.541,
+    "longitude": 98.323
+  },
+  {
+    "province_id": 2,
+    "regency_no": 6,
+    "name": "KAB. KARO",
+    "latitude": 2.748,
+    "longitude": 98.314
+  },
+  {
+    "province_id": 2,
+    "regency_no": 7,
+    "name": "KAB. LABUHANBATU",
+    "latitude": 3.551,
+    "longitude": 98.866
+  },
+  {
+    "province_id": 2,
+    "regency_no": 8,
+    "name": "KAB. LABUHANBATU SELATAN",
     "latitude": 1.868,
     "longitude": 100.041
   },
   {
-    "id": "1223",
-    "province_id": "12",
-    "name": "Kabupaten Labuhan Batu Utara",
+    "province_id": 2,
+    "regency_no": 9,
+    "name": "KAB. LABUHANBATU UTARA",
     "latitude": 2.563,
     "longitude": 99.658
   },
   {
-    "id": "1224",
-    "province_id": "12",
-    "name": "Kabupaten Nias Utara",
-    "latitude": 1.389,
-    "longitude": 97.381
+    "province_id": 2,
+    "regency_no": 10,
+    "name": "KAB. LANGKAT",
+    "latitude": 0.797,
+    "longitude": 99.579
   },
   {
-    "id": "1225",
-    "province_id": "12",
-    "name": "Kabupaten Nias Barat",
+    "province_id": 2,
+    "regency_no": 11,
+    "name": "KAB. MANDAILING NATAL",
+    "latitude": 2.022,
+    "longitude": 98.962
+  },
+  {
+    "province_id": 2,
+    "regency_no": 12,
+    "name": "KAB. NIAS",
+    "latitude": 1.685,
+    "longitude": 98.828
+  },
+  {
+    "province_id": 2,
+    "regency_no": 13,
+    "name": "KAB. NIAS BARAT",
     "latitude": 0.999,
     "longitude": 97.495
   },
   {
-    "id": "1271",
-    "province_id": "12",
-    "name": "Kota Sibolga",
-    "latitude": 3.59,
-    "longitude": 98.675
+    "province_id": 2,
+    "regency_no": 14,
+    "name": "KAB. NIAS SELATAN",
+    "latitude": 0.583,
+    "longitude": 97.778
   },
   {
-    "id": "1272",
-    "province_id": "12",
-    "name": "Kota Tanjung Balai",
-    "latitude": 2.956,
-    "longitude": 99.062
+    "province_id": 2,
+    "regency_no": 15,
+    "name": "KAB. NIAS UTARA",
+    "latitude": 1.389,
+    "longitude": 97.381
   },
   {
-    "id": "1273",
-    "province_id": "12",
-    "name": "Kota Pematang Siantar",
-    "latitude": 1.746,
-    "longitude": 98.776
+    "province_id": 2,
+    "regency_no": 16,
+    "name": "KAB. PADANG LAWAS",
+    "latitude": 1.056,
+    "longitude": 99.776
   },
   {
-    "id": "1274",
-    "province_id": "12",
-    "name": "Kota Tebing Tinggi",
-    "latitude": 2.948,
-    "longitude": 99.767
+    "province_id": 2,
+    "regency_no": 17,
+    "name": "KAB. PADANG LAWAS UTARA",
+    "latitude": 1.495,
+    "longitude": 99.62
   },
   {
-    "id": "1275",
-    "province_id": "12",
-    "name": "Kota Medan",
-    "latitude": 3.603,
-    "longitude": 98.483
+    "province_id": 2,
+    "regency_no": 18,
+    "name": "KAB. PAKPAK BHARAT",
+    "latitude": 2.25,
+    "longitude": 98.79
   },
   {
-    "id": "1276",
-    "province_id": "12",
-    "name": "Kota Binjai",
+    "province_id": 2,
+    "regency_no": 19,
+    "name": "KAB. SAMOSIR",
+    "latitude": 2.56,
+    "longitude": 98.722
+  },
+  {
+    "province_id": 2,
+    "regency_no": 20,
+    "name": "KAB. SERDANG BEDAGAI",
+    "latitude": 3.491,
+    "longitude": 99.126
+  },
+  {
+    "province_id": 2,
+    "regency_no": 21,
+    "name": "KAB. SIMALUNGUN",
+    "latitude": 2.988,
+    "longitude": 99.613
+  },
+  {
+    "province_id": 2,
+    "regency_no": 22,
+    "name": "KAB. TAPANULI SELATAN",
+    "latitude": 1.52,
+    "longitude": 99.303
+  },
+  {
+    "province_id": 2,
+    "regency_no": 23,
+    "name": "KAB. TAPANULI TENGAH",
+    "latitude": 1.242,
+    "longitude": 97.65
+  },
+  {
+    "province_id": 2,
+    "regency_no": 24,
+    "name": "KAB. TAPANULI UTARA",
+    "latitude": 3.743,
+    "longitude": 98.448
+  },
+  {
+    "province_id": 2,
+    "regency_no": 25,
+    "name": "KAB. TOBA",
+    "latitude": 3.111,
+    "longitude": 98.501
+  },
+  {
+    "province_id": 2,
+    "regency_no": 26,
+    "name": "KOTA BINJAI",
     "latitude": 3.328,
     "longitude": 99.166
   },
   {
-    "id": "1277",
-    "province_id": "12",
-    "name": "Kota Padangsidimpuan",
-    "latitude": 1.378,
-    "longitude": 99.271
-  },
-  {
-    "id": "1278",
-    "province_id": "12",
-    "name": "Kota Gunungsitoli",
+    "province_id": 2,
+    "regency_no": 27,
+    "name": "KOTA GUNUNGSITOLI",
     "latitude": 1.283,
     "longitude": 97.613
   },
   {
-    "id": "1301",
-    "province_id": "13",
-    "name": "Kabupaten Kepulauan Mentawai",
-    "latitude": -1.348,
-    "longitude": 100.578
+    "province_id": 2,
+    "regency_no": 28,
+    "name": "KOTA MEDAN",
+    "latitude": 3.603,
+    "longitude": 98.483
   },
   {
-    "id": "1302",
-    "province_id": "13",
-    "name": "Kabupaten Pesisir Selatan",
-    "latitude": -0.952,
-    "longitude": 100.621
+    "province_id": 2,
+    "regency_no": 29,
+    "name": "KOTA PADANG SIDEMPUAN",
+    "latitude": 1.378,
+    "longitude": 99.271
   },
   {
-    "id": "1303",
-    "province_id": "13",
-    "name": "Kabupaten Solok",
-    "latitude": -0.666,
-    "longitude": 100.945
+    "province_id": 2,
+    "regency_no": 30,
+    "name": "KOTA PEMATANGSIANTAR",
+    "latitude": 1.746,
+    "longitude": 98.776
   },
   {
-    "id": "1304",
-    "province_id": "13",
-    "name": "Kabupaten Sijunjung",
-    "latitude": -0.474,
-    "longitude": 100.623
+    "province_id": 2,
+    "regency_no": 31,
+    "name": "KOTA SIBOLGA",
+    "latitude": 3.59,
+    "longitude": 98.675
   },
   {
-    "id": "1305",
-    "province_id": "13",
-    "name": "Kabupaten Tanah Datar",
-    "latitude": -0.621,
-    "longitude": 100.307
+    "province_id": 2,
+    "regency_no": 32,
+    "name": "KOTA TANJUNG BALAI",
+    "latitude": 2.956,
+    "longitude": 99.062
   },
   {
-    "id": "1306",
-    "province_id": "13",
-    "name": "Kabupaten Padang Pariaman",
-    "latitude": -0.315,
-    "longitude": 100.03
+    "province_id": 2,
+    "regency_no": 33,
+    "name": "KOTA TEBING TINGGI",
+    "latitude": 2.948,
+    "longitude": 99.767
   },
   {
-    "id": "1307",
-    "province_id": "13",
-    "name": "Kabupaten Agam",
+    "province_id": 3,
+    "regency_no": 1,
+    "name": "KAB. AGAM",
     "latitude": -0.152,
     "longitude": 100.661
   },
   {
-    "id": "1308",
-    "province_id": "13",
-    "name": "Kabupaten Lima Puluh Kota",
-    "latitude": 0.14,
-    "longitude": 100.167
-  },
-  {
-    "id": "1309",
-    "province_id": "13",
-    "name": "Kabupaten Pasaman",
-    "latitude": -2.054,
-    "longitude": 99.58
-  },
-  {
-    "id": "1310",
-    "province_id": "13",
-    "name": "Kabupaten Solok Selatan",
-    "latitude": -0.953,
-    "longitude": 101.494
-  },
-  {
-    "id": "1311",
-    "province_id": "13",
-    "name": "Kabupaten Dharmasraya",
+    "province_id": 3,
+    "regency_no": 2,
+    "name": "KAB. DHARMASRAYA",
     "latitude": -1.556,
     "longitude": 101.24
   },
   {
-    "id": "1312",
-    "province_id": "13",
-    "name": "Kabupaten Pasaman Barat",
+    "province_id": 3,
+    "regency_no": 3,
+    "name": "KAB. KEPULAUAN MENTAWAI",
+    "latitude": -1.348,
+    "longitude": 100.578
+  },
+  {
+    "province_id": 3,
+    "regency_no": 4,
+    "name": "KAB. LIMA PULUH KOTA",
+    "latitude": 0.14,
+    "longitude": 100.167
+  },
+  {
+    "province_id": 3,
+    "regency_no": 5,
+    "name": "KAB. PADANG PARIAMAN",
+    "latitude": -0.315,
+    "longitude": 100.03
+  },
+  {
+    "province_id": 3,
+    "regency_no": 6,
+    "name": "KAB. PASAMAN",
+    "latitude": -2.054,
+    "longitude": 99.58
+  },
+  {
+    "province_id": 3,
+    "regency_no": 7,
+    "name": "KAB. PASAMAN BARAT",
     "latitude": 0.11,
     "longitude": 99.828
   },
   {
-    "id": "1371",
-    "province_id": "13",
-    "name": "Kota Padang",
-    "latitude": -0.876,
-    "longitude": 100.387
+    "province_id": 3,
+    "regency_no": 8,
+    "name": "KAB. PESISIR SELATAN",
+    "latitude": -0.952,
+    "longitude": 100.621
   },
   {
-    "id": "1372",
-    "province_id": "13",
-    "name": "Kota Solok",
+    "province_id": 3,
+    "regency_no": 9,
+    "name": "KAB. SIJUNJUNG",
+    "latitude": -0.474,
+    "longitude": 100.623
+  },
+  {
+    "province_id": 3,
+    "regency_no": 10,
+    "name": "KAB. SOLOK",
     "latitude": -0.799,
     "longitude": 100.653
   },
   {
-    "id": "1373",
-    "province_id": "13",
-    "name": "Kota Sawah Lunto",
-    "latitude": -0.675,
-    "longitude": 100.768
+    "province_id": 3,
+    "regency_no": 11,
+    "name": "KAB. SOLOK SELATAN",
+    "latitude": -0.953,
+    "longitude": 101.494
   },
   {
-    "id": "1374",
-    "province_id": "13",
-    "name": "Kota Padang Panjang",
-    "latitude": -0.462,
-    "longitude": 100.39
+    "province_id": 3,
+    "regency_no": 12,
+    "name": "KAB. TANAH DATAR",
+    "latitude": -0.621,
+    "longitude": 100.307
   },
   {
-    "id": "1375",
-    "province_id": "13",
-    "name": "Kota Bukittinggi",
+    "province_id": 3,
+    "regency_no": 13,
+    "name": "KOTA BUKITTINGGI",
     "latitude": -0.285,
     "longitude": 100.368
   },
   {
-    "id": "1376",
-    "province_id": "13",
-    "name": "Kota Payakumbuh",
-    "latitude": -0.223,
-    "longitude": 100.632
+    "province_id": 3,
+    "regency_no": 14,
+    "name": "KOTA PADANG",
+    "latitude": -0.876,
+    "longitude": 100.387
   },
   {
-    "id": "1377",
-    "province_id": "13",
-    "name": "Kota Pariaman",
+    "province_id": 3,
+    "regency_no": 15,
+    "name": "KOTA PADANG PANJANG",
+    "latitude": -0.462,
+    "longitude": 100.39
+  },
+  {
+    "province_id": 3,
+    "regency_no": 16,
+    "name": "KOTA PARIAMAN",
     "latitude": -0.629,
     "longitude": 100.138
   },
   {
-    "id": "1401",
-    "province_id": "14",
-    "name": "Kabupaten Kuantan Singingi",
-    "latitude": 0.314,
-    "longitude": 101.018
+    "province_id": 3,
+    "regency_no": 17,
+    "name": "KOTA PAYAKUMBUH",
+    "latitude": -0.223,
+    "longitude": 100.632
   },
   {
-    "id": "1402",
-    "province_id": "14",
-    "name": "Kabupaten Indragiri Hulu",
-    "latitude": -0.393,
-    "longitude": 102.438
+    "province_id": 3,
+    "regency_no": 18,
+    "name": "KOTA SAWAHLUNTO",
+    "latitude": -0.675,
+    "longitude": 100.768
   },
   {
-    "id": "1403",
-    "province_id": "14",
-    "name": "Kabupaten Indragiri Hilir",
-    "latitude": 1.473,
-    "longitude": 102.113
+    "province_id": 3,
+    "regency_no": 19,
+    "name": "KOTA SOLOK",
+    "latitude": -0.799,
+    "longitude": 100.653
   },
   {
-    "id": "1404",
-    "province_id": "14",
-    "name": "Kabupaten Pelalawan",
-    "latitude": -0.315,
-    "longitude": 103.158
-  },
-  {
-    "id": "1405",
-    "province_id": "14",
-    "name": "Kabupaten S I A K",
-    "latitude": 0.384,
-    "longitude": 101.842
-  },
-  {
-    "id": "1406",
-    "province_id": "14",
-    "name": "Kabupaten Kampar",
-    "latitude": 0.9,
-    "longitude": 100.307
-  },
-  {
-    "id": "1407",
-    "province_id": "14",
-    "name": "Kabupaten Rokan Hulu",
-    "latitude": 2.099,
-    "longitude": 100.818
-  },
-  {
-    "id": "1408",
-    "province_id": "14",
-    "name": "Kabupaten Bengkalis",
+    "province_id": 4,
+    "regency_no": 1,
+    "name": "KAB. BENGKALIS",
     "latitude": 0.805,
     "longitude": 102.02
   },
   {
-    "id": "1409",
-    "province_id": "14",
-    "name": "Kabupaten Rokan Hilir",
-    "latitude": -0.505,
-    "longitude": 101.538
+    "province_id": 4,
+    "regency_no": 2,
+    "name": "KAB. INDRAGIRI HILIR",
+    "latitude": 1.473,
+    "longitude": 102.113
   },
   {
-    "id": "1410",
-    "province_id": "14",
-    "name": "Kabupaten Kepulauan Meranti",
+    "province_id": 4,
+    "regency_no": 3,
+    "name": "KAB. INDRAGIRI HULU",
+    "latitude": -0.393,
+    "longitude": 102.438
+  },
+  {
+    "province_id": 4,
+    "regency_no": 4,
+    "name": "KAB. KAMPAR",
+    "latitude": 0.9,
+    "longitude": 100.307
+  },
+  {
+    "province_id": 4,
+    "regency_no": 5,
+    "name": "KAB. KEPULAUAN MERANTI",
     "latitude": 1.001,
     "longitude": 102.726
   },
   {
-    "id": "1471",
-    "province_id": "14",
-    "name": "Kota Pekanbaru",
-    "latitude": 0.513,
-    "longitude": 101.447
+    "province_id": 4,
+    "regency_no": 6,
+    "name": "KAB. KUANTAN SINGINGI",
+    "latitude": 0.314,
+    "longitude": 101.018
   },
   {
-    "id": "1473",
-    "province_id": "14",
-    "name": "Kota D U M A I",
+    "province_id": 4,
+    "regency_no": 7,
+    "name": "KAB. PELALAWAN",
+    "latitude": -0.315,
+    "longitude": 103.158
+  },
+  {
+    "province_id": 4,
+    "regency_no": 8,
+    "name": "KAB. ROKAN HILIR",
+    "latitude": -0.505,
+    "longitude": 101.538
+  },
+  {
+    "province_id": 4,
+    "regency_no": 9,
+    "name": "KAB. ROKAN HULU",
+    "latitude": 2.099,
+    "longitude": 100.818
+  },
+  {
+    "province_id": 4,
+    "regency_no": 10,
+    "name": "KAB. SIAK",
+    "latitude": 0.384,
+    "longitude": 101.842
+  },
+  {
+    "province_id": 4,
+    "regency_no": 11,
+    "name": "KOTA DUMAI",
     "latitude": 1.667,
     "longitude": 101.4
   },
   {
-    "id": "1501",
-    "province_id": "15",
-    "name": "Kabupaten Kerinci",
-    "latitude": -2.057,
-    "longitude": 101.388
+    "province_id": 4,
+    "regency_no": 12,
+    "name": "KOTA PEKANBARU",
+    "latitude": 0.513,
+    "longitude": 101.447
   },
   {
-    "id": "1502",
-    "province_id": "15",
-    "name": "Kabupaten Merangin",
-    "latitude": -2.06,
-    "longitude": 102.274
-  },
-  {
-    "id": "1503",
-    "province_id": "15",
-    "name": "Kabupaten Sarolangun",
-    "latitude": -2.313,
-    "longitude": 102.75
-  },
-  {
-    "id": "1504",
-    "province_id": "15",
-    "name": "Kabupaten Batang Hari",
+    "province_id": 5,
+    "regency_no": 1,
+    "name": "KAB. BATANG HARI",
     "latitude": -1.694,
     "longitude": 103.273
   },
   {
-    "id": "1505",
-    "province_id": "15",
-    "name": "Kabupaten Muaro Jambi",
-    "latitude": -1.448,
-    "longitude": 103.515
-  },
-  {
-    "id": "1506",
-    "province_id": "15",
-    "name": "Kabupaten Tanjung Jabung Timur",
-    "latitude": -0.827,
-    "longitude": 103.461
-  },
-  {
-    "id": "1507",
-    "province_id": "15",
-    "name": "Kabupaten Tanjung Jabung Barat",
-    "latitude": -1.206,
-    "longitude": 103.79
-  },
-  {
-    "id": "1508",
-    "province_id": "15",
-    "name": "Kabupaten Tebo",
-    "latitude": -1.516,
-    "longitude": 102.119
-  },
-  {
-    "id": "1509",
-    "province_id": "15",
-    "name": "Kabupaten Bungo",
+    "province_id": 5,
+    "regency_no": 2,
+    "name": "KAB. BUNGO",
     "latitude": -1.466,
     "longitude": 102.358
   },
   {
-    "id": "1571",
-    "province_id": "15",
-    "name": "Kota Jambi",
+    "province_id": 5,
+    "regency_no": 3,
+    "name": "KAB. KERINCI",
+    "latitude": -2.057,
+    "longitude": 101.388
+  },
+  {
+    "province_id": 5,
+    "regency_no": 4,
+    "name": "KAB. MERANGIN",
+    "latitude": -2.06,
+    "longitude": 102.274
+  },
+  {
+    "province_id": 5,
+    "regency_no": 5,
+    "name": "KAB. MUARO JAMBI",
+    "latitude": -1.448,
+    "longitude": 103.515
+  },
+  {
+    "province_id": 5,
+    "regency_no": 6,
+    "name": "KAB. SAROLANGUN",
+    "latitude": -2.313,
+    "longitude": 102.75
+  },
+  {
+    "province_id": 5,
+    "regency_no": 7,
+    "name": "KAB. TANJUNG JABUNG BARAT",
+    "latitude": -1.206,
+    "longitude": 103.79
+  },
+  {
+    "province_id": 5,
+    "regency_no": 8,
+    "name": "KAB. TANJUNG JABUNG TIMUR",
+    "latitude": -0.827,
+    "longitude": 103.461
+  },
+  {
+    "province_id": 5,
+    "regency_no": 9,
+    "name": "KAB. TEBO",
+    "latitude": -1.516,
+    "longitude": 102.119
+  },
+  {
+    "province_id": 5,
+    "regency_no": 10,
+    "name": "KOTA JAMBI",
     "latitude": -1.631,
     "longitude": 103.607
   },
   {
-    "id": "1572",
-    "province_id": "15",
-    "name": "Kota Sungai Penuh",
+    "province_id": 5,
+    "regency_no": 11,
+    "name": "KOTA SUNGAI PENUH",
     "latitude": -2.071,
     "longitude": 101.396
   },
   {
-    "id": "1601",
-    "province_id": "16",
-    "name": "Kabupaten Ogan Komering Ulu",
-    "latitude": -4.166,
-    "longitude": 104.198
-  },
-  {
-    "id": "1602",
-    "province_id": "16",
-    "name": "Kabupaten Ogan Komering Ilir",
-    "latitude": -3.412,
-    "longitude": 104.823
-  },
-  {
-    "id": "1603",
-    "province_id": "16",
-    "name": "Kabupaten Muara Enim",
-    "latitude": -3.656,
-    "longitude": 103.777
-  },
-  {
-    "id": "1604",
-    "province_id": "16",
-    "name": "Kabupaten Lahat",
-    "latitude": -3.778,
-    "longitude": 103.55
-  },
-  {
-    "id": "1605",
-    "province_id": "16",
-    "name": "Kabupaten Musi Rawas",
-    "latitude": -3.244,
-    "longitude": 103.012
-  },
-  {
-    "id": "1606",
-    "province_id": "16",
-    "name": "Kabupaten Musi Banyuasin",
-    "latitude": -2.889,
-    "longitude": 103.84
-  },
-  {
-    "id": "1607",
-    "province_id": "16",
-    "name": "Kabupaten Banyu Asin",
+    "province_id": 6,
+    "regency_no": 1,
+    "name": "KAB. BANYUASIN",
     "latitude": -2.917,
     "longitude": 104.407
   },
   {
-    "id": "1608",
-    "province_id": "16",
-    "name": "Kabupaten Ogan Komering Ulu Selatan",
-    "latitude": -4.369,
-    "longitude": 104.358
-  },
-  {
-    "id": "1609",
-    "province_id": "16",
-    "name": "Kabupaten Ogan Komering Ulu Timur",
-    "latitude": -4.532,
-    "longitude": 104.095
-  },
-  {
-    "id": "1610",
-    "province_id": "16",
-    "name": "Kabupaten Ogan Ilir",
-    "latitude": -3.261,
-    "longitude": 104.653
-  },
-  {
-    "id": "1611",
-    "province_id": "16",
-    "name": "Kabupaten Empat Lawang",
+    "province_id": 6,
+    "regency_no": 2,
+    "name": "KAB. EMPAT LAWANG",
     "latitude": -3.61,
     "longitude": 103.103
   },
   {
-    "id": "1612",
-    "province_id": "16",
-    "name": "Kabupaten Penukal Abab Lematang Ilir",
-    "latitude": -3.31,
-    "longitude": 103.884
+    "province_id": 6,
+    "regency_no": 3,
+    "name": "KAB. LAHAT",
+    "latitude": -3.778,
+    "longitude": 103.55
   },
   {
-    "id": "1613",
-    "province_id": "16",
-    "name": "Kabupaten Musi Rawas Utara",
+    "province_id": 6,
+    "regency_no": 4,
+    "name": "KAB. MUARA ENIM",
+    "latitude": -3.656,
+    "longitude": 103.777
+  },
+  {
+    "province_id": 6,
+    "regency_no": 5,
+    "name": "KAB. MUSI BANYUASIN",
+    "latitude": -2.889,
+    "longitude": 103.84
+  },
+  {
+    "province_id": 6,
+    "regency_no": 6,
+    "name": "KAB. MUSI RAWAS",
+    "latitude": -3.244,
+    "longitude": 103.012
+  },
+  {
+    "province_id": 6,
+    "regency_no": 7,
+    "name": "KAB. MUSI RAWAS UTARA",
     "latitude": -2.735,
     "longitude": 102.901
   },
   {
-    "id": "1671",
-    "province_id": "16",
-    "name": "Kota Palembang",
-    "latitude": -2.991,
-    "longitude": 104.757
+    "province_id": 6,
+    "regency_no": 8,
+    "name": "KAB. OGAN ILIR",
+    "latitude": -3.261,
+    "longitude": 104.653
   },
   {
-    "id": "1672",
-    "province_id": "16",
-    "name": "Kota Prabumulih",
-    "latitude": -4.039,
-    "longitude": 103.197
+    "province_id": 6,
+    "regency_no": 9,
+    "name": "KAB. OGAN KOMERING ILIR",
+    "latitude": -3.412,
+    "longitude": 104.823
   },
   {
-    "id": "1673",
-    "province_id": "16",
-    "name": "Kota Pagar Alam",
-    "latitude": -3.326,
-    "longitude": 102.825
+    "province_id": 6,
+    "regency_no": 10,
+    "name": "KAB. OGAN KOMERING ULU",
+    "latitude": -4.166,
+    "longitude": 104.198
   },
   {
-    "id": "1674",
-    "province_id": "16",
-    "name": "Kota Lubuklinggau",
+    "province_id": 6,
+    "regency_no": 11,
+    "name": "KAB. OKU SELATAN",
+    "latitude": -4.369,
+    "longitude": 104.358
+  },
+  {
+    "province_id": 6,
+    "regency_no": 12,
+    "name": "KAB. OKU TIMUR",
+    "latitude": -4.532,
+    "longitude": 104.095
+  },
+  {
+    "province_id": 6,
+    "regency_no": 13,
+    "name": "KAB. PENUKAL ABAB LEMATANG ILIR",
+    "latitude": -3.31,
+    "longitude": 103.884
+  },
+  {
+    "province_id": 6,
+    "regency_no": 14,
+    "name": "KOTA LUBUK LINGGAU",
     "latitude": -3.369,
     "longitude": 104.308
   },
   {
-    "id": "1701",
-    "province_id": "17",
-    "name": "Kabupaten Bengkulu Selatan",
+    "province_id": 6,
+    "regency_no": 15,
+    "name": "KOTA PAGAR ALAM",
+    "latitude": -3.326,
+    "longitude": 102.825
+  },
+  {
+    "province_id": 6,
+    "regency_no": 16,
+    "name": "KOTA PALEMBANG",
+    "latitude": -2.991,
+    "longitude": 104.757
+  },
+  {
+    "province_id": 6,
+    "regency_no": 17,
+    "name": "KOTA PRABUMULIH",
+    "latitude": -4.039,
+    "longitude": 103.197
+  },
+  {
+    "province_id": 7,
+    "regency_no": 1,
+    "name": "KAB. BENGKULU SELATAN",
     "latitude": -4.44,
     "longitude": 102.895
   },
   {
-    "id": "1702",
-    "province_id": "17",
-    "name": "Kabupaten Rejang Lebong",
-    "latitude": -3.478,
-    "longitude": 102.532
-  },
-  {
-    "id": "1703",
-    "province_id": "17",
-    "name": "Kabupaten Bengkulu Utara",
-    "latitude": -3.437,
-    "longitude": 102.202
-  },
-  {
-    "id": "1704",
-    "province_id": "17",
-    "name": "Kabupaten Kaur",
-    "latitude": -4.759,
-    "longitude": 103.349
-  },
-  {
-    "id": "1705",
-    "province_id": "17",
-    "name": "Kabupaten Seluma",
-    "latitude": -4.078,
-    "longitude": 102.556
-  },
-  {
-    "id": "1706",
-    "province_id": "17",
-    "name": "Kabupaten Mukomuko",
-    "latitude": -2.553,
-    "longitude": 101.104
-  },
-  {
-    "id": "1707",
-    "province_id": "17",
-    "name": "Kabupaten Lebong",
-    "latitude": -3.157,
-    "longitude": 102.183
-  },
-  {
-    "id": "1708",
-    "province_id": "17",
-    "name": "Kabupaten Kepahiang",
-    "latitude": -3.625,
-    "longitude": 102.556
-  },
-  {
-    "id": "1709",
-    "province_id": "17",
-    "name": "Kabupaten Bengkulu Tengah",
+    "province_id": 7,
+    "regency_no": 2,
+    "name": "KAB. BENGKULU TENGAH",
     "latitude": -3.773,
     "longitude": 102.39
   },
   {
-    "id": "1771",
-    "province_id": "17",
-    "name": "Kota Bengkulu",
+    "province_id": 7,
+    "regency_no": 3,
+    "name": "KAB. BENGKULU UTARA",
+    "latitude": -3.437,
+    "longitude": 102.202
+  },
+  {
+    "province_id": 7,
+    "regency_no": 4,
+    "name": "KAB. KAUR",
+    "latitude": -4.759,
+    "longitude": 103.349
+  },
+  {
+    "province_id": 7,
+    "regency_no": 5,
+    "name": "KAB. KEPAHIANG",
+    "latitude": -3.625,
+    "longitude": 102.556
+  },
+  {
+    "province_id": 7,
+    "regency_no": 6,
+    "name": "KAB. LEBONG",
+    "latitude": -3.157,
+    "longitude": 102.183
+  },
+  {
+    "province_id": 7,
+    "regency_no": 7,
+    "name": "KAB. MUKOMUKO",
+    "latitude": -2.553,
+    "longitude": 101.104
+  },
+  {
+    "province_id": 7,
+    "regency_no": 8,
+    "name": "KAB. REJANG LEBONG",
+    "latitude": -3.478,
+    "longitude": 102.532
+  },
+  {
+    "province_id": 7,
+    "regency_no": 9,
+    "name": "KAB. SELUMA",
+    "latitude": -4.078,
+    "longitude": 102.556
+  },
+  {
+    "province_id": 7,
+    "regency_no": 10,
+    "name": "KOTA BENGKULU",
     "latitude": -3.793,
     "longitude": 102.261
   },
   {
-    "id": "1801",
-    "province_id": "18",
-    "name": "Kabupaten Lampung Barat",
+    "province_id": 8,
+    "regency_no": 1,
+    "name": "KAB. LAMPUNG BARAT",
     "latitude": -5.718,
     "longitude": 105.585
   },
   {
-    "id": "1802",
-    "province_id": "18",
-    "name": "Kabupaten Tanggamus",
-    "latitude": -4.977,
-    "longitude": 105.21
-  },
-  {
-    "id": "1803",
-    "province_id": "18",
-    "name": "Kabupaten Lampung Selatan",
+    "province_id": 8,
+    "regency_no": 2,
+    "name": "KAB. LAMPUNG SELATAN",
     "latitude": -4.829,
     "longitude": 104.887
   },
   {
-    "id": "1804",
-    "province_id": "18",
-    "name": "Kabupaten Lampung Timur",
-    "latitude": -5.019,
-    "longitude": 104.061
-  },
-  {
-    "id": "1805",
-    "province_id": "18",
-    "name": "Kabupaten Lampung Tengah",
+    "province_id": 8,
+    "regency_no": 3,
+    "name": "KAB. LAMPUNG TENGAH",
     "latitude": -4.495,
     "longitude": 105.22
   },
   {
-    "id": "1806",
-    "province_id": "18",
-    "name": "Kabupaten Lampung Utara",
+    "province_id": 8,
+    "regency_no": 4,
+    "name": "KAB. LAMPUNG TIMUR",
+    "latitude": -5.019,
+    "longitude": 104.061
+  },
+  {
+    "province_id": 8,
+    "regency_no": 5,
+    "name": "KAB. LAMPUNG UTARA",
     "latitude": -5.481,
     "longitude": 104.682
   },
   {
-    "id": "1807",
-    "province_id": "18",
-    "name": "Kabupaten Way Kanan",
-    "latitude": -5.048,
-    "longitude": 105.528
-  },
-  {
-    "id": "1808",
-    "province_id": "18",
-    "name": "Kabupaten Tulangbawang",
-    "latitude": -4.506,
-    "longitude": 104.511
-  },
-  {
-    "id": "1809",
-    "province_id": "18",
-    "name": "Kabupaten Pesawaran",
-    "latitude": -5.398,
-    "longitude": 105.07
-  },
-  {
-    "id": "1810",
-    "province_id": "18",
-    "name": "Kabupaten Pringsewu",
-    "latitude": -5.344,
-    "longitude": 105.006
-  },
-  {
-    "id": "1811",
-    "province_id": "18",
-    "name": "Kabupaten Mesuji",
+    "province_id": 8,
+    "regency_no": 6,
+    "name": "KAB. MESUJI",
     "latitude": -3.873,
     "longitude": 105.428
   },
   {
-    "id": "1812",
-    "province_id": "18",
-    "name": "Kabupaten Tulang Bawang Barat",
-    "latitude": -4.499,
-    "longitude": 105.12
+    "province_id": 8,
+    "regency_no": 7,
+    "name": "KAB. PESAWARAN",
+    "latitude": -5.398,
+    "longitude": 105.07
   },
   {
-    "id": "1813",
-    "province_id": "18",
-    "name": "Kabupaten Pesisir Barat",
+    "province_id": 8,
+    "regency_no": 8,
+    "name": "KAB. PESISIR BARAT",
     "latitude": -5.188,
     "longitude": 103.935
   },
   {
-    "id": "1871",
-    "province_id": "18",
-    "name": "Kota Bandar Lampung",
+    "province_id": 8,
+    "regency_no": 9,
+    "name": "KAB. PRINGSEWU",
+    "latitude": -5.344,
+    "longitude": 105.006
+  },
+  {
+    "province_id": 8,
+    "regency_no": 10,
+    "name": "KAB. TANGGAMUS",
+    "latitude": -4.977,
+    "longitude": 105.21
+  },
+  {
+    "province_id": 8,
+    "regency_no": 11,
+    "name": "KAB. TULANG BAWANG",
+    "latitude": -4.506,
+    "longitude": 104.511
+  },
+  {
+    "province_id": 8,
+    "regency_no": 12,
+    "name": "KAB. TULANG BAWANG BARAT",
+    "latitude": -4.499,
+    "longitude": 105.12
+  },
+  {
+    "province_id": 8,
+    "regency_no": 13,
+    "name": "KAB. WAY KANAN",
+    "latitude": -5.048,
+    "longitude": 105.528
+  },
+  {
+    "province_id": 8,
+    "regency_no": 14,
+    "name": "KOTA BANDAR LAMPUNG",
     "latitude": -5.43,
     "longitude": 105.263
   },
   {
-    "id": "1872",
-    "province_id": "18",
-    "name": "Kota Metro",
+    "province_id": 8,
+    "regency_no": 15,
+    "name": "KOTA METRO",
     "latitude": -5.114,
     "longitude": 105.307
   },
   {
-    "id": "1901",
-    "province_id": "19",
-    "name": "Kabupaten Bangka",
+    "province_id": 9,
+    "regency_no": 1,
+    "name": "KAB. BANGKA",
     "latitude": -1.887,
     "longitude": 106.105
   },
   {
-    "id": "1902",
-    "province_id": "19",
-    "name": "Kabupaten Belitung",
-    "latitude": -2.742,
-    "longitude": 107.654
-  },
-  {
-    "id": "1903",
-    "province_id": "19",
-    "name": "Kabupaten Bangka Barat",
+    "province_id": 9,
+    "regency_no": 2,
+    "name": "KAB. BANGKA BARAT",
     "latitude": -3.02,
     "longitude": 106.512
   },
   {
-    "id": "1904",
-    "province_id": "19",
-    "name": "Kabupaten Bangka Tengah",
-    "latitude": -2.515,
-    "longitude": 106.416
-  },
-  {
-    "id": "1905",
-    "province_id": "19",
-    "name": "Kabupaten Bangka Selatan",
+    "province_id": 9,
+    "regency_no": 3,
+    "name": "KAB. BANGKA SELATAN",
     "latitude": -2.059,
     "longitude": 105.201
   },
   {
-    "id": "1906",
-    "province_id": "19",
-    "name": "Kabupaten Belitung Timur",
+    "province_id": 9,
+    "regency_no": 4,
+    "name": "KAB. BANGKA TENGAH",
+    "latitude": -2.515,
+    "longitude": 106.416
+  },
+  {
+    "province_id": 9,
+    "regency_no": 5,
+    "name": "KAB. BELITUNG",
+    "latitude": -2.742,
+    "longitude": 107.654
+  },
+  {
+    "province_id": 9,
+    "regency_no": 6,
+    "name": "KAB. BELITUNG TIMUR",
     "latitude": -2.883,
     "longitude": 108.239
   },
   {
-    "id": "1971",
-    "province_id": "19",
-    "name": "Kota Pangkal Pinang",
+    "province_id": 9,
+    "regency_no": 7,
+    "name": "KOTA PANGKAL PINANG",
     "latitude": -2.141,
     "longitude": 106.116
   },
   {
-    "id": "2101",
-    "province_id": "21",
-    "name": "Kabupaten Karimun",
-    "latitude": 1.087,
-    "longitude": 104.502
-  },
-  {
-    "id": "2102",
-    "province_id": "21",
-    "name": "Kabupaten Bintan",
+    "province_id": 10,
+    "regency_no": 1,
+    "name": "KAB. BINTAN",
     "latitude": 1.033,
     "longitude": 103.376
   },
   {
-    "id": "2103",
-    "province_id": "21",
-    "name": "Kabupaten Natuna",
-    "latitude": 3.923,
-    "longitude": 108.337
+    "province_id": 10,
+    "regency_no": 2,
+    "name": "KAB. KARIMUN",
+    "latitude": 1.087,
+    "longitude": 104.502
   },
   {
-    "id": "2104",
-    "province_id": "21",
-    "name": "Kabupaten Lingga",
-    "latitude": -0.21,
-    "longitude": 104.605
-  },
-  {
-    "id": "2105",
-    "province_id": "21",
-    "name": "Kabupaten Kepulauan Anambas",
+    "province_id": 10,
+    "regency_no": 3,
+    "name": "KAB. KEPULAUAN ANAMBAS",
     "latitude": 3.215,
     "longitude": 106.249
   },
   {
-    "id": "2171",
-    "province_id": "21",
-    "name": "Kota B A T A M",
+    "province_id": 10,
+    "regency_no": 4,
+    "name": "KAB. LINGGA",
+    "latitude": -0.21,
+    "longitude": 104.605
+  },
+  {
+    "province_id": 10,
+    "regency_no": 5,
+    "name": "KAB. NATUNA",
+    "latitude": 3.923,
+    "longitude": 108.337
+  },
+  {
+    "province_id": 10,
+    "regency_no": 6,
+    "name": "KOTA BATAM",
     "latitude": 1.129,
     "longitude": 104.055
   },
   {
-    "id": "2172",
-    "province_id": "21",
-    "name": "Kota Tanjung Pinang",
+    "province_id": 10,
+    "regency_no": 7,
+    "name": "KOTA TANJUNG PINANG",
     "latitude": 0.965,
     "longitude": 104.441
   },
   {
-    "id": "3101",
-    "province_id": "31",
-    "name": "Kabupaten Kepulauan Seribu",
+    "province_id": 11,
+    "regency_no": 1,
+    "name": "KAB. ADM. KEP. SERIBU",
     "latitude": -5.746,
     "longitude": 106.613
   },
   {
-    "id": "3171",
-    "province_id": "31",
-    "name": "Kota Jakarta Selatan",
-    "latitude": -6.173,
-    "longitude": 106.819
-  },
-  {
-    "id": "3172",
-    "province_id": "31",
-    "name": "Kota Jakarta Timur",
-    "latitude": -6.12,
-    "longitude": 106.892
-  },
-  {
-    "id": "3173",
-    "province_id": "31",
-    "name": "Kota Jakarta Pusat",
-    "latitude": -6.184,
-    "longitude": 106.737
-  },
-  {
-    "id": "3174",
-    "province_id": "31",
-    "name": "Kota Jakarta Barat",
+    "province_id": 11,
+    "regency_no": 2,
+    "name": "KOTA ADM. JAKARTA BARAT",
     "latitude": -6.248,
     "longitude": 106.808
   },
   {
-    "id": "3175",
-    "province_id": "31",
-    "name": "Kota Jakarta Utara",
+    "province_id": 11,
+    "regency_no": 3,
+    "name": "KOTA ADM. JAKARTA PUSAT",
+    "latitude": -6.184,
+    "longitude": 106.737
+  },
+  {
+    "province_id": 11,
+    "regency_no": 4,
+    "name": "KOTA ADM. JAKARTA SELATAN",
+    "latitude": -6.173,
+    "longitude": 106.819
+  },
+  {
+    "province_id": 11,
+    "regency_no": 5,
+    "name": "KOTA ADM. JAKARTA TIMUR",
+    "latitude": -6.12,
+    "longitude": 106.892
+  },
+  {
+    "province_id": 11,
+    "regency_no": 6,
+    "name": "KOTA ADM. JAKARTA UTARA",
     "latitude": -6.214,
     "longitude": 106.944
   },
   {
-    "id": "3201",
-    "province_id": "32",
-    "name": "Kabupaten Bogor",
-    "latitude": -6.479,
-    "longitude": 106.825
-  },
-  {
-    "id": "3202",
-    "province_id": "32",
-    "name": "Kabupaten Sukabumi",
-    "latitude": -6.989,
-    "longitude": 106.55
-  },
-  {
-    "id": "3203",
-    "province_id": "32",
-    "name": "Kabupaten Cianjur",
-    "latitude": -6.823,
-    "longitude": 107.139
-  },
-  {
-    "id": "3204",
-    "province_id": "32",
-    "name": "Kabupaten Bandung",
-    "latitude": -7.022,
-    "longitude": 107.528
-  },
-  {
-    "id": "3205",
-    "province_id": "32",
-    "name": "Kabupaten Garut",
-    "latitude": -7.203,
-    "longitude": 107.886
-  },
-  {
-    "id": "3206",
-    "province_id": "32",
-    "name": "Kabupaten Tasikmalaya",
-    "latitude": -7.361,
-    "longitude": 108.113
-  },
-  {
-    "id": "3207",
-    "province_id": "32",
-    "name": "Kabupaten Ciamis",
-    "latitude": -7.326,
-    "longitude": 108.351
-  },
-  {
-    "id": "3208",
-    "province_id": "32",
-    "name": "Kabupaten Kuningan",
-    "latitude": -6.976,
-    "longitude": 108.483
-  },
-  {
-    "id": "3209",
-    "province_id": "32",
-    "name": "Kabupaten Cirebon",
-    "latitude": -6.765,
-    "longitude": 108.479
-  },
-  {
-    "id": "3210",
-    "province_id": "32",
-    "name": "Kabupaten Majalengka",
-    "latitude": -6.836,
-    "longitude": 108.228
-  },
-  {
-    "id": "3211",
-    "province_id": "32",
-    "name": "Kabupaten Sumedang",
-    "latitude": -6.861,
-    "longitude": 107.921
-  },
-  {
-    "id": "3212",
-    "province_id": "32",
-    "name": "Kabupaten Indramayu",
-    "latitude": -6.327,
-    "longitude": 108.323
-  },
-  {
-    "id": "3213",
-    "province_id": "32",
-    "name": "Kabupaten Subang",
-    "latitude": -6.571,
-    "longitude": 107.762
-  },
-  {
-    "id": "3214",
-    "province_id": "32",
-    "name": "Kabupaten Purwakarta",
-    "latitude": -6.556,
-    "longitude": 107.441
-  },
-  {
-    "id": "3215",
-    "province_id": "32",
-    "name": "Kabupaten Karawang",
-    "latitude": -6.302,
-    "longitude": 107.305
-  },
-  {
-    "id": "3216",
-    "province_id": "32",
-    "name": "Kabupaten Bekasi",
-    "latitude": -6.247,
-    "longitude": 107.148
-  },
-  {
-    "id": "3217",
-    "province_id": "32",
-    "name": "Kabupaten Bandung Barat",
-    "latitude": -6.865,
-    "longitude": 107.492
-  },
-  {
-    "id": "3218",
-    "province_id": "32",
-    "name": "Kabupaten Pangandaran",
-    "latitude": -7.615,
-    "longitude": 108.499
-  },
-  {
-    "id": "3271",
-    "province_id": "32",
-    "name": "Kota Bogor",
-    "latitude": -6.595,
-    "longitude": 106.794
-  },
-  {
-    "id": "3272",
-    "province_id": "32",
-    "name": "Kota Sukabumi",
-    "latitude": -6.918,
-    "longitude": 106.932
-  },
-  {
-    "id": "3273",
-    "province_id": "32",
-    "name": "Kota Bandung",
+    "province_id": 12,
+    "regency_no": 1,
+    "name": "KAB. BANDUNG",
     "latitude": -6.911,
     "longitude": 107.61
   },
   {
-    "id": "3274",
-    "province_id": "32",
-    "name": "Kota Cirebon",
-    "latitude": -6.707,
-    "longitude": 108.558
+    "province_id": 12,
+    "regency_no": 2,
+    "name": "KAB. BANDUNG BARAT",
+    "latitude": -6.865,
+    "longitude": 107.492
   },
   {
-    "id": "3275",
-    "province_id": "32",
-    "name": "Kota Bekasi",
+    "province_id": 12,
+    "regency_no": 3,
+    "name": "KAB. BEKASI",
     "latitude": -6.236,
     "longitude": 106.994
   },
   {
-    "id": "3276",
-    "province_id": "32",
-    "name": "Kota Depok",
-    "latitude": -6.394,
-    "longitude": 106.823
+    "province_id": 12,
+    "regency_no": 4,
+    "name": "KAB. BOGOR",
+    "latitude": -6.595,
+    "longitude": 106.794
   },
   {
-    "id": "3277",
-    "province_id": "32",
-    "name": "Kota Cimahi",
-    "latitude": -6.871,
-    "longitude": 107.555
+    "province_id": 12,
+    "regency_no": 5,
+    "name": "KAB. CIAMIS",
+    "latitude": -7.326,
+    "longitude": 108.351
   },
   {
-    "id": "3278",
-    "province_id": "32",
-    "name": "Kota Tasikmalaya",
+    "province_id": 12,
+    "regency_no": 6,
+    "name": "KAB. CIANJUR",
+    "latitude": -6.823,
+    "longitude": 107.139
+  },
+  {
+    "province_id": 12,
+    "regency_no": 7,
+    "name": "KAB. CIREBON",
+    "latitude": -6.707,
+    "longitude": 108.558
+  },
+  {
+    "province_id": 12,
+    "regency_no": 8,
+    "name": "KAB. GARUT",
+    "latitude": -7.203,
+    "longitude": 107.886
+  },
+  {
+    "province_id": 12,
+    "regency_no": 9,
+    "name": "KAB. INDRAMAYU",
+    "latitude": -6.327,
+    "longitude": 108.323
+  },
+  {
+    "province_id": 12,
+    "regency_no": 10,
+    "name": "KAB. KARAWANG",
+    "latitude": -6.302,
+    "longitude": 107.305
+  },
+  {
+    "province_id": 12,
+    "regency_no": 11,
+    "name": "KAB. KUNINGAN",
+    "latitude": -6.976,
+    "longitude": 108.483
+  },
+  {
+    "province_id": 12,
+    "regency_no": 12,
+    "name": "KAB. MAJALENGKA",
+    "latitude": -6.836,
+    "longitude": 108.228
+  },
+  {
+    "province_id": 12,
+    "regency_no": 13,
+    "name": "KAB. PANGANDARAN",
+    "latitude": -7.615,
+    "longitude": 108.499
+  },
+  {
+    "province_id": 12,
+    "regency_no": 14,
+    "name": "KAB. PURWAKARTA",
+    "latitude": -6.556,
+    "longitude": 107.441
+  },
+  {
+    "province_id": 12,
+    "regency_no": 15,
+    "name": "KAB. SUBANG",
+    "latitude": -6.571,
+    "longitude": 107.762
+  },
+  {
+    "province_id": 12,
+    "regency_no": 16,
+    "name": "KAB. SUKABUMI",
+    "latitude": -6.918,
+    "longitude": 106.932
+  },
+  {
+    "province_id": 12,
+    "regency_no": 17,
+    "name": "KAB. SUMEDANG",
+    "latitude": -6.861,
+    "longitude": 107.921
+  },
+  {
+    "province_id": 12,
+    "regency_no": 18,
+    "name": "KAB. TASIKMALAYA",
     "latitude": -7.316,
     "longitude": 108.197
   },
   {
-    "id": "3279",
-    "province_id": "32",
-    "name": "Kota Banjar",
-    "latitude": -7.362,
-    "longitude": 108.56
-  },
-  {
-    "id": "3301",
-    "province_id": "33",
-    "name": "Kabupaten Cilacap",
-    "latitude": -7.726,
-    "longitude": 109.01
-  },
-  {
-    "id": "3302",
-    "province_id": "33",
-    "name": "Kabupaten Banyumas",
-    "latitude": -7.423,
-    "longitude": 109.23
-  },
-  {
-    "id": "3303",
-    "province_id": "33",
-    "name": "Kabupaten Purbalingga",
-    "latitude": -7.389,
-    "longitude": 109.364
-  },
-  {
-    "id": "3304",
-    "province_id": "33",
-    "name": "Kabupaten Banjarnegara",
-    "latitude": -7.396,
-    "longitude": 109.696
-  },
-  {
-    "id": "3305",
-    "province_id": "33",
-    "name": "Kabupaten Kebumen",
-    "latitude": -7.668,
-    "longitude": 109.654
-  },
-  {
-    "id": "3306",
-    "province_id": "33",
-    "name": "Kabupaten Purworejo",
-    "latitude": -7.714,
-    "longitude": 110.008
-  },
-  {
-    "id": "3307",
-    "province_id": "33",
-    "name": "Kabupaten Wonosobo",
-    "latitude": -7.358,
-    "longitude": 109.905
-  },
-  {
-    "id": "3308",
-    "province_id": "33",
-    "name": "Kabupaten Magelang",
-    "latitude": -7.597,
-    "longitude": 110.224
-  },
-  {
-    "id": "3309",
-    "province_id": "33",
-    "name": "Kabupaten Boyolali",
-    "latitude": -7.546,
-    "longitude": 110.611
-  },
-  {
-    "id": "3310",
-    "province_id": "33",
-    "name": "Kabupaten Klaten",
-    "latitude": -7.712,
-    "longitude": 110.592
-  },
-  {
-    "id": "3311",
-    "province_id": "33",
-    "name": "Kabupaten Sukoharjo",
-    "latitude": -7.665,
-    "longitude": 110.836
-  },
-  {
-    "id": "3312",
-    "province_id": "33",
-    "name": "Kabupaten Wonogiri",
-    "latitude": -7.815,
-    "longitude": 110.926
-  },
-  {
-    "id": "3313",
-    "province_id": "33",
-    "name": "Kabupaten Karanganyar",
-    "latitude": -7.596,
-    "longitude": 110.94
-  },
-  {
-    "id": "3314",
-    "province_id": "33",
-    "name": "Kabupaten Sragen",
-    "latitude": -7.426,
-    "longitude": 111.023
-  },
-  {
-    "id": "3315",
-    "province_id": "33",
-    "name": "Kabupaten Grobogan",
-    "latitude": -7.082,
-    "longitude": 110.917
-  },
-  {
-    "id": "3316",
-    "province_id": "33",
-    "name": "Kabupaten Blora",
-    "latitude": -6.97,
-    "longitude": 111.415
-  },
-  {
-    "id": "3317",
-    "province_id": "33",
-    "name": "Kabupaten Rembang",
-    "latitude": -6.703,
-    "longitude": 111.343
-  },
-  {
-    "id": "3318",
-    "province_id": "33",
-    "name": "Kabupaten Pati",
-    "latitude": -6.752,
-    "longitude": 111.04
-  },
-  {
-    "id": "3319",
-    "province_id": "33",
-    "name": "Kabupaten Kudus",
-    "latitude": -6.806,
-    "longitude": 110.842
-  },
-  {
-    "id": "3320",
-    "province_id": "33",
-    "name": "Kabupaten Jepara",
-    "latitude": -6.59,
-    "longitude": 110.668
-  },
-  {
-    "id": "3321",
-    "province_id": "33",
-    "name": "Kabupaten Demak",
-    "latitude": -6.891,
-    "longitude": 110.638
-  },
-  {
-    "id": "3322",
-    "province_id": "33",
-    "name": "Kabupaten Semarang",
-    "latitude": -7.129,
-    "longitude": 110.404
-  },
-  {
-    "id": "3323",
-    "province_id": "33",
-    "name": "Kabupaten Temanggung",
-    "latitude": -7.315,
-    "longitude": 110.182
-  },
-  {
-    "id": "3324",
-    "province_id": "33",
-    "name": "Kabupaten Kendal",
-    "latitude": -6.923,
-    "longitude": 110.204
-  },
-  {
-    "id": "3325",
-    "province_id": "33",
-    "name": "Kabupaten Batang",
+    "province_id": 12,
+    "regency_no": 19,
+    "name": "KOTA BANDUNG",
     "latitude": -6.911,
-    "longitude": 109.73
+    "longitude": 107.61
   },
   {
-    "id": "3326",
-    "province_id": "33",
-    "name": "Kabupaten Pekalongan",
-    "latitude": -7.025,
-    "longitude": 109.591
-  },
-  {
-    "id": "3327",
-    "province_id": "33",
-    "name": "Kabupaten Pemalang",
-    "latitude": -6.893,
-    "longitude": 109.381
-  },
-  {
-    "id": "3328",
-    "province_id": "33",
-    "name": "Kabupaten Tegal",
-    "latitude": -6.995,
-    "longitude": 109.128
-  },
-  {
-    "id": "3329",
-    "province_id": "33",
-    "name": "Kabupaten Brebes",
-    "latitude": -6.87,
-    "longitude": 109.039
-  },
-  {
-    "id": "3371",
-    "province_id": "33",
-    "name": "Kota Magelang",
-    "latitude": -7.504,
-    "longitude": 110.221
-  },
-  {
-    "id": "3372",
-    "province_id": "33",
-    "name": "Kota Surakarta",
-    "latitude": -7.569,
-    "longitude": 110.829
-  },
-  {
-    "id": "3373",
-    "province_id": "33",
-    "name": "Kota Salatiga",
-    "latitude": -7.33,
-    "longitude": 110.501
-  },
-  {
-    "id": "3374",
-    "province_id": "33",
-    "name": "Kota Semarang",
-    "latitude": -6.982,
-    "longitude": 110.412
-  },
-  {
-    "id": "3375",
-    "province_id": "33",
-    "name": "Kota Pekalongan",
-    "latitude": -6.897,
-    "longitude": 109.662
-  },
-  {
-    "id": "3376",
-    "province_id": "33",
-    "name": "Kota Tegal",
-    "latitude": -6.87,
-    "longitude": 109.137
-  },
-  {
-    "id": "3401",
-    "province_id": "34",
-    "name": "Kabupaten Kulon Progo",
-    "latitude": -7.858,
-    "longitude": 110.159
-  },
-  {
-    "id": "3402",
-    "province_id": "34",
-    "name": "Kabupaten Bantul",
-    "latitude": -7.886,
-    "longitude": 110.328
-  },
-  {
-    "id": "3403",
-    "province_id": "34",
-    "name": "Kabupaten Gunung Kidul",
-    "latitude": -7.964,
-    "longitude": 110.602
-  },
-  {
-    "id": "3404",
-    "province_id": "34",
-    "name": "Kabupaten Sleman",
-    "latitude": -7.717,
-    "longitude": 110.356
-  },
-  {
-    "id": "3471",
-    "province_id": "34",
-    "name": "Kota Yogyakarta",
-    "latitude": -7.8,
-    "longitude": 110.391
-  },
-  {
-    "id": "3501",
-    "province_id": "35",
-    "name": "Kabupaten Pacitan",
-    "latitude": -8.194,
-    "longitude": 111.103
-  },
-  {
-    "id": "3502",
-    "province_id": "35",
-    "name": "Kabupaten Ponorogo",
-    "latitude": -7.871,
-    "longitude": 111.463
-  },
-  {
-    "id": "3503",
-    "province_id": "35",
-    "name": "Kabupaten Trenggalek",
-    "latitude": -8.048,
-    "longitude": 111.709
-  },
-  {
-    "id": "3504",
-    "province_id": "35",
-    "name": "Kabupaten Tulungagung",
-    "latitude": -8.064,
-    "longitude": 111.901
-  },
-  {
-    "id": "3505",
-    "province_id": "35",
-    "name": "Kabupaten Blitar",
-    "latitude": -8.124,
-    "longitude": 112.213
-  },
-  {
-    "id": "3506",
-    "province_id": "35",
-    "name": "Kabupaten Kediri",
-    "latitude": -7.802,
-    "longitude": 112.041
-  },
-  {
-    "id": "3507",
-    "province_id": "35",
-    "name": "Kabupaten Malang",
-    "latitude": -8.105,
-    "longitude": 112.573
-  },
-  {
-    "id": "3508",
-    "province_id": "35",
-    "name": "Kabupaten Lumajang",
-    "latitude": -8.135,
-    "longitude": 113.224
-  },
-  {
-    "id": "3509",
-    "province_id": "35",
-    "name": "Kabupaten Jember",
-    "latitude": -8.17,
-    "longitude": 113.702
-  },
-  {
-    "id": "3510",
-    "province_id": "35",
-    "name": "Kabupaten Banyuwangi",
-    "latitude": -8.223,
-    "longitude": 114.366
-  },
-  {
-    "id": "3511",
-    "province_id": "35",
-    "name": "Kabupaten Bondowoso",
-    "latitude": -7.914,
-    "longitude": 113.822
-  },
-  {
-    "id": "3512",
-    "province_id": "35",
-    "name": "Kabupaten Situbondo",
-    "latitude": -7.707,
-    "longitude": 114.002
-  },
-  {
-    "id": "3513",
-    "province_id": "35",
-    "name": "Kabupaten Probolinggo",
-    "latitude": -7.762,
-    "longitude": 113.416
-  },
-  {
-    "id": "3514",
-    "province_id": "35",
-    "name": "Kabupaten Pasuruan",
-    "latitude": -7.649,
-    "longitude": 112.905
-  },
-  {
-    "id": "3515",
-    "province_id": "35",
-    "name": "Kabupaten Sidoarjo",
-    "latitude": -7.447,
-    "longitude": 112.718
-  },
-  {
-    "id": "3516",
-    "province_id": "35",
-    "name": "Kabupaten Mojokerto",
-    "latitude": -7.463,
-    "longitude": 112.433
-  },
-  {
-    "id": "3517",
-    "province_id": "35",
-    "name": "Kabupaten Jombang",
-    "latitude": -7.556,
-    "longitude": 112.235
-  },
-  {
-    "id": "3518",
-    "province_id": "35",
-    "name": "Kabupaten Nganjuk",
-    "latitude": -7.602,
-    "longitude": 111.902
-  },
-  {
-    "id": "3519",
-    "province_id": "35",
-    "name": "Kabupaten Madiun",
-    "latitude": -7.539,
-    "longitude": 111.653
-  },
-  {
-    "id": "3520",
-    "province_id": "35",
-    "name": "Kabupaten Magetan",
-    "latitude": -7.656,
-    "longitude": 111.329
-  },
-  {
-    "id": "3521",
-    "province_id": "35",
-    "name": "Kabupaten Ngawi",
-    "latitude": -7.401,
-    "longitude": 111.445
-  },
-  {
-    "id": "3522",
-    "province_id": "35",
-    "name": "Kabupaten Bojonegoro",
-    "latitude": -7.15,
-    "longitude": 111.882
-  },
-  {
-    "id": "3523",
-    "province_id": "35",
-    "name": "Kabupaten Tuban",
-    "latitude": -6.896,
-    "longitude": 112.065
-  },
-  {
-    "id": "3524",
-    "province_id": "35",
-    "name": "Kabupaten Lamongan",
-    "latitude": -7.121,
-    "longitude": 112.415
-  },
-  {
-    "id": "3525",
-    "province_id": "35",
-    "name": "Kabupaten Gresik",
-    "latitude": -7.171,
-    "longitude": 112.6
-  },
-  {
-    "id": "3526",
-    "province_id": "35",
-    "name": "Kabupaten Bangkalan",
-    "latitude": -7.046,
-    "longitude": 112.737
-  },
-  {
-    "id": "3527",
-    "province_id": "35",
-    "name": "Kabupaten Sampang",
-    "latitude": -7.188,
-    "longitude": 113.237
-  },
-  {
-    "id": "3528",
-    "province_id": "35",
-    "name": "Kabupaten Pamekasan",
-    "latitude": -7.157,
-    "longitude": 113.472
-  },
-  {
-    "id": "3529",
-    "province_id": "35",
-    "name": "Kabupaten Sumenep",
-    "latitude": -7.014,
-    "longitude": 113.864
-  },
-  {
-    "id": "3571",
-    "province_id": "35",
-    "name": "Kota Kediri",
-    "latitude": -7.812,
-    "longitude": 112.014
-  },
-  {
-    "id": "3572",
-    "province_id": "35",
-    "name": "Kota Blitar",
-    "latitude": -8.099,
-    "longitude": 112.165
-  },
-  {
-    "id": "3573",
-    "province_id": "35",
-    "name": "Kota Malang",
-    "latitude": -7.978,
-    "longitude": 112.634
-  },
-  {
-    "id": "3574",
-    "province_id": "35",
-    "name": "Kota Probolinggo",
-    "latitude": -7.754,
-    "longitude": 113.214
-  },
-  {
-    "id": "3575",
-    "province_id": "35",
-    "name": "Kota Pasuruan",
-    "latitude": -7.647,
-    "longitude": 112.909
-  },
-  {
-    "id": "3576",
-    "province_id": "35",
-    "name": "Kota Mojokerto",
-    "latitude": -7.463,
-    "longitude": 112.433
-  },
-  {
-    "id": "3577",
-    "province_id": "35",
-    "name": "Kota Madiun",
-    "latitude": -7.624,
-    "longitude": 111.521
-  },
-  {
-    "id": "3578",
-    "province_id": "35",
-    "name": "Kota Surabaya",
-    "latitude": -7.259,
-    "longitude": 112.747
-  },
-  {
-    "id": "3579",
-    "province_id": "35",
-    "name": "Kota Batu",
-    "latitude": -7.863,
-    "longitude": 112.513
-  },
-  {
-    "id": "3601",
-    "province_id": "36",
-    "name": "Kabupaten Pandeglang",
-    "latitude": -6.317,
-    "longitude": 106.115
-  },
-  {
-    "id": "3602",
-    "province_id": "36",
-    "name": "Kabupaten Lebak",
-    "latitude": -6.361,
-    "longitude": 106.246
-  },
-  {
-    "id": "3603",
-    "province_id": "36",
-    "name": "Kabupaten Tangerang",
-    "latitude": -6.27,
-    "longitude": 106.484
-  },
-  {
-    "id": "3604",
-    "province_id": "36",
-    "name": "Kabupaten Serang",
-    "latitude": -6.115,
-    "longitude": 106.152
-  },
-  {
-    "id": "3671",
-    "province_id": "36",
-    "name": "Kota Tangerang",
-    "latitude": -6.164,
-    "longitude": 106.641
-  },
-  {
-    "id": "3672",
-    "province_id": "36",
-    "name": "Kota Cilegon",
-    "latitude": -6.01,
-    "longitude": 106.042
-  },
-  {
-    "id": "3673",
-    "province_id": "36",
-    "name": "Kota Serang",
-    "latitude": -6.12,
-    "longitude": 106.173
-  },
-  {
-    "id": "3674",
-    "province_id": "36",
-    "name": "Kota Tangerang Selatan",
-    "latitude": -6.322,
-    "longitude": 106.708
-  },
-  {
-    "id": "5101",
-    "province_id": "51",
-    "name": "Kabupaten Jembrana",
-    "latitude": -8.357,
-    "longitude": 114.637
-  },
-  {
-    "id": "5102",
-    "province_id": "51",
-    "name": "Kabupaten Tabanan",
-    "latitude": -8.539,
-    "longitude": 115.131
-  },
-  {
-    "id": "5103",
-    "province_id": "51",
-    "name": "Kabupaten Badung",
-    "latitude": -8.602,
-    "longitude": 115.179
-  },
-  {
-    "id": "5104",
-    "province_id": "51",
-    "name": "Kabupaten Gianyar",
-    "latitude": -8.541,
-    "longitude": 115.324
-  },
-  {
-    "id": "5105",
-    "province_id": "51",
-    "name": "Kabupaten Klungkung",
-    "latitude": -8.534,
-    "longitude": 115.403
-  },
-  {
-    "id": "5106",
-    "province_id": "51",
-    "name": "Kabupaten Bangli",
-    "latitude": -8.462,
-    "longitude": 115.352
-  },
-  {
-    "id": "5107",
-    "province_id": "51",
-    "name": "Kabupaten Karang Asem",
-    "latitude": -8.439,
-    "longitude": 115.612
-  },
-  {
-    "id": "5108",
-    "province_id": "51",
-    "name": "Kabupaten Buleleng",
-    "latitude": -8.125,
-    "longitude": 115.093
-  },
-  {
-    "id": "5171",
-    "province_id": "51",
-    "name": "Kota Denpasar",
-    "latitude": -8.654,
-    "longitude": 115.217
-  },
-  {
-    "id": "5201",
-    "province_id": "52",
-    "name": "Kabupaten Lombok Barat",
-    "latitude": -8.681,
-    "longitude": 116.137
-  },
-  {
-    "id": "5202",
-    "province_id": "52",
-    "name": "Kabupaten Lombok Tengah",
-    "latitude": -8.706,
-    "longitude": 116.27
-  },
-  {
-    "id": "5203",
-    "province_id": "52",
-    "name": "Kabupaten Lombok Timur",
-    "latitude": -8.651,
-    "longitude": 116.53
-  },
-  {
-    "id": "5204",
-    "province_id": "52",
-    "name": "Kabupaten Sumbawa",
-    "latitude": -8.49,
-    "longitude": 117.42
-  },
-  {
-    "id": "5205",
-    "province_id": "52",
-    "name": "Kabupaten Dompu",
-    "latitude": -8.534,
-    "longitude": 118.465
-  },
-  {
-    "id": "5206",
-    "province_id": "52",
-    "name": "Kabupaten Bima",
-    "latitude": -8.557,
-    "longitude": 118.67
-  },
-  {
-    "id": "5207",
-    "province_id": "52",
-    "name": "Kabupaten Sumbawa Barat",
-    "latitude": -8.754,
-    "longitude": 116.854
-  },
-  {
-    "id": "5208",
-    "province_id": "52",
-    "name": "Kabupaten Lombok Utara",
-    "latitude": -8.356,
-    "longitude": 116.159
-  },
-  {
-    "id": "5271",
-    "province_id": "52",
-    "name": "Kota Mataram",
-    "latitude": -8.583,
-    "longitude": 116.108
-  },
-  {
-    "id": "5272",
-    "province_id": "52",
-    "name": "Kota Bima",
-    "latitude": -8.462,
-    "longitude": 118.749
-  },
-  {
-    "id": "5301",
-    "province_id": "53",
-    "name": "Kabupaten Sumba Barat",
-    "latitude": -10.073,
-    "longitude": 123.864
-  },
-  {
-    "id": "5302",
-    "province_id": "53",
-    "name": "Kabupaten Sumba Timur",
-    "latitude": -9.852,
-    "longitude": 124.266
-  },
-  {
-    "id": "5303",
-    "province_id": "53",
-    "name": "Kabupaten Kupang",
-    "latitude": -9.457,
-    "longitude": 124.475
-  },
-  {
-    "id": "5304",
-    "province_id": "53",
-    "name": "Kabupaten Timor Tengah Selatan",
-    "latitude": -9.106,
-    "longitude": 124.874
-  },
-  {
-    "id": "5305",
-    "province_id": "53",
-    "name": "Kabupaten Timor Tengah Utara",
-    "latitude": -8.209,
-    "longitude": 124.573
-  },
-  {
-    "id": "5306",
-    "province_id": "53",
-    "name": "Kabupaten Belu",
-    "latitude": -8.326,
-    "longitude": 123.003
-  },
-  {
-    "id": "5307",
-    "province_id": "53",
-    "name": "Kabupaten Alor",
-    "latitude": -8.617,
-    "longitude": 122.208
-  },
-  {
-    "id": "5308",
-    "province_id": "53",
-    "name": "Kabupaten Lembata",
-    "latitude": -8.843,
-    "longitude": 121.662
-  },
-  {
-    "id": "5309",
-    "province_id": "53",
-    "name": "Kabupaten Flores Timur",
-    "latitude": -8.785,
-    "longitude": 120.975
-  },
-  {
-    "id": "5310",
-    "province_id": "53",
-    "name": "Kabupaten Sikka",
-    "latitude": -8.611,
-    "longitude": 120.464
-  },
-  {
-    "id": "5311",
-    "province_id": "53",
-    "name": "Kabupaten Ende",
-    "latitude": -9.661,
-    "longitude": 120.261
-  },
-  {
-    "id": "5312",
-    "province_id": "53",
-    "name": "Kabupaten Ngada",
-    "latitude": -9.647,
-    "longitude": 119.394
-  },
-  {
-    "id": "5313",
-    "province_id": "53",
-    "name": "Kabupaten Manggarai",
-    "latitude": -8.36,
-    "longitude": 123.459
-  },
-  {
-    "id": "5314",
-    "province_id": "53",
-    "name": "Kabupaten Rote Ndao",
-    "latitude": -10.758,
-    "longitude": 123.063
-  },
-  {
-    "id": "5315",
-    "province_id": "53",
-    "name": "Kabupaten Manggarai Barat",
-    "latitude": -8.496,
-    "longitude": 119.894
-  },
-  {
-    "id": "5316",
-    "province_id": "53",
-    "name": "Kabupaten Sumba Tengah",
-    "latitude": -8.575,
-    "longitude": 121.281
-  },
-  {
-    "id": "5317",
-    "province_id": "53",
-    "name": "Kabupaten Sumba Barat Daya",
-    "latitude": -9.623,
-    "longitude": 119.6
-  },
-  {
-    "id": "5318",
-    "province_id": "53",
-    "name": "Kabupaten Nagekeo",
-    "latitude": -9.392,
-    "longitude": 119.181
-  },
-  {
-    "id": "5319",
-    "province_id": "53",
-    "name": "Kabupaten Manggarai Timur",
-    "latitude": -8.749,
-    "longitude": 120.609
-  },
-  {
-    "id": "5320",
-    "province_id": "53",
-    "name": "Kabupaten Sabu Raijua",
-    "latitude": -10.453,
-    "longitude": 121.878
-  },
-  {
-    "id": "5321",
-    "province_id": "53",
-    "name": "Kabupaten Malaka",
-    "latitude": -9.445,
-    "longitude": 124.918
-  },
-  {
-    "id": "5371",
-    "province_id": "53",
-    "name": "Kota Kupang",
-    "latitude": -10.154,
-    "longitude": 123.619
-  },
-  {
-    "id": "6101",
-    "province_id": "61",
-    "name": "Kabupaten Sambas",
-    "latitude": 1.361,
-    "longitude": 109.329
-  },
-  {
-    "id": "6102",
-    "province_id": "61",
-    "name": "Kabupaten Bengkayang",
-    "latitude": 0.351,
-    "longitude": 108.962
-  },
-  {
-    "id": "6103",
-    "province_id": "61",
-    "name": "Kabupaten Landak",
-    "latitude": 0.123,
-    "longitude": 110.596
-  },
-  {
-    "id": "6104",
-    "province_id": "61",
-    "name": "Kabupaten Mempawah",
-    "latitude": -1.844,
-    "longitude": 109.979
-  },
-  {
-    "id": "6105",
-    "province_id": "61",
-    "name": "Kabupaten Sanggau",
-    "latitude": 0.079,
-    "longitude": 111.495
-  },
-  {
-    "id": "6106",
-    "province_id": "61",
-    "name": "Kabupaten Ketapang",
-    "latitude": 0.879,
-    "longitude": 112.925
-  },
-  {
-    "id": "6107",
-    "province_id": "61",
-    "name": "Kabupaten Sintang",
-    "latitude": 0.869,
-    "longitude": 109.497
-  },
-  {
-    "id": "6108",
-    "province_id": "61",
-    "name": "Kabupaten Kapuas Hulu",
-    "latitude": 0.375,
-    "longitude": 109.938
-  },
-  {
-    "id": "6109",
-    "province_id": "61",
-    "name": "Kabupaten Sekadau",
-    "latitude": 0.007,
-    "longitude": 110.955
-  },
-  {
-    "id": "6110",
-    "province_id": "61",
-    "name": "Kabupaten Melawi",
-    "latitude": -0.377,
-    "longitude": 111.764
-  },
-  {
-    "id": "6111",
-    "province_id": "61",
-    "name": "Kabupaten Kayong Utara",
-    "latitude": -1.253,
-    "longitude": 109.954
-  },
-  {
-    "id": "6112",
-    "province_id": "61",
-    "name": "Kabupaten Kubu Raya",
-    "latitude": -0.127,
-    "longitude": 109.404
-  },
-  {
-    "id": "6171",
-    "province_id": "61",
-    "name": "Kota Pontianak",
-    "latitude": -0.022,
-    "longitude": 109.338
-  },
-  {
-    "id": "6172",
-    "province_id": "61",
-    "name": "Kota Singkawang",
-    "latitude": 0.905,
-    "longitude": 108.977
-  },
-  {
-    "id": "6201",
-    "province_id": "62",
-    "name": "Kabupaten Kotawaringin Barat",
-    "latitude": -2.692,
-    "longitude": 111.634
-  },
-  {
-    "id": "6202",
-    "province_id": "62",
-    "name": "Kabupaten Kotawaringin Timur",
-    "latitude": -2.538,
-    "longitude": 112.941
-  },
-  {
-    "id": "6203",
-    "province_id": "62",
-    "name": "Kabupaten Kapuas",
-    "latitude": -2.964,
-    "longitude": 114.416
-  },
-  {
-    "id": "6204",
-    "province_id": "62",
-    "name": "Kabupaten Barito Selatan",
-    "latitude": -1.719,
-    "longitude": 114.845
-  },
-  {
-    "id": "6205",
-    "province_id": "62",
-    "name": "Kabupaten Barito Utara",
-    "latitude": -0.952,
-    "longitude": 114.898
-  },
-  {
-    "id": "6206",
-    "province_id": "62",
-    "name": "Kabupaten Sukamara",
-    "latitude": -1.881,
-    "longitude": 113.399
-  },
-  {
-    "id": "6207",
-    "province_id": "62",
-    "name": "Kabupaten Lamandau",
-    "latitude": -3.414,
-    "longitude": 112.542
-  },
-  {
-    "id": "6208",
-    "province_id": "62",
-    "name": "Kabupaten Seruyan",
-    "latitude": -2.761,
-    "longitude": 111.177
-  },
-  {
-    "id": "6209",
-    "province_id": "62",
-    "name": "Kabupaten Katingan",
-    "latitude": -2.185,
-    "longitude": 111.428
-  },
-  {
-    "id": "6210",
-    "province_id": "62",
-    "name": "Kabupaten Pulang Pisau",
-    "latitude": -1.127,
-    "longitude": 113.844
-  },
-  {
-    "id": "6211",
-    "province_id": "62",
-    "name": "Kabupaten Gunung Mas",
-    "latitude": -2.716,
-    "longitude": 114.305
-  },
-  {
-    "id": "6212",
-    "province_id": "62",
-    "name": "Kabupaten Barito Timur",
-    "latitude": -0.64,
-    "longitude": 114.569
-  },
-  {
-    "id": "6213",
-    "province_id": "62",
-    "name": "Kabupaten Murung Raya",
-    "latitude": -2.115,
-    "longitude": 115.169
-  },
-  {
-    "id": "6271",
-    "province_id": "62",
-    "name": "Kota Palangka Raya",
-    "latitude": -2.174,
-    "longitude": 113.88
-  },
-  {
-    "id": "6301",
-    "province_id": "63",
-    "name": "Kabupaten Tanah Laut",
-    "latitude": -3.799,
-    "longitude": 114.783
-  },
-  {
-    "id": "6302",
-    "province_id": "63",
-    "name": "Kabupaten Kota Baru",
-    "latitude": -3.236,
-    "longitude": 116.228
-  },
-  {
-    "id": "6303",
-    "province_id": "63",
-    "name": "Kabupaten Banjar",
+    "province_id": 12,
+    "regency_no": 20,
+    "name": "KOTA BANJAR",
     "latitude": -3.409,
     "longitude": 114.848
   },
   {
-    "id": "6304",
-    "province_id": "63",
-    "name": "Kabupaten Barito Kuala",
-    "latitude": -2.978,
-    "longitude": 114.766
+    "province_id": 12,
+    "regency_no": 21,
+    "name": "KOTA BEKASI",
+    "latitude": -6.236,
+    "longitude": 106.994
   },
   {
-    "id": "6305",
-    "province_id": "63",
-    "name": "Kabupaten Tapin",
-    "latitude": -2.932,
-    "longitude": 115.163
+    "province_id": 12,
+    "regency_no": 22,
+    "name": "KOTA BOGOR",
+    "latitude": -6.595,
+    "longitude": 106.794
   },
   {
-    "id": "6306",
-    "province_id": "63",
-    "name": "Kabupaten Hulu Sungai Selatan",
-    "latitude": -2.787,
-    "longitude": 115.266
+    "province_id": 12,
+    "regency_no": 23,
+    "name": "KOTA CIMAHI",
+    "latitude": -6.871,
+    "longitude": 107.555
   },
   {
-    "id": "6307",
-    "province_id": "63",
-    "name": "Kabupaten Hulu Sungai Tengah",
-    "latitude": -2.585,
-    "longitude": 115.385
+    "province_id": 12,
+    "regency_no": 24,
+    "name": "KOTA CIREBON",
+    "latitude": -6.707,
+    "longitude": 108.558
   },
   {
-    "id": "6308",
-    "province_id": "63",
-    "name": "Kabupaten Hulu Sungai Utara",
-    "latitude": -2.419,
-    "longitude": 115.254
+    "province_id": 12,
+    "regency_no": 25,
+    "name": "KOTA DEPOK",
+    "latitude": -6.394,
+    "longitude": 106.823
   },
   {
-    "id": "6309",
-    "province_id": "63",
-    "name": "Kabupaten Tabalong",
-    "latitude": -2.164,
-    "longitude": 115.382
+    "province_id": 12,
+    "regency_no": 26,
+    "name": "KOTA SUKABUMI",
+    "latitude": -6.918,
+    "longitude": 106.932
   },
   {
-    "id": "6310",
-    "province_id": "63",
-    "name": "Kabupaten Tanah Bumbu",
-    "latitude": -3.483,
-    "longitude": 115.947
+    "province_id": 12,
+    "regency_no": 27,
+    "name": "KOTA TASIKMALAYA",
+    "latitude": -7.316,
+    "longitude": 108.197
   },
   {
-    "id": "6311",
-    "province_id": "63",
-    "name": "Kabupaten Balangan",
+    "province_id": 13,
+    "regency_no": 1,
+    "name": "KAB. BANJARNEGARA",
+    "latitude": -7.396,
+    "longitude": 109.696
+  },
+  {
+    "province_id": 13,
+    "regency_no": 2,
+    "name": "KAB. BANYUMAS",
+    "latitude": -7.423,
+    "longitude": 109.23
+  },
+  {
+    "province_id": 13,
+    "regency_no": 3,
+    "name": "KAB. BATANG",
+    "latitude": -6.911,
+    "longitude": 109.73
+  },
+  {
+    "province_id": 13,
+    "regency_no": 4,
+    "name": "KAB. BLORA",
+    "latitude": -6.97,
+    "longitude": 111.415
+  },
+  {
+    "province_id": 13,
+    "regency_no": 5,
+    "name": "KAB. BOYOLALI",
+    "latitude": -7.546,
+    "longitude": 110.611
+  },
+  {
+    "province_id": 13,
+    "regency_no": 6,
+    "name": "KAB. BREBES",
+    "latitude": -6.87,
+    "longitude": 109.039
+  },
+  {
+    "province_id": 13,
+    "regency_no": 7,
+    "name": "KAB. CILACAP",
+    "latitude": -7.726,
+    "longitude": 109.01
+  },
+  {
+    "province_id": 13,
+    "regency_no": 8,
+    "name": "KAB. DEMAK",
+    "latitude": -6.891,
+    "longitude": 110.638
+  },
+  {
+    "province_id": 13,
+    "regency_no": 9,
+    "name": "KAB. GROBOGAN",
+    "latitude": -7.082,
+    "longitude": 110.917
+  },
+  {
+    "province_id": 13,
+    "regency_no": 10,
+    "name": "KAB. JEPARA",
+    "latitude": -6.59,
+    "longitude": 110.668
+  },
+  {
+    "province_id": 13,
+    "regency_no": 11,
+    "name": "KAB. KARANGANYAR",
+    "latitude": -7.596,
+    "longitude": 110.94
+  },
+  {
+    "province_id": 13,
+    "regency_no": 12,
+    "name": "KAB. KEBUMEN",
+    "latitude": -7.668,
+    "longitude": 109.654
+  },
+  {
+    "province_id": 13,
+    "regency_no": 13,
+    "name": "KAB. KENDAL",
+    "latitude": -6.923,
+    "longitude": 110.204
+  },
+  {
+    "province_id": 13,
+    "regency_no": 14,
+    "name": "KAB. KLATEN",
+    "latitude": -7.712,
+    "longitude": 110.592
+  },
+  {
+    "province_id": 13,
+    "regency_no": 15,
+    "name": "KAB. KUDUS",
+    "latitude": -6.806,
+    "longitude": 110.842
+  },
+  {
+    "province_id": 13,
+    "regency_no": 16,
+    "name": "KAB. MAGELANG",
+    "latitude": -7.504,
+    "longitude": 110.221
+  },
+  {
+    "province_id": 13,
+    "regency_no": 17,
+    "name": "KAB. PATI",
+    "latitude": -6.752,
+    "longitude": 111.04
+  },
+  {
+    "province_id": 13,
+    "regency_no": 18,
+    "name": "KAB. PEKALONGAN",
+    "latitude": -6.897,
+    "longitude": 109.662
+  },
+  {
+    "province_id": 13,
+    "regency_no": 19,
+    "name": "KAB. PEMALANG",
+    "latitude": -6.893,
+    "longitude": 109.381
+  },
+  {
+    "province_id": 13,
+    "regency_no": 20,
+    "name": "KAB. PURBALINGGA",
+    "latitude": -7.389,
+    "longitude": 109.364
+  },
+  {
+    "province_id": 13,
+    "regency_no": 21,
+    "name": "KAB. PURWOREJO",
+    "latitude": -7.714,
+    "longitude": 110.008
+  },
+  {
+    "province_id": 13,
+    "regency_no": 22,
+    "name": "KAB. REMBANG",
+    "latitude": -6.703,
+    "longitude": 111.343
+  },
+  {
+    "province_id": 13,
+    "regency_no": 23,
+    "name": "KAB. SEMARANG",
+    "latitude": -6.982,
+    "longitude": 110.412
+  },
+  {
+    "province_id": 13,
+    "regency_no": 24,
+    "name": "KAB. SRAGEN",
+    "latitude": -7.426,
+    "longitude": 111.023
+  },
+  {
+    "province_id": 13,
+    "regency_no": 25,
+    "name": "KAB. SUKOHARJO",
+    "latitude": -7.665,
+    "longitude": 110.836
+  },
+  {
+    "province_id": 13,
+    "regency_no": 26,
+    "name": "KAB. TEGAL",
+    "latitude": -6.87,
+    "longitude": 109.137
+  },
+  {
+    "province_id": 13,
+    "regency_no": 27,
+    "name": "KAB. TEMANGGUNG",
+    "latitude": -7.315,
+    "longitude": 110.182
+  },
+  {
+    "province_id": 13,
+    "regency_no": 28,
+    "name": "KAB. WONOGIRI",
+    "latitude": -7.815,
+    "longitude": 110.926
+  },
+  {
+    "province_id": 13,
+    "regency_no": 29,
+    "name": "KAB. WONOSOBO",
+    "latitude": -7.358,
+    "longitude": 109.905
+  },
+  {
+    "province_id": 13,
+    "regency_no": 30,
+    "name": "KOTA MAGELANG",
+    "latitude": -7.504,
+    "longitude": 110.221
+  },
+  {
+    "province_id": 13,
+    "regency_no": 31,
+    "name": "KOTA PEKALONGAN",
+    "latitude": -6.897,
+    "longitude": 109.662
+  },
+  {
+    "province_id": 13,
+    "regency_no": 32,
+    "name": "KOTA SALATIGA",
+    "latitude": -7.33,
+    "longitude": 110.501
+  },
+  {
+    "province_id": 13,
+    "regency_no": 33,
+    "name": "KOTA SEMARANG",
+    "latitude": -6.982,
+    "longitude": 110.412
+  },
+  {
+    "province_id": 13,
+    "regency_no": 34,
+    "name": "KOTA SURAKARTA",
+    "latitude": -7.569,
+    "longitude": 110.829
+  },
+  {
+    "province_id": 13,
+    "regency_no": 35,
+    "name": "KOTA TEGAL",
+    "latitude": -6.87,
+    "longitude": 109.137
+  },
+  {
+    "province_id": 14,
+    "regency_no": 1,
+    "name": "KAB. BANTUL",
+    "latitude": -7.886,
+    "longitude": 110.328
+  },
+  {
+    "province_id": 14,
+    "regency_no": 2,
+    "name": "KAB. GUNUNG KIDUL",
+    "latitude": -7.964,
+    "longitude": 110.602
+  },
+  {
+    "province_id": 14,
+    "regency_no": 3,
+    "name": "KAB. KULON PROGO",
+    "latitude": -7.858,
+    "longitude": 110.159
+  },
+  {
+    "province_id": 14,
+    "regency_no": 4,
+    "name": "KAB. SLEMAN",
+    "latitude": -7.717,
+    "longitude": 110.356
+  },
+  {
+    "province_id": 14,
+    "regency_no": 5,
+    "name": "KOTA YOGYAKARTA",
+    "latitude": -7.8,
+    "longitude": 110.391
+  },
+  {
+    "province_id": 15,
+    "regency_no": 1,
+    "name": "KAB. BANGKALAN",
+    "latitude": -7.046,
+    "longitude": 112.737
+  },
+  {
+    "province_id": 15,
+    "regency_no": 2,
+    "name": "KAB. BANYUWANGI",
+    "latitude": -8.223,
+    "longitude": 114.366
+  },
+  {
+    "province_id": 15,
+    "regency_no": 3,
+    "name": "KAB. BLITAR",
+    "latitude": -8.099,
+    "longitude": 112.165
+  },
+  {
+    "province_id": 15,
+    "regency_no": 4,
+    "name": "KAB. BOJONEGORO",
+    "latitude": -7.15,
+    "longitude": 111.882
+  },
+  {
+    "province_id": 15,
+    "regency_no": 5,
+    "name": "KAB. BONDOWOSO",
+    "latitude": -7.914,
+    "longitude": 113.822
+  },
+  {
+    "province_id": 15,
+    "regency_no": 6,
+    "name": "KAB. GRESIK",
+    "latitude": -7.171,
+    "longitude": 112.6
+  },
+  {
+    "province_id": 15,
+    "regency_no": 7,
+    "name": "KAB. JEMBER",
+    "latitude": -8.17,
+    "longitude": 113.702
+  },
+  {
+    "province_id": 15,
+    "regency_no": 8,
+    "name": "KAB. JOMBANG",
+    "latitude": -7.556,
+    "longitude": 112.235
+  },
+  {
+    "province_id": 15,
+    "regency_no": 9,
+    "name": "KAB. KEDIRI",
+    "latitude": -7.812,
+    "longitude": 112.014
+  },
+  {
+    "province_id": 15,
+    "regency_no": 10,
+    "name": "KAB. LAMONGAN",
+    "latitude": -7.121,
+    "longitude": 112.415
+  },
+  {
+    "province_id": 15,
+    "regency_no": 11,
+    "name": "KAB. LUMAJANG",
+    "latitude": -8.135,
+    "longitude": 113.224
+  },
+  {
+    "province_id": 15,
+    "regency_no": 12,
+    "name": "KAB. MADIUN",
+    "latitude": -7.624,
+    "longitude": 111.521
+  },
+  {
+    "province_id": 15,
+    "regency_no": 13,
+    "name": "KAB. MAGETAN",
+    "latitude": -7.656,
+    "longitude": 111.329
+  },
+  {
+    "province_id": 15,
+    "regency_no": 14,
+    "name": "KAB. MALANG",
+    "latitude": -7.978,
+    "longitude": 112.634
+  },
+  {
+    "province_id": 15,
+    "regency_no": 15,
+    "name": "KAB. MOJOKERTO",
+    "latitude": -7.463,
+    "longitude": 112.433
+  },
+  {
+    "province_id": 15,
+    "regency_no": 16,
+    "name": "KAB. NGANJUK",
+    "latitude": -7.602,
+    "longitude": 111.902
+  },
+  {
+    "province_id": 15,
+    "regency_no": 17,
+    "name": "KAB. NGAWI",
+    "latitude": -7.401,
+    "longitude": 111.445
+  },
+  {
+    "province_id": 15,
+    "regency_no": 18,
+    "name": "KAB. PACITAN",
+    "latitude": -8.194,
+    "longitude": 111.103
+  },
+  {
+    "province_id": 15,
+    "regency_no": 19,
+    "name": "KAB. PAMEKASAN",
+    "latitude": -7.157,
+    "longitude": 113.472
+  },
+  {
+    "province_id": 15,
+    "regency_no": 20,
+    "name": "KAB. PASURUAN",
+    "latitude": -7.647,
+    "longitude": 112.909
+  },
+  {
+    "province_id": 15,
+    "regency_no": 21,
+    "name": "KAB. PONOROGO",
+    "latitude": -7.871,
+    "longitude": 111.463
+  },
+  {
+    "province_id": 15,
+    "regency_no": 22,
+    "name": "KAB. PROBOLINGGO",
+    "latitude": -7.754,
+    "longitude": 113.214
+  },
+  {
+    "province_id": 15,
+    "regency_no": 23,
+    "name": "KAB. SAMPANG",
+    "latitude": -7.188,
+    "longitude": 113.237
+  },
+  {
+    "province_id": 15,
+    "regency_no": 24,
+    "name": "KAB. SIDOARJO",
+    "latitude": -7.447,
+    "longitude": 112.718
+  },
+  {
+    "province_id": 15,
+    "regency_no": 25,
+    "name": "KAB. SITUBONDO",
+    "latitude": -7.707,
+    "longitude": 114.002
+  },
+  {
+    "province_id": 15,
+    "regency_no": 26,
+    "name": "KAB. SUMENEP",
+    "latitude": -7.014,
+    "longitude": 113.864
+  },
+  {
+    "province_id": 15,
+    "regency_no": 27,
+    "name": "KAB. TRENGGALEK",
+    "latitude": -8.048,
+    "longitude": 111.709
+  },
+  {
+    "province_id": 15,
+    "regency_no": 28,
+    "name": "KAB. TUBAN",
+    "latitude": -6.896,
+    "longitude": 112.065
+  },
+  {
+    "province_id": 15,
+    "regency_no": 29,
+    "name": "KAB. TULUNGAGUNG",
+    "latitude": -8.064,
+    "longitude": 111.901
+  },
+  {
+    "province_id": 15,
+    "regency_no": 30,
+    "name": "KOTA BATU",
+    "latitude": -7.863,
+    "longitude": 112.513
+  },
+  {
+    "province_id": 15,
+    "regency_no": 31,
+    "name": "KOTA BLITAR",
+    "latitude": -8.099,
+    "longitude": 112.165
+  },
+  {
+    "province_id": 15,
+    "regency_no": 32,
+    "name": "KOTA KEDIRI",
+    "latitude": -7.812,
+    "longitude": 112.014
+  },
+  {
+    "province_id": 15,
+    "regency_no": 33,
+    "name": "KOTA MADIUN",
+    "latitude": -7.624,
+    "longitude": 111.521
+  },
+  {
+    "province_id": 15,
+    "regency_no": 34,
+    "name": "KOTA MALANG",
+    "latitude": -7.978,
+    "longitude": 112.634
+  },
+  {
+    "province_id": 15,
+    "regency_no": 35,
+    "name": "KOTA MOJOKERTO",
+    "latitude": -7.463,
+    "longitude": 112.433
+  },
+  {
+    "province_id": 15,
+    "regency_no": 36,
+    "name": "KOTA PASURUAN",
+    "latitude": -7.647,
+    "longitude": 112.909
+  },
+  {
+    "province_id": 15,
+    "regency_no": 37,
+    "name": "KOTA PROBOLINGGO",
+    "latitude": -7.754,
+    "longitude": 113.214
+  },
+  {
+    "province_id": 15,
+    "regency_no": 38,
+    "name": "KOTA SURABAYA",
+    "latitude": -7.259,
+    "longitude": 112.747
+  },
+  {
+    "province_id": 16,
+    "regency_no": 1,
+    "name": "KAB. LEBAK",
+    "latitude": -6.361,
+    "longitude": 106.246
+  },
+  {
+    "province_id": 16,
+    "regency_no": 2,
+    "name": "KAB. PANDEGLANG",
+    "latitude": -6.317,
+    "longitude": 106.115
+  },
+  {
+    "province_id": 16,
+    "regency_no": 3,
+    "name": "KAB. SERANG",
+    "latitude": -6.12,
+    "longitude": 106.173
+  },
+  {
+    "province_id": 16,
+    "regency_no": 4,
+    "name": "KAB. TANGERANG",
+    "latitude": -6.164,
+    "longitude": 106.641
+  },
+  {
+    "province_id": 16,
+    "regency_no": 5,
+    "name": "KOTA CILEGON",
+    "latitude": -6.01,
+    "longitude": 106.042
+  },
+  {
+    "province_id": 16,
+    "regency_no": 6,
+    "name": "KOTA SERANG",
+    "latitude": -6.12,
+    "longitude": 106.173
+  },
+  {
+    "province_id": 16,
+    "regency_no": 7,
+    "name": "KOTA TANGERANG",
+    "latitude": -6.164,
+    "longitude": 106.641
+  },
+  {
+    "province_id": 16,
+    "regency_no": 8,
+    "name": "KOTA TANGERANG SELATAN",
+    "latitude": -6.322,
+    "longitude": 106.708
+  },
+  {
+    "province_id": 17,
+    "regency_no": 1,
+    "name": "KAB. BADUNG",
+    "latitude": -8.602,
+    "longitude": 115.179
+  },
+  {
+    "province_id": 17,
+    "regency_no": 2,
+    "name": "KAB. BANGLI",
+    "latitude": -8.462,
+    "longitude": 115.352
+  },
+  {
+    "province_id": 17,
+    "regency_no": 3,
+    "name": "KAB. BULELENG",
+    "latitude": -8.125,
+    "longitude": 115.093
+  },
+  {
+    "province_id": 17,
+    "regency_no": 4,
+    "name": "KAB. GIANYAR",
+    "latitude": -8.541,
+    "longitude": 115.324
+  },
+  {
+    "province_id": 17,
+    "regency_no": 5,
+    "name": "KAB. JEMBRANA",
+    "latitude": -8.357,
+    "longitude": 114.637
+  },
+  {
+    "province_id": 17,
+    "regency_no": 6,
+    "name": "KAB. KARANGASEM",
+    "latitude": -8.439,
+    "longitude": 115.612
+  },
+  {
+    "province_id": 17,
+    "regency_no": 7,
+    "name": "KAB. KLUNGKUNG",
+    "latitude": -8.534,
+    "longitude": 115.403
+  },
+  {
+    "province_id": 17,
+    "regency_no": 8,
+    "name": "KAB. TABANAN",
+    "latitude": -8.539,
+    "longitude": 115.131
+  },
+  {
+    "province_id": 17,
+    "regency_no": 9,
+    "name": "KOTA DENPASAR",
+    "latitude": -8.654,
+    "longitude": 115.217
+  },
+  {
+    "province_id": 18,
+    "regency_no": 1,
+    "name": "KAB. BIMA",
+    "latitude": -8.462,
+    "longitude": 118.749
+  },
+  {
+    "province_id": 18,
+    "regency_no": 2,
+    "name": "KAB. DOMPU",
+    "latitude": -8.534,
+    "longitude": 118.465
+  },
+  {
+    "province_id": 18,
+    "regency_no": 3,
+    "name": "KAB. LOMBOK BARAT",
+    "latitude": -8.681,
+    "longitude": 116.137
+  },
+  {
+    "province_id": 18,
+    "regency_no": 4,
+    "name": "KAB. LOMBOK TENGAH",
+    "latitude": -8.706,
+    "longitude": 116.27
+  },
+  {
+    "province_id": 18,
+    "regency_no": 5,
+    "name": "KAB. LOMBOK TIMUR",
+    "latitude": -8.651,
+    "longitude": 116.53
+  },
+  {
+    "province_id": 18,
+    "regency_no": 6,
+    "name": "KAB. LOMBOK UTARA",
+    "latitude": -8.356,
+    "longitude": 116.159
+  },
+  {
+    "province_id": 18,
+    "regency_no": 7,
+    "name": "KAB. SUMBAWA",
+    "latitude": -8.49,
+    "longitude": 117.42
+  },
+  {
+    "province_id": 18,
+    "regency_no": 8,
+    "name": "KAB. SUMBAWA BARAT",
+    "latitude": -8.754,
+    "longitude": 116.854
+  },
+  {
+    "province_id": 18,
+    "regency_no": 9,
+    "name": "KOTA BIMA",
+    "latitude": -8.462,
+    "longitude": 118.749
+  },
+  {
+    "province_id": 18,
+    "regency_no": 10,
+    "name": "KOTA MATARAM",
+    "latitude": -8.583,
+    "longitude": 116.108
+  },
+  {
+    "province_id": 19,
+    "regency_no": 1,
+    "name": "KAB. ALOR",
+    "latitude": -8.617,
+    "longitude": 122.208
+  },
+  {
+    "province_id": 19,
+    "regency_no": 2,
+    "name": "KAB. BELU",
+    "latitude": -8.326,
+    "longitude": 123.003
+  },
+  {
+    "province_id": 19,
+    "regency_no": 3,
+    "name": "KAB. ENDE",
+    "latitude": -9.661,
+    "longitude": 120.261
+  },
+  {
+    "province_id": 19,
+    "regency_no": 4,
+    "name": "KAB. FLORES TIMUR",
+    "latitude": -8.785,
+    "longitude": 120.975
+  },
+  {
+    "province_id": 19,
+    "regency_no": 5,
+    "name": "KAB. KUPANG",
+    "latitude": -10.154,
+    "longitude": 123.619
+  },
+  {
+    "province_id": 19,
+    "regency_no": 6,
+    "name": "KAB. LEMBATA",
+    "latitude": -8.843,
+    "longitude": 121.662
+  },
+  {
+    "province_id": 19,
+    "regency_no": 7,
+    "name": "KAB. MALAKA",
+    "latitude": -9.445,
+    "longitude": 124.918
+  },
+  {
+    "province_id": 19,
+    "regency_no": 8,
+    "name": "KAB. MANGGARAI",
+    "latitude": -8.36,
+    "longitude": 123.459
+  },
+  {
+    "province_id": 19,
+    "regency_no": 9,
+    "name": "KAB. MANGGARAI BARAT",
+    "latitude": -8.496,
+    "longitude": 119.894
+  },
+  {
+    "province_id": 19,
+    "regency_no": 10,
+    "name": "KAB. MANGGARAI TIMUR",
+    "latitude": -8.749,
+    "longitude": 120.609
+  },
+  {
+    "province_id": 19,
+    "regency_no": 11,
+    "name": "KAB. NAGEKEO",
+    "latitude": -9.392,
+    "longitude": 119.181
+  },
+  {
+    "province_id": 19,
+    "regency_no": 12,
+    "name": "KAB. NGADA",
+    "latitude": -9.647,
+    "longitude": 119.394
+  },
+  {
+    "province_id": 19,
+    "regency_no": 13,
+    "name": "KAB. ROTE NDAO",
+    "latitude": -10.758,
+    "longitude": 123.063
+  },
+  {
+    "province_id": 19,
+    "regency_no": 14,
+    "name": "KAB. SABU RAIJUA",
+    "latitude": -10.453,
+    "longitude": 121.878
+  },
+  {
+    "province_id": 19,
+    "regency_no": 15,
+    "name": "KAB. SIKKA",
+    "latitude": -8.611,
+    "longitude": 120.464
+  },
+  {
+    "province_id": 19,
+    "regency_no": 16,
+    "name": "KAB. SUMBA BARAT",
+    "latitude": -10.073,
+    "longitude": 123.864
+  },
+  {
+    "province_id": 19,
+    "regency_no": 17,
+    "name": "KAB. SUMBA BARAT DAYA",
+    "latitude": -9.623,
+    "longitude": 119.6
+  },
+  {
+    "province_id": 19,
+    "regency_no": 18,
+    "name": "KAB. SUMBA TENGAH",
+    "latitude": -8.575,
+    "longitude": 121.281
+  },
+  {
+    "province_id": 19,
+    "regency_no": 19,
+    "name": "KAB. SUMBA TIMUR",
+    "latitude": -9.852,
+    "longitude": 124.266
+  },
+  {
+    "province_id": 19,
+    "regency_no": 20,
+    "name": "KAB. TIMOR TENGAH SELATAN",
+    "latitude": -9.106,
+    "longitude": 124.874
+  },
+  {
+    "province_id": 19,
+    "regency_no": 21,
+    "name": "KAB. TIMOR TENGAH UTARA",
+    "latitude": -8.209,
+    "longitude": 124.573
+  },
+  {
+    "province_id": 19,
+    "regency_no": 22,
+    "name": "KOTA KUPANG",
+    "latitude": -10.154,
+    "longitude": 123.619
+  },
+  {
+    "province_id": 20,
+    "regency_no": 1,
+    "name": "KAB. BENGKAYANG",
+    "latitude": 0.351,
+    "longitude": 108.962
+  },
+  {
+    "province_id": 20,
+    "regency_no": 2,
+    "name": "KAB. KAPUAS HULU",
+    "latitude": 0.375,
+    "longitude": 109.938
+  },
+  {
+    "province_id": 20,
+    "regency_no": 3,
+    "name": "KAB. KAYONG UTARA",
+    "latitude": -1.253,
+    "longitude": 109.954
+  },
+  {
+    "province_id": 20,
+    "regency_no": 4,
+    "name": "KAB. KETAPANG",
+    "latitude": 0.879,
+    "longitude": 112.925
+  },
+  {
+    "province_id": 20,
+    "regency_no": 5,
+    "name": "KAB. KUBU RAYA",
+    "latitude": -0.127,
+    "longitude": 109.404
+  },
+  {
+    "province_id": 20,
+    "regency_no": 6,
+    "name": "KAB. LANDAK",
+    "latitude": 0.123,
+    "longitude": 110.596
+  },
+  {
+    "province_id": 20,
+    "regency_no": 7,
+    "name": "KAB. MELAWI",
+    "latitude": -0.377,
+    "longitude": 111.764
+  },
+  {
+    "province_id": 20,
+    "regency_no": 8,
+    "name": "KAB. MEMPAWAH",
+    "latitude": -1.844,
+    "longitude": 109.979
+  },
+  {
+    "province_id": 20,
+    "regency_no": 9,
+    "name": "KAB. SAMBAS",
+    "latitude": 1.361,
+    "longitude": 109.329
+  },
+  {
+    "province_id": 20,
+    "regency_no": 10,
+    "name": "KAB. SANGGAU",
+    "latitude": 0.079,
+    "longitude": 111.495
+  },
+  {
+    "province_id": 20,
+    "regency_no": 11,
+    "name": "KAB. SEKADAU",
+    "latitude": 0.007,
+    "longitude": 110.955
+  },
+  {
+    "province_id": 20,
+    "regency_no": 12,
+    "name": "KAB. SINTANG",
+    "latitude": 0.869,
+    "longitude": 109.497
+  },
+  {
+    "province_id": 20,
+    "regency_no": 13,
+    "name": "KOTA PONTIANAK",
+    "latitude": -0.022,
+    "longitude": 109.338
+  },
+  {
+    "province_id": 20,
+    "regency_no": 14,
+    "name": "KOTA SINGKAWANG",
+    "latitude": 0.905,
+    "longitude": 108.977
+  },
+  {
+    "province_id": 21,
+    "regency_no": 1,
+    "name": "KAB. BARITO SELATAN",
+    "latitude": -1.719,
+    "longitude": 114.845
+  },
+  {
+    "province_id": 21,
+    "regency_no": 2,
+    "name": "KAB. BARITO TIMUR",
+    "latitude": -0.64,
+    "longitude": 114.569
+  },
+  {
+    "province_id": 21,
+    "regency_no": 3,
+    "name": "KAB. BARITO UTARA",
+    "latitude": -0.952,
+    "longitude": 114.898
+  },
+  {
+    "province_id": 21,
+    "regency_no": 4,
+    "name": "KAB. GUNUNG MAS",
+    "latitude": -2.716,
+    "longitude": 114.305
+  },
+  {
+    "province_id": 21,
+    "regency_no": 5,
+    "name": "KAB. KAPUAS",
+    "latitude": -2.964,
+    "longitude": 114.416
+  },
+  {
+    "province_id": 21,
+    "regency_no": 6,
+    "name": "KAB. KATINGAN",
+    "latitude": -2.185,
+    "longitude": 111.428
+  },
+  {
+    "province_id": 21,
+    "regency_no": 7,
+    "name": "KAB. KOTAWARINGIN BARAT",
+    "latitude": -2.692,
+    "longitude": 111.634
+  },
+  {
+    "province_id": 21,
+    "regency_no": 8,
+    "name": "KAB. KOTAWARINGIN TIMUR",
+    "latitude": -2.538,
+    "longitude": 112.941
+  },
+  {
+    "province_id": 21,
+    "regency_no": 9,
+    "name": "KAB. LAMANDAU",
+    "latitude": -3.414,
+    "longitude": 112.542
+  },
+  {
+    "province_id": 21,
+    "regency_no": 10,
+    "name": "KAB. MURUNG RAYA",
+    "latitude": -2.115,
+    "longitude": 115.169
+  },
+  {
+    "province_id": 21,
+    "regency_no": 11,
+    "name": "KAB. PULANG PISAU",
+    "latitude": -1.127,
+    "longitude": 113.844
+  },
+  {
+    "province_id": 21,
+    "regency_no": 12,
+    "name": "KAB. SERUYAN",
+    "latitude": -2.761,
+    "longitude": 111.177
+  },
+  {
+    "province_id": 21,
+    "regency_no": 13,
+    "name": "KAB. SUKAMARA",
+    "latitude": -1.881,
+    "longitude": 113.399
+  },
+  {
+    "province_id": 21,
+    "regency_no": 14,
+    "name": "KOTA PALANGKARAYA",
+    "latitude": -2.174,
+    "longitude": 113.88
+  },
+  {
+    "province_id": 22,
+    "regency_no": 1,
+    "name": "KAB. BALANGAN",
     "latitude": -2.364,
     "longitude": 115.471
   },
   {
-    "id": "6371",
-    "province_id": "63",
-    "name": "Kota Banjarmasin",
-    "latitude": -3.327,
-    "longitude": 114.589
+    "province_id": 22,
+    "regency_no": 2,
+    "name": "KAB. BANJAR",
+    "latitude": -3.409,
+    "longitude": 114.848
   },
   {
-    "id": "6372",
-    "province_id": "63",
-    "name": "Kota Banjar Baru",
+    "province_id": 22,
+    "regency_no": 3,
+    "name": "KAB. BARITO KUALA",
+    "latitude": -2.978,
+    "longitude": 114.766
+  },
+  {
+    "province_id": 22,
+    "regency_no": 4,
+    "name": "KAB. HULU SUNGAI SELATAN",
+    "latitude": -2.787,
+    "longitude": 115.266
+  },
+  {
+    "province_id": 22,
+    "regency_no": 5,
+    "name": "KAB. HULU SUNGAI TENGAH",
+    "latitude": -2.585,
+    "longitude": 115.385
+  },
+  {
+    "province_id": 22,
+    "regency_no": 6,
+    "name": "KAB. HULU SUNGAI UTARA",
+    "latitude": -2.419,
+    "longitude": 115.254
+  },
+  {
+    "province_id": 22,
+    "regency_no": 7,
+    "name": "KAB. KOTABARU",
+    "latitude": -3.236,
+    "longitude": 116.228
+  },
+  {
+    "province_id": 22,
+    "regency_no": 8,
+    "name": "KAB. TABALONG",
+    "latitude": -2.164,
+    "longitude": 115.382
+  },
+  {
+    "province_id": 22,
+    "regency_no": 9,
+    "name": "KAB. TANAH BUMBU",
+    "latitude": -3.483,
+    "longitude": 115.947
+  },
+  {
+    "province_id": 22,
+    "regency_no": 10,
+    "name": "KAB. TANAH LAUT",
+    "latitude": -3.799,
+    "longitude": 114.783
+  },
+  {
+    "province_id": 22,
+    "regency_no": 11,
+    "name": "KAB. TAPIN",
+    "latitude": -2.932,
+    "longitude": 115.163
+  },
+  {
+    "province_id": 22,
+    "regency_no": 12,
+    "name": "KOTA BANJARBARU",
     "latitude": -3.439,
     "longitude": 114.831
   },
   {
-    "id": "6401",
-    "province_id": "64",
-    "name": "Kabupaten Paser",
-    "latitude": -1.91,
-    "longitude": 116.191
+    "province_id": 22,
+    "regency_no": 13,
+    "name": "KOTA BANJARMASIN",
+    "latitude": -3.327,
+    "longitude": 114.589
   },
   {
-    "id": "6402",
-    "province_id": "64",
-    "name": "Kabupaten Kutai Barat",
-    "latitude": -0.443,
-    "longitude": 116.999
-  },
-  {
-    "id": "6403",
-    "province_id": "64",
-    "name": "Kabupaten Kutai Kartanegara",
-    "latitude": 2.15,
-    "longitude": 117.508
-  },
-  {
-    "id": "6404",
-    "province_id": "64",
-    "name": "Kabupaten Kutai Timur",
-    "latitude": 0.943,
-    "longitude": 116.985
-  },
-  {
-    "id": "6405",
-    "province_id": "64",
-    "name": "Kabupaten Berau",
+    "province_id": 23,
+    "regency_no": 1,
+    "name": "KAB. BERAU",
     "latitude": 2.045,
     "longitude": 117.362
   },
   {
-    "id": "6409",
-    "province_id": "64",
-    "name": "Kabupaten Penajam Paser Utara",
-    "latitude": -1.308,
-    "longitude": 116.727
+    "province_id": 23,
+    "regency_no": 2,
+    "name": "KAB. KUTAI BARAT",
+    "latitude": -0.443,
+    "longitude": 116.999
   },
   {
-    "id": "6411",
-    "province_id": "64",
-    "name": "Kabupaten Mahakam Hulu",
+    "province_id": 23,
+    "regency_no": 3,
+    "name": "KAB. KUTAI KARTANEGARA",
+    "latitude": 2.15,
+    "longitude": 117.508
+  },
+  {
+    "province_id": 23,
+    "regency_no": 4,
+    "name": "KAB. KUTAI TIMUR",
+    "latitude": 0.943,
+    "longitude": 116.985
+  },
+  {
+    "province_id": 23,
+    "regency_no": 5,
+    "name": "KAB. MAHAKAM ULU",
     "latitude": 0.506,
     "longitude": 115.271
   },
   {
-    "id": "6471",
-    "province_id": "64",
-    "name": "Kota Balikpapan",
+    "province_id": 23,
+    "regency_no": 6,
+    "name": "KAB. PASER",
+    "latitude": -1.91,
+    "longitude": 116.191
+  },
+  {
+    "province_id": 23,
+    "regency_no": 7,
+    "name": "KAB. PENAJAM PASER UTARA",
+    "latitude": -1.308,
+    "longitude": 116.727
+  },
+  {
+    "province_id": 23,
+    "regency_no": 8,
+    "name": "KOTA BALIKPAPAN",
     "latitude": -1.276,
     "longitude": 116.828
   },
   {
-    "id": "6472",
-    "province_id": "64",
-    "name": "Kota Samarinda",
-    "latitude": -0.491,
-    "longitude": 117.146
-  },
-  {
-    "id": "6474",
-    "province_id": "64",
-    "name": "Kota Bontang",
+    "province_id": 23,
+    "regency_no": 9,
+    "name": "KOTA BONTANG",
     "latitude": 0.07,
     "longitude": 117.444
   },
   {
-    "id": "6501",
-    "province_id": "65",
-    "name": "Kabupaten Malinau",
-    "latitude": 2.841,
-    "longitude": 117.398
+    "province_id": 23,
+    "regency_no": 10,
+    "name": "KOTA SAMARINDA",
+    "latitude": -0.491,
+    "longitude": 117.146
   },
   {
-    "id": "6502",
-    "province_id": "65",
-    "name": "Kabupaten Bulungan",
+    "province_id": 24,
+    "regency_no": 1,
+    "name": "KAB. BULUNGAN",
     "latitude": 3.552,
     "longitude": 116.622
   },
   {
-    "id": "6503",
-    "province_id": "65",
-    "name": "Kabupaten Tana Tidung",
-    "latitude": 4.077,
-    "longitude": 117.719
+    "province_id": 24,
+    "regency_no": 2,
+    "name": "KAB. MALINAU",
+    "latitude": 2.841,
+    "longitude": 117.398
   },
   {
-    "id": "6504",
-    "province_id": "65",
-    "name": "Kabupaten Nunukan",
+    "province_id": 24,
+    "regency_no": 3,
+    "name": "KAB. NUNUKAN",
     "latitude": 3.602,
     "longitude": 116.903
   },
   {
-    "id": "6571",
-    "province_id": "65",
-    "name": "Kota Tarakan",
+    "province_id": 24,
+    "regency_no": 4,
+    "name": "KAB. TANA TIDUNG",
+    "latitude": 4.077,
+    "longitude": 117.719
+  },
+  {
+    "province_id": 24,
+    "regency_no": 5,
+    "name": "KOTA TARAKAN",
     "latitude": 3.314,
     "longitude": 117.605
   },
   {
-    "id": "7101",
-    "province_id": "71",
-    "name": "Kabupaten Bolaang Mongondow",
+    "province_id": 25,
+    "regency_no": 1,
+    "name": "KAB. BOLAANG MONGONDOW",
     "latitude": 0.871,
     "longitude": 124.024
   },
   {
-    "id": "7102",
-    "province_id": "71",
-    "name": "Kabupaten Minahasa",
-    "latitude": 1.301,
-    "longitude": 124.911
-  },
-  {
-    "id": "7103",
-    "province_id": "71",
-    "name": "Kabupaten Kepulauan Sangihe",
-    "latitude": 3.612,
-    "longitude": 125.5
-  },
-  {
-    "id": "7104",
-    "province_id": "71",
-    "name": "Kabupaten Kepulauan Talaud",
-    "latitude": 4.006,
-    "longitude": 126.682
-  },
-  {
-    "id": "7105",
-    "province_id": "71",
-    "name": "Kabupaten Minahasa Selatan",
-    "latitude": 1.213,
-    "longitude": 124.597
-  },
-  {
-    "id": "7106",
-    "province_id": "71",
-    "name": "Kabupaten Minahasa Utara",
-    "latitude": 1.459,
-    "longitude": 124.975
-  },
-  {
-    "id": "7107",
-    "province_id": "71",
-    "name": "Kabupaten Bolaang Mongondow Utara",
-    "latitude": 1.042,
-    "longitude": 124.798
-  },
-  {
-    "id": "7108",
-    "province_id": "71",
-    "name": "Kabupaten Siau Tagulandang Biaro",
-    "latitude": 0.906,
-    "longitude": 123.259
-  },
-  {
-    "id": "7109",
-    "province_id": "71",
-    "name": "Kabupaten Minahasa Tenggara",
-    "latitude": 2.745,
-    "longitude": 125.362
-  },
-  {
-    "id": "7110",
-    "province_id": "71",
-    "name": "Kabupaten Bolaang Mongondow Selatan",
+    "province_id": 25,
+    "regency_no": 2,
+    "name": "KAB. BOLAANG MONGONDOW SELATAN",
     "latitude": 0.769,
     "longitude": 124.613
   },
   {
-    "id": "7111",
-    "province_id": "71",
-    "name": "Kabupaten Bolaang Mongondow Timur",
+    "province_id": 25,
+    "regency_no": 3,
+    "name": "KAB. BOLAANG MONGONDOW TIMUR",
     "latitude": 0.384,
     "longitude": 124.048
   },
   {
-    "id": "7171",
-    "province_id": "71",
-    "name": "Kota Manado",
-    "latitude": 1.485,
-    "longitude": 124.849
+    "province_id": 25,
+    "regency_no": 4,
+    "name": "KAB. BOLAANG MONGONDOW UTARA",
+    "latitude": 1.042,
+    "longitude": 124.798
   },
   {
-    "id": "7172",
-    "province_id": "71",
-    "name": "Kota Bitung",
+    "province_id": 25,
+    "regency_no": 5,
+    "name": "KAB. KEP. SIAU TAGULANDANG BIARO",
+    "latitude": 0.906,
+    "longitude": 123.259
+  },
+  {
+    "province_id": 25,
+    "regency_no": 6,
+    "name": "KAB. KEPULAUAN SANGIHE",
+    "latitude": 3.612,
+    "longitude": 125.5
+  },
+  {
+    "province_id": 25,
+    "regency_no": 7,
+    "name": "KAB. KEPULAUAN TALAUD",
+    "latitude": 4.006,
+    "longitude": 126.682
+  },
+  {
+    "province_id": 25,
+    "regency_no": 8,
+    "name": "KAB. MINAHASA",
+    "latitude": 1.301,
+    "longitude": 124.911
+  },
+  {
+    "province_id": 25,
+    "regency_no": 9,
+    "name": "KAB. MINAHASA SELATAN",
+    "latitude": 1.213,
+    "longitude": 124.597
+  },
+  {
+    "province_id": 25,
+    "regency_no": 10,
+    "name": "KAB. MINAHASA TENGGARA",
+    "latitude": 2.745,
+    "longitude": 125.362
+  },
+  {
+    "province_id": 25,
+    "regency_no": 11,
+    "name": "KAB. MINAHASA UTARA",
+    "latitude": 1.459,
+    "longitude": 124.975
+  },
+  {
+    "province_id": 25,
+    "regency_no": 12,
+    "name": "KOTA BITUNG",
     "latitude": 1.445,
     "longitude": 125.182
   },
   {
-    "id": "7173",
-    "province_id": "71",
-    "name": "Kota Tomohon",
-    "latitude": 1.315,
-    "longitude": 124.827
-  },
-  {
-    "id": "7174",
-    "province_id": "71",
-    "name": "Kota Kotamobagu",
+    "province_id": 25,
+    "regency_no": 13,
+    "name": "KOTA KOTAMOBAGU",
     "latitude": 0.743,
     "longitude": 124.313
   },
   {
-    "id": "7201",
-    "province_id": "72",
-    "name": "Kabupaten Banggai Kepulauan",
-    "latitude": -0.994,
-    "longitude": 122.789
+    "province_id": 25,
+    "regency_no": 14,
+    "name": "KOTA MANADO",
+    "latitude": 1.485,
+    "longitude": 124.849
   },
   {
-    "id": "7202",
-    "province_id": "72",
-    "name": "Kabupaten Banggai",
+    "province_id": 25,
+    "regency_no": 15,
+    "name": "KOTA TOMOHON",
+    "latitude": 1.315,
+    "longitude": 124.827
+  },
+  {
+    "province_id": 26,
+    "regency_no": 1,
+    "name": "KAB. BANGGAI",
     "latitude": -1.395,
     "longitude": 120.755
   },
   {
-    "id": "7203",
-    "province_id": "72",
-    "name": "Kabupaten Morowali",
-    "latitude": -0.678,
-    "longitude": 119.753
+    "province_id": 26,
+    "regency_no": 2,
+    "name": "KAB. BANGGAI KEPULAUAN",
+    "latitude": -0.994,
+    "longitude": 122.789
   },
   {
-    "id": "7204",
-    "province_id": "72",
-    "name": "Kabupaten Poso",
-    "latitude": 1.018,
-    "longitude": 120.798
-  },
-  {
-    "id": "7205",
-    "province_id": "72",
-    "name": "Kabupaten Donggala",
-    "latitude": 1.169,
-    "longitude": 121.41
-  },
-  {
-    "id": "7206",
-    "province_id": "72",
-    "name": "Kabupaten Toli-toli",
-    "latitude": -2.481,
-    "longitude": 121.934
-  },
-  {
-    "id": "7207",
-    "province_id": "72",
-    "name": "Kabupaten Buol",
-    "latitude": -1.312,
-    "longitude": 123.298
-  },
-  {
-    "id": "7208",
-    "province_id": "72",
-    "name": "Kabupaten Parigi Moutong",
-    "latitude": -0.805,
-    "longitude": 120.16
-  },
-  {
-    "id": "7209",
-    "province_id": "72",
-    "name": "Kabupaten Tojo Una-una",
-    "latitude": -0.915,
-    "longitude": 121.589
-  },
-  {
-    "id": "7210",
-    "province_id": "72",
-    "name": "Kabupaten Sigi",
-    "latitude": -1.047,
-    "longitude": 119.95
-  },
-  {
-    "id": "7211",
-    "province_id": "72",
-    "name": "Kabupaten Banggai Laut",
+    "province_id": 26,
+    "regency_no": 3,
+    "name": "KAB. BANGGAI LAUT",
     "latitude": -1.606,
     "longitude": 123.496
   },
   {
-    "id": "7212",
-    "province_id": "72",
-    "name": "Kabupaten Morowali Utara",
+    "province_id": 26,
+    "regency_no": 4,
+    "name": "KAB. BUOL",
+    "latitude": -1.312,
+    "longitude": 123.298
+  },
+  {
+    "province_id": 26,
+    "regency_no": 5,
+    "name": "KAB. DONGGALA",
+    "latitude": 1.169,
+    "longitude": 121.41
+  },
+  {
+    "province_id": 26,
+    "regency_no": 6,
+    "name": "KAB. MOROWALI",
+    "latitude": -0.678,
+    "longitude": 119.753
+  },
+  {
+    "province_id": 26,
+    "regency_no": 7,
+    "name": "KAB. MOROWALI UTARA",
     "latitude": -1.977,
     "longitude": 121.336
   },
   {
-    "id": "7271",
-    "province_id": "72",
-    "name": "Kota Palu",
+    "province_id": 26,
+    "regency_no": 8,
+    "name": "KAB. PARIGI MOUTONG",
+    "latitude": -0.805,
+    "longitude": 120.16
+  },
+  {
+    "province_id": 26,
+    "regency_no": 9,
+    "name": "KAB. POSO",
+    "latitude": 1.018,
+    "longitude": 120.798
+  },
+  {
+    "province_id": 26,
+    "regency_no": 10,
+    "name": "KAB. SIGI",
+    "latitude": -1.047,
+    "longitude": 119.95
+  },
+  {
+    "province_id": 26,
+    "regency_no": 11,
+    "name": "KAB. TOJO UNA UNA",
+    "latitude": -0.915,
+    "longitude": 121.589
+  },
+  {
+    "province_id": 26,
+    "regency_no": 12,
+    "name": "KAB. TOLI-TOLI",
+    "latitude": -2.481,
+    "longitude": 121.934
+  },
+  {
+    "province_id": 26,
+    "regency_no": 13,
+    "name": "KOTA PALU",
     "latitude": -0.9,
     "longitude": 119.891
   },
   {
-    "id": "7301",
-    "province_id": "73",
-    "name": "Kabupaten Kepulauan Selayar",
-    "latitude": -6.12,
-    "longitude": 120.466
-  },
-  {
-    "id": "7302",
-    "province_id": "73",
-    "name": "Kabupaten Bulukumba",
-    "latitude": -5.558,
-    "longitude": 120.193
-  },
-  {
-    "id": "7303",
-    "province_id": "73",
-    "name": "Kabupaten Bantaeng",
+    "province_id": 27,
+    "regency_no": 1,
+    "name": "KAB. BANTAENG",
     "latitude": -5.553,
     "longitude": 119.967
   },
   {
-    "id": "7304",
-    "province_id": "73",
-    "name": "Kabupaten Jeneponto",
-    "latitude": -5.677,
-    "longitude": 119.749
-  },
-  {
-    "id": "7305",
-    "province_id": "73",
-    "name": "Kabupaten Takalar",
-    "latitude": -5.425,
-    "longitude": 119.441
-  },
-  {
-    "id": "7306",
-    "province_id": "73",
-    "name": "Kabupaten Gowa",
-    "latitude": -5.2,
-    "longitude": 119.453
-  },
-  {
-    "id": "7307",
-    "province_id": "73",
-    "name": "Kabupaten Sinjai",
-    "latitude": -5.12,
-    "longitude": 120.235
-  },
-  {
-    "id": "7308",
-    "province_id": "73",
-    "name": "Kabupaten Maros",
-    "latitude": -4.539,
-    "longitude": 120.309
-  },
-  {
-    "id": "7309",
-    "province_id": "73",
-    "name": "Kabupaten Pangkajene Dan Kepulauan",
-    "latitude": -5.016,
-    "longitude": 119.574
-  },
-  {
-    "id": "7310",
-    "province_id": "73",
-    "name": "Kabupaten Barru",
+    "province_id": 27,
+    "regency_no": 2,
+    "name": "KAB. BARRU",
     "latitude": -4.846,
     "longitude": 119.56
   },
   {
-    "id": "7311",
-    "province_id": "73",
-    "name": "Kabupaten Bone",
+    "province_id": 27,
+    "regency_no": 3,
+    "name": "KAB. BONE",
     "latitude": -4.414,
     "longitude": 119.617
   },
   {
-    "id": "7312",
-    "province_id": "73",
-    "name": "Kabupaten Soppeng",
-    "latitude": -4.364,
-    "longitude": 119.898
+    "province_id": 27,
+    "regency_no": 4,
+    "name": "KAB. BULUKUMBA",
+    "latitude": -5.558,
+    "longitude": 120.193
   },
   {
-    "id": "7313",
-    "province_id": "73",
-    "name": "Kabupaten Wajo",
-    "latitude": -4.112,
-    "longitude": 120.027
-  },
-  {
-    "id": "7314",
-    "province_id": "73",
-    "name": "Kabupaten Sidenreng Rappang",
-    "latitude": -3.933,
-    "longitude": 119.769
-  },
-  {
-    "id": "7315",
-    "province_id": "73",
-    "name": "Kabupaten Pinrang",
-    "latitude": -3.809,
-    "longitude": 119.65
-  },
-  {
-    "id": "7316",
-    "province_id": "73",
-    "name": "Kabupaten Enrekang",
+    "province_id": 27,
+    "regency_no": 5,
+    "name": "KAB. ENREKANG",
     "latitude": -3.588,
     "longitude": 119.77
   },
   {
-    "id": "7317",
-    "province_id": "73",
-    "name": "Kabupaten Luwu",
+    "province_id": 27,
+    "regency_no": 6,
+    "name": "KAB. GOWA",
+    "latitude": -5.2,
+    "longitude": 119.453
+  },
+  {
+    "province_id": 27,
+    "regency_no": 7,
+    "name": "KAB. JENEPONTO",
+    "latitude": -5.677,
+    "longitude": 119.749
+  },
+  {
+    "province_id": 27,
+    "regency_no": 8,
+    "name": "KAB. KEPULAUAN SELAYAR",
+    "latitude": -6.12,
+    "longitude": 120.466
+  },
+  {
+    "province_id": 27,
+    "regency_no": 9,
+    "name": "KAB. LUWU",
     "latitude": -3.395,
     "longitude": 120.366
   },
   {
-    "id": "7318",
-    "province_id": "73",
-    "name": "Kabupaten Tana Toraja",
-    "latitude": -3.087,
-    "longitude": 119.857
-  },
-  {
-    "id": "7322",
-    "province_id": "73",
-    "name": "Kabupaten Luwu Utara",
-    "latitude": -2.55,
-    "longitude": 120.346
-  },
-  {
-    "id": "7325",
-    "province_id": "73",
-    "name": "Kabupaten Luwu Timur",
+    "province_id": 27,
+    "regency_no": 10,
+    "name": "KAB. LUWU TIMUR",
     "latitude": -2.583,
     "longitude": 121.171
   },
   {
-    "id": "7326",
-    "province_id": "73",
-    "name": "Kabupaten Toraja Utara",
+    "province_id": 27,
+    "regency_no": 11,
+    "name": "KAB. LUWU UTARA",
+    "latitude": -2.55,
+    "longitude": 120.346
+  },
+  {
+    "province_id": 27,
+    "regency_no": 12,
+    "name": "KAB. MAROS",
+    "latitude": -4.539,
+    "longitude": 120.309
+  },
+  {
+    "province_id": 27,
+    "regency_no": 13,
+    "name": "KAB. PANGKAJENE KEPULAUAN",
+    "latitude": -5.016,
+    "longitude": 119.574
+  },
+  {
+    "province_id": 27,
+    "regency_no": 14,
+    "name": "KAB. PINRANG",
+    "latitude": -3.809,
+    "longitude": 119.65
+  },
+  {
+    "province_id": 27,
+    "regency_no": 15,
+    "name": "KAB. SIDENRENG RAPPANG",
+    "latitude": -3.933,
+    "longitude": 119.769
+  },
+  {
+    "province_id": 27,
+    "regency_no": 16,
+    "name": "KAB. SINJAI",
+    "latitude": -5.12,
+    "longitude": 120.235
+  },
+  {
+    "province_id": 27,
+    "regency_no": 17,
+    "name": "KAB. SOPPENG",
+    "latitude": -4.364,
+    "longitude": 119.898
+  },
+  {
+    "province_id": 27,
+    "regency_no": 18,
+    "name": "KAB. TAKALAR",
+    "latitude": -5.425,
+    "longitude": 119.441
+  },
+  {
+    "province_id": 27,
+    "regency_no": 19,
+    "name": "KAB. TANA TORAJA",
+    "latitude": -3.087,
+    "longitude": 119.857
+  },
+  {
+    "province_id": 27,
+    "regency_no": 20,
+    "name": "KAB. TORAJA UTARA",
     "latitude": -2.974,
     "longitude": 119.895
   },
   {
-    "id": "7371",
-    "province_id": "73",
-    "name": "Kota Makassar",
+    "province_id": 27,
+    "regency_no": 21,
+    "name": "KAB. WAJO",
+    "latitude": -4.112,
+    "longitude": 120.027
+  },
+  {
+    "province_id": 27,
+    "regency_no": 22,
+    "name": "KOTA MAKASSAR",
     "latitude": -5.133,
     "longitude": 119.408
   },
   {
-    "id": "7372",
-    "province_id": "73",
-    "name": "Kota Parepare",
-    "latitude": -4.028,
-    "longitude": 119.633
-  },
-  {
-    "id": "7373",
-    "province_id": "73",
-    "name": "Kota Palopo",
+    "province_id": 27,
+    "regency_no": 23,
+    "name": "KOTA PALOPO",
     "latitude": -3.008,
     "longitude": 120.202
   },
   {
-    "id": "7401",
-    "province_id": "74",
-    "name": "Kabupaten Buton",
-    "latitude": -4.061,
-    "longitude": 121.616
+    "province_id": 27,
+    "regency_no": 24,
+    "name": "KOTA PAREPARE",
+    "latitude": -4.028,
+    "longitude": 119.633
   },
   {
-    "id": "7402",
-    "province_id": "74",
-    "name": "Kabupaten Muna",
-    "latitude": -3.854,
-    "longitude": 122.043
-  },
-  {
-    "id": "7403",
-    "province_id": "74",
-    "name": "Kabupaten Konawe",
-    "latitude": -4.798,
-    "longitude": 122.719
-  },
-  {
-    "id": "7404",
-    "province_id": "74",
-    "name": "Kabupaten Kolaka",
-    "latitude": -5.496,
-    "longitude": 122.84
-  },
-  {
-    "id": "7405",
-    "province_id": "74",
-    "name": "Kabupaten Konawe Selatan",
-    "latitude": -4.332,
-    "longitude": 122.281
-  },
-  {
-    "id": "7406",
-    "province_id": "74",
-    "name": "Kabupaten Bombana",
+    "province_id": 28,
+    "regency_no": 1,
+    "name": "KAB. BOMBANA",
     "latitude": -4.747,
     "longitude": 122.011
   },
   {
-    "id": "7407",
-    "province_id": "74",
-    "name": "Kabupaten Wakatobi",
-    "latitude": -5.328,
-    "longitude": 23.539
+    "province_id": 28,
+    "regency_no": 2,
+    "name": "KAB. BUTON",
+    "latitude": -4.061,
+    "longitude": 121.616
   },
   {
-    "id": "7408",
-    "province_id": "74",
-    "name": "Kabupaten Kolaka Utara",
-    "latitude": -3.49,
-    "longitude": 120.888
-  },
-  {
-    "id": "7409",
-    "province_id": "74",
-    "name": "Kabupaten Buton Utara",
-    "latitude": -3.512,
-    "longitude": 122.111
-  },
-  {
-    "id": "7410",
-    "province_id": "74",
-    "name": "Kabupaten Konawe Utara",
-    "latitude": -4.801,
-    "longitude": 122.983
-  },
-  {
-    "id": "7411",
-    "province_id": "74",
-    "name": "Kabupaten Kolaka Timur",
-    "latitude": -4.001,
-    "longitude": 121.862
-  },
-  {
-    "id": "7412",
-    "province_id": "74",
-    "name": "Kabupaten Konawe Kepulauan",
-    "latitude": -4.053,
-    "longitude": 122.989
-  },
-  {
-    "id": "7413",
-    "province_id": "74",
-    "name": "Kabupaten Muna Barat",
-    "latitude": -4.792,
-    "longitude": 122.494
-  },
-  {
-    "id": "7414",
-    "province_id": "74",
-    "name": "Kabupaten Buton Tengah",
-    "latitude": -5.316,
-    "longitude": 122.532
-  },
-  {
-    "id": "7415",
-    "province_id": "74",
-    "name": "Kabupaten Buton Selatan",
+    "province_id": 28,
+    "regency_no": 3,
+    "name": "KAB. BUTON SELATAN",
     "latitude": -5.608,
     "longitude": 122.601
   },
   {
-    "id": "7471",
-    "province_id": "74",
-    "name": "Kota Kendari",
-    "latitude": -3.973,
-    "longitude": 122.512
+    "province_id": 28,
+    "regency_no": 4,
+    "name": "KAB. BUTON TENGAH",
+    "latitude": -5.316,
+    "longitude": 122.532
   },
   {
-    "id": "7472",
-    "province_id": "74",
-    "name": "Kota Baubau",
+    "province_id": 28,
+    "regency_no": 5,
+    "name": "KAB. BUTON UTARA",
+    "latitude": -3.512,
+    "longitude": 122.111
+  },
+  {
+    "province_id": 28,
+    "regency_no": 6,
+    "name": "KAB. KOLAKA",
+    "latitude": -5.496,
+    "longitude": 122.84
+  },
+  {
+    "province_id": 28,
+    "regency_no": 7,
+    "name": "KAB. KOLAKA TIMUR",
+    "latitude": -4.001,
+    "longitude": 121.862
+  },
+  {
+    "province_id": 28,
+    "regency_no": 8,
+    "name": "KAB. KOLAKA UTARA",
+    "latitude": -3.49,
+    "longitude": 120.888
+  },
+  {
+    "province_id": 28,
+    "regency_no": 9,
+    "name": "KAB. KONAWE",
+    "latitude": -4.798,
+    "longitude": 122.719
+  },
+  {
+    "province_id": 28,
+    "regency_no": 10,
+    "name": "KAB. KONAWE KEPULAUAN",
+    "latitude": -4.053,
+    "longitude": 122.989
+  },
+  {
+    "province_id": 28,
+    "regency_no": 11,
+    "name": "KAB. KONAWE SELATAN",
+    "latitude": -4.332,
+    "longitude": 122.281
+  },
+  {
+    "province_id": 28,
+    "regency_no": 12,
+    "name": "KAB. KONAWE UTARA",
+    "latitude": -4.801,
+    "longitude": 122.983
+  },
+  {
+    "province_id": 28,
+    "regency_no": 13,
+    "name": "KAB. MUNA",
+    "latitude": -3.854,
+    "longitude": 122.043
+  },
+  {
+    "province_id": 28,
+    "regency_no": 14,
+    "name": "KAB. MUNA BARAT",
+    "latitude": -4.792,
+    "longitude": 122.494
+  },
+  {
+    "province_id": 28,
+    "regency_no": 15,
+    "name": "KAB. WAKATOBI",
+    "latitude": -5.328,
+    "longitude": 23.539
+  },
+  {
+    "province_id": 28,
+    "regency_no": 16,
+    "name": "KOTA BAU BAU",
     "latitude": -5.485,
     "longitude": 122.585
   },
   {
-    "id": "7501",
-    "province_id": "75",
-    "name": "Kabupaten Boalemo",
+    "province_id": 28,
+    "regency_no": 17,
+    "name": "KOTA KENDARI",
+    "latitude": -3.973,
+    "longitude": 122.512
+  },
+  {
+    "province_id": 29,
+    "regency_no": 1,
+    "name": "KAB. BOALEMO",
     "latitude": 0.629,
     "longitude": 122.981
   },
   {
-    "id": "7502",
-    "province_id": "75",
-    "name": "Kabupaten Gorontalo",
-    "latitude": 0.529,
-    "longitude": 122.348
-  },
-  {
-    "id": "7503",
-    "province_id": "75",
-    "name": "Kabupaten Pohuwato",
-    "latitude": 0.557,
-    "longitude": 123.144
-  },
-  {
-    "id": "7504",
-    "province_id": "75",
-    "name": "Kabupaten Bone Bolango",
+    "province_id": 29,
+    "regency_no": 2,
+    "name": "KAB. BONE BOLANGO",
     "latitude": 0.706,
     "longitude": 121.72
   },
   {
-    "id": "7505",
-    "province_id": "75",
-    "name": "Kabupaten Gorontalo Utara",
-    "latitude": 0.791,
-    "longitude": 122.869
-  },
-  {
-    "id": "7571",
-    "province_id": "75",
-    "name": "Kota Gorontalo",
+    "province_id": 29,
+    "regency_no": 3,
+    "name": "KAB. GORONTALO",
     "latitude": 0.532,
     "longitude": 123.06
   },
   {
-    "id": "7601",
-    "province_id": "76",
-    "name": "Kabupaten Majene",
+    "province_id": 29,
+    "regency_no": 4,
+    "name": "KAB. GORONTALO UTARA",
+    "latitude": 0.791,
+    "longitude": 122.869
+  },
+  {
+    "province_id": 29,
+    "regency_no": 5,
+    "name": "KAB. POHUWATO",
+    "latitude": 0.557,
+    "longitude": 123.144
+  },
+  {
+    "province_id": 29,
+    "regency_no": 6,
+    "name": "KOTA GORONTALO",
+    "latitude": 0.532,
+    "longitude": 123.06
+  },
+  {
+    "province_id": 30,
+    "regency_no": 1,
+    "name": "KAB. MAJENE",
     "latitude": -1.174,
     "longitude": 119.377
   },
   {
-    "id": "7602",
-    "province_id": "76",
-    "name": "Kabupaten Polewali Mandar",
-    "latitude": -2.69,
-    "longitude": 118.885
-  },
-  {
-    "id": "7603",
-    "province_id": "76",
-    "name": "Kabupaten Mamasa",
+    "province_id": 30,
+    "regency_no": 2,
+    "name": "KAB. MAMASA",
     "latitude": -2.956,
     "longitude": 119.363
   },
   {
-    "id": "7604",
-    "province_id": "76",
-    "name": "Kabupaten Mamuju",
+    "province_id": 30,
+    "regency_no": 3,
+    "name": "KAB. MAMUJU",
     "latitude": -3.408,
     "longitude": 119.311
   },
   {
-    "id": "7605",
-    "province_id": "76",
-    "name": "Kabupaten Mamuju Utara",
-    "latitude": -3.548,
-    "longitude": 118.959
-  },
-  {
-    "id": "7606",
-    "province_id": "76",
-    "name": "Kabupaten Mamuju Tengah",
+    "province_id": 30,
+    "regency_no": 4,
+    "name": "KAB. MAMUJU TENGAH",
     "latitude": -2.082,
     "longitude": 119.301
   },
   {
-    "id": "8101",
-    "province_id": "81",
-    "name": "Kabupaten Maluku Tenggara Barat",
-    "latitude": -3.304,
-    "longitude": 128.954
+    "province_id": 30,
+    "regency_no": 5,
+    "name": "KAB. PASANGKAYU",
+    "latitude": -3.548,
+    "longitude": 118.959
   },
   {
-    "id": "8102",
-    "province_id": "81",
-    "name": "Kabupaten Maluku Tenggara",
-    "latitude": -5.683,
-    "longitude": 132.717
+    "province_id": 30,
+    "regency_no": 6,
+    "name": "KAB. POLEWALI MANDAR",
+    "latitude": -2.69,
+    "longitude": 118.885
   },
   {
-    "id": "8103",
-    "province_id": "81",
-    "name": "Kabupaten Maluku Tengah",
-    "latitude": -7.97,
-    "longitude": 131.312
-  },
-  {
-    "id": "8104",
-    "province_id": "81",
-    "name": "Kabupaten Buru",
+    "province_id": 31,
+    "regency_no": 1,
+    "name": "KAB. BURU",
     "latitude": -3.259,
     "longitude": 127.103
   },
   {
-    "id": "8105",
-    "province_id": "81",
-    "name": "Kabupaten Kepulauan Aru",
-    "latitude": -3.104,
-    "longitude": 130.489
-  },
-  {
-    "id": "8106",
-    "province_id": "81",
-    "name": "Kabupaten Seram Bagian Barat",
-    "latitude": -3.067,
-    "longitude": 128.23
-  },
-  {
-    "id": "8107",
-    "province_id": "81",
-    "name": "Kabupaten Seram Bagian Timur",
-    "latitude": -5.775,
-    "longitude": 134.215
-  },
-  {
-    "id": "8108",
-    "province_id": "81",
-    "name": "Kabupaten Maluku Barat Daya",
-    "latitude": -8.148,
-    "longitude": 127.802
-  },
-  {
-    "id": "8109",
-    "province_id": "81",
-    "name": "Kabupaten Buru Selatan",
+    "province_id": 31,
+    "regency_no": 2,
+    "name": "KAB. BURU SELATAN",
     "latitude": -3.838,
     "longitude": 126.734
   },
   {
-    "id": "8171",
-    "province_id": "81",
-    "name": "Kota Ambon",
+    "province_id": 31,
+    "regency_no": 3,
+    "name": "KAB. KEPULAUAN ARU",
+    "latitude": -3.104,
+    "longitude": 130.489
+  },
+  {
+    "province_id": 31,
+    "regency_no": 4,
+    "name": "KAB. KEPULAUAN TANIMBAR",
+    "latitude": -3.304,
+    "longitude": 128.954
+  },
+  {
+    "province_id": 31,
+    "regency_no": 5,
+    "name": "KAB. MALUKU BARAT DAYA",
+    "latitude": -8.148,
+    "longitude": 127.802
+  },
+  {
+    "province_id": 31,
+    "regency_no": 6,
+    "name": "KAB. MALUKU TENGAH",
+    "latitude": -7.97,
+    "longitude": 131.312
+  },
+  {
+    "province_id": 31,
+    "regency_no": 7,
+    "name": "KAB. MALUKU TENGGARA",
+    "latitude": -5.683,
+    "longitude": 132.717
+  },
+  {
+    "province_id": 31,
+    "regency_no": 8,
+    "name": "KAB. SERAM BAGIAN BARAT",
+    "latitude": -3.067,
+    "longitude": 128.23
+  },
+  {
+    "province_id": 31,
+    "regency_no": 9,
+    "name": "KAB. SERAM BAGIAN TIMUR",
+    "latitude": -5.775,
+    "longitude": 134.215
+  },
+  {
+    "province_id": 31,
+    "regency_no": 10,
+    "name": "KOTA AMBON",
     "latitude": -3.694,
     "longitude": 128.181
   },
   {
-    "id": "8172",
-    "province_id": "81",
-    "name": "Kota Tual",
+    "province_id": 31,
+    "regency_no": 11,
+    "name": "KOTA TUAL",
     "latitude": -5.635,
     "longitude": 132.752
   },
   {
-    "id": "8201",
-    "province_id": "82",
-    "name": "Kabupaten Halmahera Barat",
+    "province_id": 32,
+    "regency_no": 1,
+    "name": "KAB. HALMAHERA BARAT",
     "latitude": 1.08,
     "longitude": 127.48
   },
   {
-    "id": "8202",
-    "province_id": "82",
-    "name": "Kabupaten Halmahera Tengah",
-    "latitude": 0.33,
-    "longitude": 127.87
-  },
-  {
-    "id": "8203",
-    "province_id": "82",
-    "name": "Kabupaten Kepulauan Sula",
-    "latitude": 1.728,
-    "longitude": 127.992
-  },
-  {
-    "id": "8204",
-    "province_id": "82",
-    "name": "Kabupaten Halmahera Selatan",
+    "province_id": 32,
+    "regency_no": 2,
+    "name": "KAB. HALMAHERA SELATAN",
     "latitude": -0.645,
     "longitude": 127.505
   },
   {
-    "id": "8205",
-    "province_id": "82",
-    "name": "Kabupaten Halmahera Utara",
-    "latitude": -2.007,
-    "longitude": 125.964
+    "province_id": 32,
+    "regency_no": 3,
+    "name": "KAB. HALMAHERA TENGAH",
+    "latitude": 0.33,
+    "longitude": 127.87
   },
   {
-    "id": "8206",
-    "province_id": "82",
-    "name": "Kabupaten Halmahera Timur",
+    "province_id": 32,
+    "regency_no": 4,
+    "name": "KAB. HALMAHERA TIMUR",
     "latitude": 0.677,
     "longitude": 128.284
   },
   {
-    "id": "8207",
-    "province_id": "82",
-    "name": "Kabupaten Pulau Morotai",
+    "province_id": 32,
+    "regency_no": 5,
+    "name": "KAB. HALMAHERA UTARA",
+    "latitude": -2.007,
+    "longitude": 125.964
+  },
+  {
+    "province_id": 32,
+    "regency_no": 6,
+    "name": "KAB. KEPULAUAN SULA",
+    "latitude": 1.728,
+    "longitude": 127.992
+  },
+  {
+    "province_id": 32,
+    "regency_no": 7,
+    "name": "KAB. PULAU MOROTAI",
     "latitude": 2.013,
     "longitude": 128.284
   },
   {
-    "id": "8208",
-    "province_id": "82",
-    "name": "Kabupaten Pulau Taliabu",
+    "province_id": 32,
+    "regency_no": 8,
+    "name": "KAB. PULAU TALIABU",
     "latitude": -1.947,
     "longitude": 124.387
   },
   {
-    "id": "8271",
-    "province_id": "82",
-    "name": "Kota Ternate",
+    "province_id": 32,
+    "regency_no": 9,
+    "name": "KOTA TERNATE",
     "latitude": 0.786,
     "longitude": 127.388
   },
   {
-    "id": "8272",
-    "province_id": "82",
-    "name": "Kota Tidore Kepulauan",
+    "province_id": 32,
+    "regency_no": 10,
+    "name": "KOTA TIDORE KEPULAUAN",
     "latitude": 0.672,
     "longitude": 127.447
   },
   {
-    "id": "9101",
-    "province_id": "91",
-    "name": "Kabupaten Fakfak",
-    "latitude": -3.098,
-    "longitude": 133.019
-  },
-  {
-    "id": "9102",
-    "province_id": "91",
-    "name": "Kabupaten Kaimana",
-    "latitude": -3.288,
-    "longitude": 133.944
-  },
-  {
-    "id": "9103",
-    "province_id": "91",
-    "name": "Kabupaten Teluk Wondama",
-    "latitude": -2.55,
-    "longitude": 140.477
-  },
-  {
-    "id": "9104",
-    "province_id": "91",
-    "name": "Kabupaten Teluk Bintuni",
-    "latitude": -1.906,
-    "longitude": 133.329
-  },
-  {
-    "id": "9105",
-    "province_id": "91",
-    "name": "Kabupaten Manokwari",
-    "latitude": -1.874,
-    "longitude": 136.237
-  },
-  {
-    "id": "9106",
-    "province_id": "96",
-    "name": "Kabupaten Sorong Selatan",
-    "latitude": -1.171,
-    "longitude": 136.09
-  },
-  {
-    "id": "9107",
-    "province_id": "96",
-    "name": "Kabupaten Sorong",
-    "latitude": -1.122,
-    "longitude": 131.488
-  },
-  {
-    "id": "9108",
-    "province_id": "96",
-    "name": "Kabupaten Raja Ampat",
-    "latitude": -1.092,
-    "longitude": 130.878
-  },
-  {
-    "id": "9109",
-    "province_id": "96",
-    "name": "Kabupaten Tambrauw",
-    "latitude": -0.782,
-    "longitude": 132.394
-  },
-  {
-    "id": "9110",
-    "province_id": "96",
-    "name": "Kabupaten Maybrat",
-    "latitude": -1.869,
-    "longitude": 138.744
-  },
-  {
-    "id": "9111",
-    "province_id": "91",
-    "name": "Kabupaten Manokwari Selatan",
-    "latitude": -2.909,
-    "longitude": 140.773
-  },
-  {
-    "id": "9112",
-    "province_id": "91",
-    "name": "Kabupaten Pegunungan Arfak",
-    "latitude": -1.155,
-    "longitude": 133.714
-  },
-  {
-    "id": "9171",
-    "province_id": "96",
-    "name": "Kota Sorong",
-    "latitude": -2.563,
-    "longitude": 140.693
-  },
-  {
-    "id": "9401",
-    "province_id": "93",
-    "name": "Kabupaten Merauke",
-    "latitude": -3.363,
-    "longitude": 135.504
-  },
-  {
-    "id": "9402",
-    "province_id": "95",
-    "name": "Kabupaten Jayawijaya",
-    "latitude": -3.716,
-    "longitude": 137.988
-  },
-  {
-    "id": "9403",
-    "province_id": "94",
-    "name": "Kabupaten Jayapura",
-    "latitude": -3.941,
-    "longitude": 136.422
-  },
-  {
-    "id": "9404",
-    "province_id": "94",
-    "name": "Kabupaten Nabire",
-    "latitude": -4.456,
-    "longitude": 136.854
-  },
-  {
-    "id": "9408",
-    "province_id": "94",
-    "name": "Kabupaten Kepulauan Yapen",
-    "latitude": -4.032,
-    "longitude": 136.299
-  },
-  {
-    "id": "9409",
-    "province_id": "94",
-    "name": "Kabupaten Biak Numfor",
+    "province_id": 33,
+    "regency_no": 1,
+    "name": "KAB. BIAK NUMFOR",
     "latitude": -1.038,
     "longitude": 135.98
   },
   {
-    "id": "9410",
-    "province_id": "94",
-    "name": "Kabupaten Paniai",
-    "latitude": -3.788,
-    "longitude": 136.362
+    "province_id": 33,
+    "regency_no": 2,
+    "name": "KAB. JAYAPURA",
+    "latitude": -2.592,
+    "longitude": 140.669
   },
   {
-    "id": "9411",
-    "province_id": "94",
-    "name": "Kabupaten Puncak Jaya",
-    "latitude": -3.447,
-    "longitude": 137.843
-  },
-  {
-    "id": "9412",
-    "province_id": "94",
-    "name": "Kabupaten Mimika",
-    "latitude": -4.455,
-    "longitude": 137.136
-  },
-  {
-    "id": "9413",
-    "province_id": "93",
-    "name": "Kabupaten Boven Digoel",
-    "latitude": -5.74,
-    "longitude": 140.348
-  },
-  {
-    "id": "9414",
-    "province_id": "93",
-    "name": "Kabupaten Mappi",
-    "latitude": -6.761,
-    "longitude": 139.691
-  },
-  {
-    "id": "9415",
-    "province_id": "93",
-    "name": "Kabupaten Asmat",
-    "latitude": -5.057,
-    "longitude": 138.399
-  },
-  {
-    "id": "9416",
-    "province_id": "95",
-    "name": "Kabupaten Yahukimo",
-    "latitude": -4.494,
-    "longitude": 139.528
-  },
-  {
-    "id": "9417",
-    "province_id": "95",
-    "name": "Kabupaten Pegunungan Bintang",
-    "latitude": -4.559,
-    "longitude": 140.514
-  },
-  {
-    "id": "9418",
-    "province_id": "95",
-    "name": "Kabupaten Tolikara",
-    "latitude": -3.481,
-    "longitude": 138.479
-  },
-  {
-    "id": "9419",
-    "province_id": "94",
-    "name": "Kabupaten Sarmi",
-    "latitude": -2.468,
-    "longitude": 139.203
-  },
-  {
-    "id": "9420",
-    "province_id": "94",
-    "name": "Kabupaten Keerom",
+    "province_id": 33,
+    "regency_no": 3,
+    "name": "KAB. KEEROM",
     "latitude": -3.345,
     "longitude": 140.762
   },
   {
-    "id": "9426",
-    "province_id": "94",
-    "name": "Kabupaten Waropen",
-    "latitude": -2.844,
-    "longitude": 136.671
+    "province_id": 33,
+    "regency_no": 4,
+    "name": "KAB. KEPULAUAN YAPEN",
+    "latitude": -4.032,
+    "longitude": 136.299
   },
   {
-    "id": "9427",
-    "province_id": "94",
-    "name": "Kabupaten Supiori",
-    "latitude": -0.73,
-    "longitude": 135.639
-  },
-  {
-    "id": "9428",
-    "province_id": "94",
-    "name": "Kabupaten Mamberamo Raya",
+    "province_id": 33,
+    "regency_no": 5,
+    "name": "KAB. MAMBERAMO RAYA",
     "latitude": -2.533,
     "longitude": 137.764
   },
   {
-    "id": "9429",
-    "province_id": "95",
-    "name": "Kabupaten Nduga",
-    "latitude": -4.407,
-    "longitude": 138.239
+    "province_id": 33,
+    "regency_no": 6,
+    "name": "KAB. SARMI",
+    "latitude": -2.468,
+    "longitude": 139.203
   },
   {
-    "id": "9430",
-    "province_id": "95",
-    "name": "Kabupaten Lanny Jaya",
-    "latitude": -3.971,
-    "longitude": 138.319
+    "province_id": 33,
+    "regency_no": 7,
+    "name": "KAB. SUPIORI",
+    "latitude": -0.73,
+    "longitude": 135.639
   },
   {
-    "id": "9431",
-    "province_id": "95",
-    "name": "Kabupaten Mamberamo Tengah",
-    "latitude": -2.375,
-    "longitude": 138.319
+    "province_id": 33,
+    "regency_no": 8,
+    "name": "KAB. WAROPEN",
+    "latitude": -2.844,
+    "longitude": 136.671
   },
   {
-    "id": "9432",
-    "province_id": "95",
-    "name": "Kabupaten Yalimo",
-    "latitude": -3.785,
-    "longitude": 139.447
+    "province_id": 33,
+    "regency_no": 9,
+    "name": "KOTA JAYAPURA",
+    "latitude": -2.592,
+    "longitude": 140.669
   },
   {
-    "id": "9433",
-    "province_id": "94",
-    "name": "Kabupaten Puncak",
-    "latitude": -3.865,
-    "longitude": 137.606
+    "province_id": 34,
+    "regency_no": 1,
+    "name": "KAB. FAK FAK",
+    "latitude": -3.098,
+    "longitude": 133.019
   },
   {
-    "id": "9434",
-    "province_id": "94",
-    "name": "Kabupaten Dogiyai",
-    "latitude": -4.045,
-    "longitude": 135.676
+    "province_id": 34,
+    "regency_no": 2,
+    "name": "KAB. KAIMANA",
+    "latitude": -3.288,
+    "longitude": 133.944
   },
   {
-    "id": "9435",
-    "province_id": "94",
-    "name": "Kabupaten Intan Jaya",
-    "latitude": -3.508,
-    "longitude": 136.748
+    "province_id": 34,
+    "regency_no": 3,
+    "name": "KAB. MANOKWARI",
+    "latitude": -1.874,
+    "longitude": 136.237
   },
   {
-    "id": "9436",
-    "province_id": "94",
-    "name": "Kabupaten Deiyai",
+    "province_id": 34,
+    "regency_no": 4,
+    "name": "KAB. MANOKWARI SELATAN",
+    "latitude": -2.909,
+    "longitude": 140.773
+  },
+  {
+    "province_id": 34,
+    "regency_no": 5,
+    "name": "KAB. PEGUNUNGAN ARFAK",
+    "latitude": -1.155,
+    "longitude": 133.714
+  },
+  {
+    "province_id": 34,
+    "regency_no": 6,
+    "name": "KAB. TELUK BINTUNI",
+    "latitude": -1.906,
+    "longitude": 133.329
+  },
+  {
+    "province_id": 34,
+    "regency_no": 7,
+    "name": "KAB. TELUK WONDAMA",
+    "latitude": -2.55,
+    "longitude": 140.477
+  },
+  {
+    "province_id": 35,
+    "regency_no": 1,
+    "name": "KAB. ASMAT",
+    "latitude": -5.057,
+    "longitude": 138.399
+  },
+  {
+    "province_id": 35,
+    "regency_no": 2,
+    "name": "KAB. BOVEN DIGOEL",
+    "latitude": -5.74,
+    "longitude": 140.348
+  },
+  {
+    "province_id": 35,
+    "regency_no": 3,
+    "name": "KAB. MAPPI",
+    "latitude": -6.761,
+    "longitude": 139.691
+  },
+  {
+    "province_id": 35,
+    "regency_no": 4,
+    "name": "KAB. MERAUKE",
+    "latitude": -3.363,
+    "longitude": 135.504
+  },
+  {
+    "province_id": 36,
+    "regency_no": 1,
+    "name": "KAB. DEIYAI",
     "latitude": -4.097,
     "longitude": 136.439
   },
   {
-    "id": "9471",
-    "province_id": "94",
-    "name": "Kota Jayapura",
-    "latitude": -2.592,
-    "longitude": 140.669
+    "province_id": 36,
+    "regency_no": 2,
+    "name": "KAB. DOGIYAI",
+    "latitude": -4.045,
+    "longitude": 135.676
+  },
+  {
+    "province_id": 36,
+    "regency_no": 3,
+    "name": "KAB. INTAN JAYA",
+    "latitude": -3.508,
+    "longitude": 136.748
+  },
+  {
+    "province_id": 36,
+    "regency_no": 4,
+    "name": "KAB. MIMIKA",
+    "latitude": -4.455,
+    "longitude": 137.136
+  },
+  {
+    "province_id": 36,
+    "regency_no": 5,
+    "name": "KAB. NABIRE",
+    "latitude": -4.456,
+    "longitude": 136.854
+  },
+  {
+    "province_id": 36,
+    "regency_no": 6,
+    "name": "KAB. PANIAI",
+    "latitude": -3.788,
+    "longitude": 136.362
+  },
+  {
+    "province_id": 36,
+    "regency_no": 7,
+    "name": "KAB. PUNCAK",
+    "latitude": -3.865,
+    "longitude": 137.606
+  },
+  {
+    "province_id": 36,
+    "regency_no": 8,
+    "name": "KAB. PUNCAK JAYA",
+    "latitude": -3.447,
+    "longitude": 137.843
+  },
+  {
+    "province_id": 37,
+    "regency_no": 1,
+    "name": "KAB. JAYAWIJAYA",
+    "latitude": -3.716,
+    "longitude": 137.988
+  },
+  {
+    "province_id": 37,
+    "regency_no": 2,
+    "name": "KAB. LANNY JAYA",
+    "latitude": -3.971,
+    "longitude": 138.319
+  },
+  {
+    "province_id": 37,
+    "regency_no": 3,
+    "name": "KAB. MAMBERAMO TENGAH",
+    "latitude": -2.375,
+    "longitude": 138.319
+  },
+  {
+    "province_id": 37,
+    "regency_no": 4,
+    "name": "KAB. NDUGA",
+    "latitude": -4.407,
+    "longitude": 138.239
+  },
+  {
+    "province_id": 37,
+    "regency_no": 5,
+    "name": "KAB. PEGUNUNGAN BINTANG",
+    "latitude": -4.559,
+    "longitude": 140.514
+  },
+  {
+    "province_id": 37,
+    "regency_no": 6,
+    "name": "KAB. TOLIKARA",
+    "latitude": -3.481,
+    "longitude": 138.479
+  },
+  {
+    "province_id": 37,
+    "regency_no": 7,
+    "name": "KAB. YAHUKIMO",
+    "latitude": -4.494,
+    "longitude": 139.528
+  },
+  {
+    "province_id": 37,
+    "regency_no": 8,
+    "name": "KAB. YALIMO",
+    "latitude": -3.785,
+    "longitude": 139.447
+  },
+  {
+    "province_id": 38,
+    "regency_no": 1,
+    "name": "KAB. MAYBRAT",
+    "latitude": -1.869,
+    "longitude": 138.744
+  },
+  {
+    "province_id": 38,
+    "regency_no": 2,
+    "name": "KAB. RAJA AMPAT",
+    "latitude": -1.092,
+    "longitude": 130.878
+  },
+  {
+    "province_id": 38,
+    "regency_no": 3,
+    "name": "KAB. SORONG",
+    "latitude": -2.563,
+    "longitude": 140.693
+  },
+  {
+    "province_id": 38,
+    "regency_no": 4,
+    "name": "KAB. SORONG SELATAN",
+    "latitude": -1.171,
+    "longitude": 136.09
+  },
+  {
+    "province_id": 38,
+    "regency_no": 5,
+    "name": "KAB. TAMBRAUW",
+    "latitude": -0.782,
+    "longitude": 132.394
+  },
+  {
+    "province_id": 38,
+    "regency_no": 6,
+    "name": "KOTA SORONG",
+    "latitude": -2.563,
+    "longitude": 140.693
   }
 ]
