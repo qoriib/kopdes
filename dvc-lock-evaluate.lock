@@ -51,27 +51,27 @@ stages:
   interpret:
     cmd: python src/interpret.py
     deps:
-    - path: data/model/clustered_regencies.csv
-      hash: md5
-      md5: f231967bd64fb2b33851530b2bcd29d7
-      size: 40793
-    - path: reports/evaluate_metrics.json
-      hash: md5
-      md5: c8dbd7604399d2878f3fd667ef8c23e8
-      size: 168
-    - path: src/interpret.py
-      hash: md5
+    - hash: md5
+      md5: 24ea5b3944414272966686e4b5b37a9b
+      path: data/model/clustered_regencies.csv
+      size: 41308
+    - hash: md5
+      md5: d55929a88eae43e8d5897c4e37c909b8
+      path: reports/evaluate_metrics.json
+      size: 175
+    - hash: md5
       md5: 2307a08e900f2865fa9095267548ae3c
+      path: src/interpret.py
       size: 7529
     outs:
-    - path: reports/interpret_labels.json
-      hash: md5
-      md5: 16c321dc33cc0a13d55904c7e11284da
-      size: 2628
-    - path: reports/interpret_report.md
-      hash: md5
-      md5: 884796572ed1559b856888c9c1162d7e
-      size: 3166
+    - hash: md5
+      md5: 844c6991761ccb92fa8bf821cb104c1d
+      path: reports/interpret_labels.json
+      size: 2324
+    - hash: md5
+      md5: 890b18f26a40f9896d10870efe9f2dee
+      path: reports/interpret_report.md
+      size: 3013
   model:
     cmd: python src/model.py
     deps:
