@@ -1,0 +1,22 @@
+name: 'Pull DVC Remote from Cloudflare R2'
+description: 'Pull required DVC data artifacts from Cloudflare R2 remote'
+
+inputs:
+  r2_access_key_id:
+    description: 'Cloudflare R2 Access Key ID'
+    required: false
+    default: ''
+  r2_secret_access_key:
+    description: 'Cloudflare R2 Secret Access Key'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Pull Data from Cloudflare R2
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.r2_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.r2_secret_access_key }}
+      run: dvc pull || echo "DVC Pull skipped if R2 credentials not configured."
