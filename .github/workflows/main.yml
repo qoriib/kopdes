@@ -211,6 +211,17 @@ jobs:
       - name: DVC Push
         run: dvc push
 
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+        with:
+          vega: false
+
+      - name: Post CML EDA Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create reports/eda_summary.md || echo "CML comment created."
+
       - name: Upload DVC Lock
         uses: actions/upload-artifact@v7
         with:
@@ -380,18 +391,11 @@ jobs:
         with:
           vega: false
 
-      - name: Generate & Post CML Report
+      - name: Post CML Evaluation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > reports/cml_report.md
-          echo "" >> reports/cml_report.md
-          cat reports/eda_summary.md >> reports/cml_report.md
-          echo "" >> reports/cml_report.md
-          cat reports/clustering_report.md >> reports/cml_report.md
-          echo "" >> reports/cml_report.md
-
-          cml comment create reports/cml_report.md || echo "CML comment created."
+          cml comment create reports/clustering_report.md || echo "CML comment created."
 
       - name: Commit & Push to GitHub
         run: |
