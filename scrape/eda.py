@@ -6,11 +6,11 @@ import json
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
+PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
 
-CLEANED_PROVINCES_CSV = os.path.join(PROCESSED_DIR, "cleaned_provinces.csv")
-CLEANED_REGENCIES_CSV = os.path.join(PROCESSED_DIR, "cleaned_regencies.csv")
+CLEANED_PROVINCES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_provinces.csv")
+CLEANED_REGENCIES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_regencies.csv")
 
 METRICS_JSON = os.path.join(REPORTS_DIR, "metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
@@ -21,7 +21,6 @@ def read_csv_data(filepath):
         with open(filepath, encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
             for r in reader:
-                # Convert numbers to numeric
                 for k, v in r.items():
                     try:
                         r[k] = float(v) if '.' in str(v) else int(v)
@@ -57,7 +56,6 @@ def main():
     top_regencies_koperasi = sorted(reg_data, key=lambda x: x.get('jumlah_koperasi', 0), reverse=True)[:5]
     top_regencies_transaksi = sorted(reg_data, key=lambda x: x.get('nilai_transaksi', 0), reverse=True)[:5]
 
-    # Build DVC Metrics JSON
     metrics = {
         "summary": {
             "total_provinces": total_provinces,
@@ -87,7 +85,6 @@ def main():
         json.dump(metrics, f, indent=2, ensure_ascii=False)
     print(f"[SAVED] DVC Metrics -> {METRICS_JSON}")
 
-    # Build EDA Summary Markdown Document
     md_content = f"""# Laporan Analisis Eksplorasi Data (EDA) SIMKOPDES
 
 Laporan otomatis ini dihasilkan dari stage pipeline EDA DVC berdasarkan data `cleaned_provinces.csv` dan `cleaned_regencies.csv`.

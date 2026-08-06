@@ -28,15 +28,15 @@ stages:
       - data/raw/province.json
       - data/raw/regency.json
     outs:
-      - data/processed/cleaned_provinces.csv
-      - data/processed/cleaned_regencies.csv
+      - data/preprocess/cleaned_provinces.csv
+      - data/preprocess/cleaned_regencies.csv
 
   eda:
     cmd: python scrape/eda.py
     deps:
       - scrape/eda.py
-      - data/processed/cleaned_provinces.csv
-      - data/processed/cleaned_regencies.csv
+      - data/preprocess/cleaned_provinces.csv
+      - data/preprocess/cleaned_regencies.csv
     metrics:
       - reports/metrics.json:
           cache: false

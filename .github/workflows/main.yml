@@ -1,4 +1,4 @@
-name: Auto Scraper & DVC Data Pipeline
+name: SIMKOPDES End-to-End Data Pipeline
 
 on:
   workflow_dispatch: # Pemicu tombol manual di GitHub Actions
@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   scrape_matrix:
+    name: Parallel Scraping (${{ matrix.stage }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -41,6 +42,7 @@ jobs:
           path: dvc.lock
 
   pipeline_sequential:
+    name: Sequential Pipeline (Preprocess & EDA)
     needs: scrape_matrix
     runs-on: ubuntu-latest
     steps:
@@ -68,6 +70,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock .dvc/config data/processed/.gitignore reports/
+          git add dvc.lock .dvc/config data/preprocess/.gitignore reports/
           git commit -m "auto: reproduce sequential preprocess & eda pipeline [skip ci]" || echo "Tidak ada perubahan data."
           git push

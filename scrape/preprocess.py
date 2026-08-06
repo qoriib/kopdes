@@ -8,21 +8,17 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
-PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
+PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
 
 RAW_PROVINCES_CSV = os.path.join(RAW_DIR, "scraped_provinces.csv")
 RAW_REGENCIES_CSV = os.path.join(RAW_DIR, "scraped_regencies.csv")
 GEO_PROVINCES_JSON = os.path.join(RAW_DIR, "province.json")
 GEO_REGENCIES_JSON = os.path.join(RAW_DIR, "regency.json")
 
-CLEANED_PROVINCES_CSV = os.path.join(PROCESSED_DIR, "cleaned_provinces.csv")
-CLEANED_REGENCIES_CSV = os.path.join(PROCESSED_DIR, "cleaned_regencies.csv")
+CLEANED_PROVINCES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_provinces.csv")
+CLEANED_REGENCIES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_regencies.csv")
 
 def parse_num(val):
-    """
-    Membersihkan string angka/mata uang seperti 'Rp 511.287.785', '6.534', '27.97'
-    menjadi float atau int murni.
-    """
     if val is None:
         return 0
     s = str(val).strip()

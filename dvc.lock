@@ -58,32 +58,32 @@ stages:
       size: 35922
     - path: scrape/preprocess.py
       hash: md5
-      md5: a5bf0ee3ed28efa89990a4ffcd25b5c3
-      size: 5478
+      md5: b283b10e0d54a6bd2b01eda0b483825a
+      size: 5349
     outs:
-    - path: data/processed/cleaned_provinces.csv
+    - path: data/preprocess/cleaned_provinces.csv
       hash: md5
       md5: ae22206e878faa338dcbb5aaac258a6f
       size: 4025
-    - path: data/processed/cleaned_regencies.csv
+    - path: data/preprocess/cleaned_regencies.csv
       hash: md5
       md5: 55a5537a2ca87a3fe38279e04b4a5d17
       size: 39249
   eda:
     cmd: python scrape/eda.py
     deps:
-    - path: data/processed/cleaned_provinces.csv
+    - path: data/preprocess/cleaned_provinces.csv
       hash: md5
       md5: ae22206e878faa338dcbb5aaac258a6f
       size: 4025
-    - path: data/processed/cleaned_regencies.csv
+    - path: data/preprocess/cleaned_regencies.csv
       hash: md5
       md5: 55a5537a2ca87a3fe38279e04b4a5d17
       size: 39249
     - path: scrape/eda.py
       hash: md5
-      md5: c49e98465f1794008291e4d755685fcb
-      size: 5647
+      md5: 7edb69acffc63fbb557ed3cbd3c1d195
+      size: 5535
     outs:
     - path: reports/eda_summary.md
       hash: md5
