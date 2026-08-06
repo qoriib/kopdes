@@ -356,7 +356,9 @@ jobs:
           dvc push
 
       - name: Setup CML
-        uses: iterative/setup-cml@v1
+        uses: iterative/setup-cml@v2
+        with:
+          vega: false
 
       - name: Generate & Post CML Report
         env:
