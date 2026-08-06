@@ -209,14 +209,12 @@ jobs:
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
-        with:
-          vega: false
 
       - name: Post CML EDA Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create reports/eda_summary.md || echo "CML comment created."
+          cml comment create reports/eda_summary.md
 
       - name: Upload DVC Lock
         uses: actions/upload-artifact@v7
@@ -385,14 +383,12 @@ jobs:
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
-        with:
-          vega: false
 
       - name: Post CML Evaluation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create reports/clustering_report.md || echo "CML comment created."
+          cml comment create reports/clustering_report.md
 
       - name: Upload DVC Lock
         uses: actions/upload-artifact@v7
@@ -446,14 +442,12 @@ jobs:
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
-        with:
-          vega: false
 
       - name: Post CML AI Interpretation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml comment create reports/ai_interpretation.md || echo "CML comment created."
+          cml comment create reports/ai_interpretation.md
 
       - name: Commit & Push to GitHub
         run: |
