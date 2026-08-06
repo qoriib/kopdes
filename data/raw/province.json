@@ -1,0 +1,394 @@
+{
+  "country": {
+    "code": "id",
+    "name_en": "Indonesia"
+  },
+  "level": {
+    "key": "province",
+    "name_local": "Provinsi",
+    "name_en": "Province"
+  },
+  "count": 38,
+  "entities": [
+    {
+      "id": "11",
+      "name_local": "Aceh",
+      "name_en": "Aceh",
+      "slug": "aceh-11",
+      "lat": 5.571,
+      "lon": 95.341,
+      "latitude": 5.571,
+      "longitude": 95.341
+    },
+    {
+      "id": "12",
+      "name_local": "Sumatera Utara",
+      "name_en": "North Sumatra",
+      "slug": "north-sumatra-12",
+      "lat": 3.581,
+      "lon": 98.672,
+      "latitude": 3.581,
+      "longitude": 98.672
+    },
+    {
+      "id": "13",
+      "name_local": "Sumatera Barat",
+      "name_en": "West Sumatra",
+      "slug": "west-sumatra-13",
+      "lat": -0.938,
+      "lon": 100.36,
+      "latitude": -0.938,
+      "longitude": 100.36
+    },
+    {
+      "id": "14",
+      "name_local": "Riau",
+      "name_en": "Riau",
+      "slug": "riau-14",
+      "lat": 0.518,
+      "lon": 101.446,
+      "latitude": 0.518,
+      "longitude": 101.446
+    },
+    {
+      "id": "15",
+      "name_local": "Jambi",
+      "name_en": "Jambi",
+      "slug": "jambi-15",
+      "lat": -1.604,
+      "lon": 103.584,
+      "latitude": -1.604,
+      "longitude": 103.584
+    },
+    {
+      "id": "16",
+      "name_local": "Sumatera Selatan",
+      "name_en": "South Sumatra",
+      "slug": "south-sumatra-16",
+      "lat": -2.977,
+      "lon": 104.751,
+      "latitude": -2.977,
+      "longitude": 104.751
+    },
+    {
+      "id": "17",
+      "name_local": "Bengkulu",
+      "name_en": "Bengkulu",
+      "slug": "bengkulu-17",
+      "lat": -3.821,
+      "lon": 102.284,
+      "latitude": -3.821,
+      "longitude": 102.284
+    },
+    {
+      "id": "18",
+      "name_local": "Lampung",
+      "name_en": "Lampung",
+      "slug": "lampung-18",
+      "lat": -5.441,
+      "lon": 105.258,
+      "latitude": -5.441,
+      "longitude": 105.258
+    },
+    {
+      "id": "19",
+      "name_local": "Kepulauan Bangka Belitung",
+      "name_en": "Bangka Belitung Islands",
+      "slug": "bangka-belitung-islands-19",
+      "lat": -2.153,
+      "lon": 106.158,
+      "latitude": -2.153,
+      "longitude": 106.158
+    },
+    {
+      "id": "21",
+      "name_local": "Kepulauan Riau",
+      "name_en": "Riau Islands",
+      "slug": "riau-islands-21",
+      "lat": 0.876,
+      "lon": 104.445,
+      "latitude": 0.876,
+      "longitude": 104.445
+    },
+    {
+      "id": "31",
+      "name_local": "Dki Jakarta",
+      "name_en": "Jakarta",
+      "slug": "jakarta-31",
+      "lat": -6.178,
+      "lon": 106.828,
+      "latitude": -6.178,
+      "longitude": 106.828
+    },
+    {
+      "id": "32",
+      "name_local": "Jawa Barat",
+      "name_en": "West Java",
+      "slug": "west-java-32",
+      "lat": -6.902,
+      "lon": 107.619,
+      "latitude": -6.902,
+      "longitude": 107.619
+    },
+    {
+      "id": "33",
+      "name_local": "Jawa Tengah",
+      "name_en": "Central Java",
+      "slug": "central-java-33",
+      "lat": -6.993,
+      "lon": 110.42,
+      "latitude": -6.993,
+      "longitude": 110.42
+    },
+    {
+      "id": "34",
+      "name_local": "Di Yogyakarta",
+      "name_en": "Yogyakarta",
+      "slug": "yogyakarta-34",
+      "lat": -7.795,
+      "lon": 110.367,
+      "latitude": -7.795,
+      "longitude": 110.367
+    },
+    {
+      "id": "35",
+      "name_local": "Jawa Timur",
+      "name_en": "East Java",
+      "slug": "east-java-35",
+      "lat": -7.246,
+      "lon": 112.739,
+      "latitude": -7.246,
+      "longitude": 112.739
+    },
+    {
+      "id": "36",
+      "name_local": "Banten",
+      "name_en": "Banten",
+      "slug": "banten-36",
+      "lat": -6.174,
+      "lon": 106.157,
+      "latitude": -6.174,
+      "longitude": 106.157
+    },
+    {
+      "id": "51",
+      "name_local": "Bali",
+      "name_en": "Bali",
+      "slug": "bali-51",
+      "lat": -8.668,
+      "lon": 115.234,
+      "latitude": -8.668,
+      "longitude": 115.234
+    },
+    {
+      "id": "52",
+      "name_local": "Nusa Tenggara Barat",
+      "name_en": "West Nusa Tenggara",
+      "slug": "west-nusa-tenggara-52",
+      "lat": -8.581,
+      "lon": 116.11,
+      "latitude": -8.581,
+      "longitude": 116.11
+    },
+    {
+      "id": "53",
+      "name_local": "Nusa Tenggara Timur",
+      "name_en": "East Nusa Tenggara",
+      "slug": "east-nusa-tenggara-53",
+      "lat": -10.171,
+      "lon": 123.607,
+      "latitude": -10.171,
+      "longitude": 123.607
+    },
+    {
+      "id": "61",
+      "name_local": "Kalimantan Barat",
+      "name_en": "West Kalimantan",
+      "slug": "west-kalimantan-61",
+      "lat": -0.061,
+      "lon": 109.353,
+      "latitude": -0.061,
+      "longitude": 109.353
+    },
+    {
+      "id": "62",
+      "name_local": "Kalimantan Tengah",
+      "name_en": "Central Kalimantan",
+      "slug": "central-kalimantan-62",
+      "lat": -2.217,
+      "lon": 113.919,
+      "latitude": -2.217,
+      "longitude": 113.919
+    },
+    {
+      "id": "63",
+      "name_local": "Kalimantan Selatan",
+      "name_en": "South Kalimantan",
+      "slug": "south-kalimantan-63",
+      "lat": -3.484,
+      "lon": 114.834,
+      "latitude": -3.484,
+      "longitude": 114.834
+    },
+    {
+      "id": "64",
+      "name_local": "Kalimantan Timur",
+      "name_en": "East Kalimantan",
+      "slug": "east-kalimantan-64",
+      "lat": -0.501,
+      "lon": 117.139,
+      "latitude": -0.501,
+      "longitude": 117.139
+    },
+    {
+      "id": "65",
+      "name_local": "Kalimantan Utara",
+      "name_en": "North Kalimantan",
+      "slug": "north-kalimantan-65",
+      "lat": 2.842,
+      "lon": 117.374,
+      "latitude": 2.842,
+      "longitude": 117.374
+    },
+    {
+      "id": "71",
+      "name_local": "Sulawesi Utara",
+      "name_en": "North Sulawesi",
+      "slug": "north-sulawesi-71",
+      "lat": 1.47,
+      "lon": 124.845,
+      "latitude": 1.47,
+      "longitude": 124.845
+    },
+    {
+      "id": "72",
+      "name_local": "Sulawesi Tengah",
+      "name_en": "Central Sulawesi",
+      "slug": "central-sulawesi-72",
+      "lat": -0.891,
+      "lon": 119.871,
+      "latitude": -0.891,
+      "longitude": 119.871
+    },
+    {
+      "id": "73",
+      "name_local": "Sulawesi Selatan",
+      "name_en": "South Sulawesi",
+      "slug": "south-sulawesi-73",
+      "lat": -5.139,
+      "lon": 119.452,
+      "latitude": -5.139,
+      "longitude": 119.452
+    },
+    {
+      "id": "74",
+      "name_local": "Sulawesi Tenggara",
+      "name_en": "Southeast Sulawesi",
+      "slug": "southeast-sulawesi-74",
+      "lat": -4.025,
+      "lon": 122.54,
+      "latitude": -4.025,
+      "longitude": 122.54
+    },
+    {
+      "id": "75",
+      "name_local": "Gorontalo",
+      "name_en": "Gorontalo",
+      "slug": "gorontalo-75",
+      "lat": 0.524,
+      "lon": 123.077,
+      "latitude": 0.524,
+      "longitude": 123.077
+    },
+    {
+      "id": "76",
+      "name_local": "Sulawesi Barat",
+      "name_en": "West Sulawesi",
+      "slug": "west-sulawesi-76",
+      "lat": -2.665,
+      "lon": 118.853,
+      "latitude": -2.665,
+      "longitude": 118.853
+    },
+    {
+      "id": "81",
+      "name_local": "Maluku",
+      "name_en": "Maluku",
+      "slug": "maluku-81",
+      "lat": -3.694,
+      "lon": 128.183,
+      "latitude": -3.694,
+      "longitude": 128.183
+    },
+    {
+      "id": "82",
+      "name_local": "Maluku Utara",
+      "name_en": "North Maluku",
+      "slug": "north-maluku-82",
+      "lat": 0.756,
+      "lon": 127.61,
+      "latitude": 0.756,
+      "longitude": 127.61
+    },
+    {
+      "id": "91",
+      "name_local": "Papua Barat",
+      "name_en": "West Papua",
+      "slug": "west-papua-91",
+      "lat": -2.536,
+      "lon": 140.715,
+      "latitude": -2.536,
+      "longitude": 140.715
+    },
+    {
+      "id": "92",
+      "name_local": "Papua Tengah",
+      "name_en": "Central Papua",
+      "slug": "papua-tengah-92",
+      "lat": -3.8,
+      "lon": 136.5,
+      "latitude": -3.8,
+      "longitude": 136.5
+    },
+    {
+      "id": "93",
+      "name_local": "Papua Selatan",
+      "name_en": "South Papua",
+      "slug": "papua-selatan-93",
+      "lat": -7.0,
+      "lon": 139.5,
+      "latitude": -7.0,
+      "longitude": 139.5
+    },
+    {
+      "id": "94",
+      "name_local": "Papua",
+      "name_en": "Papua",
+      "slug": "papua-94",
+      "lat": -3.363,
+      "lon": 135.504,
+      "latitude": -3.363,
+      "longitude": 135.504
+    },
+    {
+      "id": "95",
+      "name_local": "Papua Pegunungan",
+      "name_en": "Highland Papua",
+      "slug": "papua-pegunungan-95",
+      "lat": -4.1,
+      "lon": 138.9,
+      "latitude": -4.1,
+      "longitude": 138.9
+    },
+    {
+      "id": "96",
+      "name_local": "Papua Barat Daya",
+      "name_en": "Southwest Papua",
+      "slug": "papua-barat-daya-96",
+      "lat": -1.3,
+      "lon": 131.8,
+      "latitude": -1.3,
+      "longitude": 131.8
+    }
+  ]
+}

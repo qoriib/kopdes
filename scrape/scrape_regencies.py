@@ -10,10 +10,10 @@ START_PROVINCE_ID = 1
 END_PROVINCE_ID = 38
 TABLE_INDEX = 2
 BASE_URL_TEMPLATE = "https://simkopdes.go.id/pers/dashboard/district/{id}"
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_districts.csv")
+OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_regencies.csv")
 
 def main():
-    print("[+] Memulai Scraping Data Kota/Kabupaten ID 1-38 via Playwright...")
+    print("[+] Memulai Scraping Data Kabupaten/Kota ID 1-38 via Playwright...")
     print(f"[*] Output CSV : {OUTPUT_CSV}")
     start_time = time.time()
 
@@ -58,7 +58,7 @@ def main():
         browser.close()
 
     elapsed = time.time() - start_time
-    print(f"\n[DONE] Scraping selesai! Total {len(combined_rows)} baris kota/kabupaten dalam {elapsed:.2f} detik.")
+    print(f"\n[DONE] Scraping selesai! Total {len(combined_rows)} baris kabupaten/kota dalam {elapsed:.2f} detik.")
     print(f"[SAVED] File CSV akhir -> {OUTPUT_CSV}")
 
 if __name__ == "__main__":
