@@ -82,8 +82,8 @@ stages:
       size: 39249
     - path: scrape/eda.py
       hash: md5
-      md5: 7edb69acffc63fbb557ed3cbd3c1d195
-      size: 5535
+      md5: 5301720d187a42c98d0a11bd0fda78d7
+      size: 6852
     outs:
     - path: reports/eda_summary.md
       hash: md5
@@ -93,3 +93,11 @@ stages:
       hash: md5
       md5: bc008461dcc58155d16349964fa08e43
       size: 592
+    - path: reports/plots/koperasi_status.csv
+      hash: md5
+      md5: d4e7cb9fabfef73b457916864af2e11e
+      size: 78
+    - path: reports/plots/top_provinces.csv
+      hash: md5
+      md5: 507f05ad3bc57f19752739ae95a8d305
+      size: 224

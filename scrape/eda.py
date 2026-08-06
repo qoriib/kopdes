@@ -8,12 +8,16 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
+PLOTS_DIR = os.path.join(REPORTS_DIR, "plots")
 
 CLEANED_PROVINCES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_provinces.csv")
 CLEANED_REGENCIES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_regencies.csv")
 
 METRICS_JSON = os.path.join(REPORTS_DIR, "metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
+
+TOP_PROVINCES_PLOT_CSV = os.path.join(PLOTS_DIR, "top_provinces.csv")
+KOPERASI_STATUS_PLOT_CSV = os.path.join(PLOTS_DIR, "koperasi_status.csv")
 
 def read_csv_data(filepath):
     rows = []
@@ -29,9 +33,18 @@ def read_csv_data(filepath):
                 rows.append(r)
     return rows
 
+def save_plot_csv(filepath, headers, rows):
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    # Use standard utf-8 without BOM for clean DVC plot headers
+    with open(filepath, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        writer.writerows(rows)
+
 def main():
-    print("[+] Memulai Stage EDA (Exploratory Data Analysis)...")
+    print("[+] Memulai Stage EDA & DVC Plots Generation...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(PLOTS_DIR, exist_ok=True)
 
     prov_data = read_csv_data(CLEANED_PROVINCES_CSV)
     reg_data = read_csv_data(CLEANED_REGENCIES_CSV)
@@ -52,10 +65,11 @@ def main():
     pct_npwp = round((total_npwp / total_koperasi * 100), 2) if total_koperasi else 0
     pct_rat = round((total_rat / total_koperasi * 100), 2) if total_koperasi else 0
 
-    top_provinces_koperasi = sorted(prov_data, key=lambda x: x.get('jumlah_koperasi', 0), reverse=True)[:5]
+    top_provinces_koperasi = sorted(prov_data, key=lambda x: x.get('jumlah_koperasi', 0), reverse=True)[:10]
     top_regencies_koperasi = sorted(reg_data, key=lambda x: x.get('jumlah_koperasi', 0), reverse=True)[:5]
     top_regencies_transaksi = sorted(reg_data, key=lambda x: x.get('nilai_transaksi', 0), reverse=True)[:5]
 
+    # 1. DVC Metrics JSON
     metrics = {
         "summary": {
             "total_provinces": total_provinces,
@@ -85,6 +99,21 @@ def main():
         json.dump(metrics, f, indent=2, ensure_ascii=False)
     print(f"[SAVED] DVC Metrics -> {METRICS_JSON}")
 
+    # 2. DVC Plot CSV 1: Top 10 Provinces by Koperasi Count
+    prov_plot_rows = [[p.get('province_name'), p.get('jumlah_koperasi')] for p in top_provinces_koperasi]
+    save_plot_csv(TOP_PROVINCES_PLOT_CSV, ['province_name', 'jumlah_koperasi'], prov_plot_rows)
+    print(f"[SAVED] DVC Plot CSV -> {TOP_PROVINCES_PLOT_CSV}")
+
+    # 3. DVC Plot CSV 2: Koperasi Compliance Status Breakdown
+    status_plot_rows = [
+        ['Memiliki NIB', total_nib],
+        ['Memiliki NPWP', total_npwp],
+        ['Telah RAT 2025', total_rat]
+    ]
+    save_plot_csv(KOPERASI_STATUS_PLOT_CSV, ['status', 'jumlah'], status_plot_rows)
+    print(f"[SAVED] DVC Plot CSV -> {KOPERASI_STATUS_PLOT_CSV}")
+
+    # 4. EDA Summary Markdown Document
     md_content = f"""# Laporan Analisis Eksplorasi Data (EDA) SIMKOPDES
 
 Laporan otomatis ini dihasilkan dari stage pipeline EDA DVC berdasarkan data `cleaned_provinces.csv` dan `cleaned_regencies.csv`.
@@ -110,7 +139,7 @@ Laporan otomatis ini dihasilkan dari stage pipeline EDA DVC berdasarkan data `cl
 ## 🏆 Top 5 Provinsi Jumlah Koperasi Terbanyak
 
 """
-    for idx, p in enumerate(top_provinces_koperasi, 1):
+    for idx, p in enumerate(top_provinces_koperasi[:5], 1):
         md_content += f"{idx}. **{p.get('province_name')}**: {p.get('jumlah_koperasi'):,} Koperasi (NIB: {p.get('koperasi_nib'):,}, RAT: {p.get('koperasi_rat'):,})\n"
 
     md_content += "\n---\n\n## 🏙️ Top 5 Kabupaten/Kota Jumlah Koperasi Terbanyak\n\n"
@@ -125,7 +154,7 @@ Laporan otomatis ini dihasilkan dari stage pipeline EDA DVC berdasarkan data `cl
         f.write(md_content)
     print(f"[SAVED] EDA Summary Markdown -> {EDA_SUMMARY_MD}")
 
-    print("[DONE] Stage EDA selesai.")
+    print("[DONE] Stage EDA & Plots selesai.")
 
 if __name__ == "__main__":
     main()

@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
+  statuses: write
 
 jobs:
   scrape_matrix:
@@ -65,6 +67,22 @@ jobs:
         with:
           r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Setup CML (Continuous Machine Learning)
+        uses: iterative/setup-cml@v1
+
+      - name: Generate & Post CML Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## 🚀 SIMKOPDES DVC Data Pipeline Report" > cml_report.md
+          echo "" >> cml_report.md
+          cat reports/eda_summary.md >> cml_report.md
+          echo "" >> cml_report.md
+          echo "## 📊 DVC Metrics Summary" >> cml_report.md
+          dvc metrics show --markdown >> cml_report.md
+
+          cml comment create cml_report.md || echo "CML comment created."
 
       - name: Commit & Push Updated Lockfile and Reports
         run: |
