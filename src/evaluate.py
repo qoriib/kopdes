@@ -180,8 +180,6 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
     for cluster_id, count in cluster_counts.items():
         md_content += f"- **Klaster {cluster_id}**: {count} Kabupaten/Kota\n"
 
-    md_content += "\n---\n"
-
     with open(CLUSTERING_REPORT_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
     print(f"[SAVED] Laporan Markdown Clustering -> {CLUSTERING_REPORT_MD}")

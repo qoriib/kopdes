@@ -217,8 +217,6 @@ Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat
     for idx, (_, r) in enumerate(top_regencies_transaksi.iterrows(), 1):
         md_content += f"{idx}. **{r['regency_name']}**: Rp {float(r['nilai_transaksi']):,.2f}\n"
 
-    md_content += "\n---\n"
-
     with open(EDA_SUMMARY_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
     print(f"[SAVED] Laporan Markdown EDA -> {EDA_SUMMARY_MD}")
