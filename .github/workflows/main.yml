@@ -214,7 +214,7 @@ jobs:
           path: dvc.lock
 
   evaluate:
-    name: ML Model Evaluation & CML Report
+    name: ML Model Evaluation
     needs: [eda, model]
     runs-on: ubuntu-latest
     steps:
@@ -246,6 +246,47 @@ jobs:
           r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
+      - name: Upload Lockfile Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-lock-evaluate
+          path: dvc.lock
+
+  interpret:
+    name: Cloudflare AI Interpretation Report
+    needs: evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'false'
+
+      - name: Download Lockfile Artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Reproduce Interpret Stage (with DVC Auto-Pull & Cloudflare Workers AI)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --pull --force interpret
+          else
+            dvc repro --pull interpret
+          fi
+
+      - name: Push Interpretation Reports to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
       - name: Setup CML (Continuous Machine Learning)
         uses: iterative/setup-cml@v1
 
@@ -259,6 +300,8 @@ jobs:
           echo "" >> cml_report.md
           cat reports/clustering_report.md >> cml_report.md
           echo "" >> cml_report.md
+          cat reports/ai_interpretation.md >> cml_report.md
+          echo "" >> cml_report.md
           echo "## Metrik Evaluasi Model DVC" >> cml_report.md
           dvc metrics show --markdown >> cml_report.md
 
@@ -269,5 +312,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dvc.lock .dvc/config data/transform/.gitignore data/preprocess/.gitignore data/model/.gitignore models/.gitignore reports/
-          git commit -m "auto: reproduce end-to-end ML pipeline stages [skip ci]" || echo "Tidak ada perubahan data."
+          git commit -m "auto: reproduce end-to-end ML pipeline and AI interpretation stages [skip ci]" || echo "Tidak ada perubahan data."
           git push

@@ -74,3 +74,13 @@ stages:
           cache: false
     outs:
       - reports/clustering_report.md
+
+  interpret:
+    cmd: python src/interpret.py
+    deps:
+      - src/interpret.py
+      - data/model/clustered_regencies.csv
+      - reports/model_metrics.json
+    outs:
+      - reports/cluster_labels.json
+      - reports/ai_interpretation.md
