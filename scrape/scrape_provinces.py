@@ -8,7 +8,7 @@ from scraper_utils import scrape_table_with_pagination, save_to_csv
 
 TARGET_URL = "https://simkopdes.go.id/pers/dashboard"
 TABLE_INDEX = 2
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "scraped_provinces.csv")
+OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_provinces.csv")
 
 def main():
     print("[+] Memulai Scraping Data Provinsi via Playwright...")

@@ -40,6 +40,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock data/scraped_provinces.csv data/scraped_districts.csv .dvc/config
-          git commit -m "auto: reproduce DVC pipeline & sync datasets [skip ci]" || echo "Tidak ada perubahan data."
+          git add dvc.lock data/raw/scraped_provinces.csv data/raw/scraped_districts.csv .dvc/config
+          git commit -m "auto: reproduce DVC pipeline & sync raw datasets [skip ci]" || echo "Tidak ada perubahan data."
           git push

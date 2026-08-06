@@ -5,7 +5,7 @@ stages:
       - scrape/scrape_provinces.py
       - scrape/scraper_utils.py
     outs:
-      - data/scraped_provinces.csv
+      - data/raw/scraped_provinces.csv
 
   scrape_districts:
     cmd: python scrape/scrape_districts.py
@@ -13,4 +13,4 @@ stages:
       - scrape/scrape_districts.py
       - scrape/scraper_utils.py
     outs:
-      - data/scraped_districts.csv
+      - data/raw/scraped_districts.csv

@@ -10,7 +10,7 @@ START_PROVINCE_ID = 1
 END_PROVINCE_ID = 38
 TABLE_INDEX = 2
 BASE_URL_TEMPLATE = "https://simkopdes.go.id/pers/dashboard/district/{id}"
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "scraped_districts.csv")
+OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_districts.csv")
 
 def main():
     print("[+] Memulai Scraping Data Kota/Kabupaten ID 1-38 via Playwright...")
@@ -49,7 +49,7 @@ def main():
 
                 print(f"[OK] ({prov_count} baris baru).")
 
-                # Perbarui CSV secara instan per provinsi selesai di folder data/
+                # Perbarui CSV secara instan per provinsi selesai di folder data/raw/
                 save_to_csv(OUTPUT_CSV, global_headers, combined_rows)
 
             except Exception as e:
