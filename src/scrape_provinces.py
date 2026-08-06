@@ -4,7 +4,7 @@ import time
 from playwright.sync_api import sync_playwright
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from scraper_utils import scrape_table_with_pagination, save_to_csv
+from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 
 TARGET_URL = "https://simkopdes.go.id/pers/dashboard"
 TABLE_INDEX = 2

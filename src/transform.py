@@ -19,10 +19,6 @@ TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.c
 TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
 
 def parse_num(val):
-    """
-    Membersihkan string angka/mata uang seperti 'Rp 511.287.785', '6.534', '27.97'
-    menjadi float atau int murni.
-    """
     if val is None:
         return 0
     s = str(val).strip()

@@ -1,21 +1,21 @@
 schema: '2.0'
 stages:
   scrape_provinces:
-    cmd: python scrape/scrape_provinces.py
+    cmd: python src/scrape_provinces.py
     deps:
-    - path: scrape/scrape_provinces.py
+    - path: src/scrape_provinces.py
       hash: md5
-      md5: ab2467c2a9c8b085c59eceb106f847cd
-      size: 1331
-    - path: scrape/scraper_utils.py
+      md5: a672db6659d404f4e8318d9b1a1e93ba
+      size: 1337
+    - path: src/utils/scraper_utils.py
       hash: md5
-      md5: fe98bd03e6a471a6640293976f3206fa
-      size: 3799
+      md5: ab1cf03ae5b9110d259f8fb5b71fa214
+      size: 3642
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: f52d5008fc4ac62b2063f8f2fb9bd535
-      size: 3990
+      md5: 419c8e76f4ccc51768c47640d76ef4ad
+      size: 3992
   scrape_regencies:
     cmd: python scrape/scrape_regencies.py
     deps:

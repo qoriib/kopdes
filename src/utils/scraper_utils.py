@@ -56,7 +56,6 @@ def scrape_table_with_pagination(page, target_url, target_table_index=2):
     page.goto(target_url, wait_until='networkidle', timeout=40000)
     page.wait_for_selector('table', timeout=15000)
 
-    # Coba ubah opsi page size ke 100/page atau 50/page jika dropdown Ant Design tersedia
     try:
         size_changer = page.query_selector('.ant-pagination-options-size-changer')
         if size_changer:
@@ -86,7 +85,6 @@ def scrape_table_with_pagination(page, target_url, target_table_index=2):
                 seen_rows.add(t)
                 all_rows.append(r)
 
-        # Cek tombol Next pada pagination Ant Design
         next_li = page.query_selector('li.ant-pagination-next')
         if not next_li:
             break
@@ -111,7 +109,7 @@ def scrape_table_with_pagination(page, target_url, target_table_index=2):
 def save_to_csv(filename, headers, rows):
     """
     Menyimpan data ke berkas CSV (utf-8 dengan BOM)
-    Memastikan direktori tujuan (misal data/) dibuat secara otomatis.
+    Memastikan direktori tujuan dibuat secara otomatis.
     """
     if headers and rows:
         parent_dir = os.path.dirname(filename)

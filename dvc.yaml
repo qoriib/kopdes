@@ -1,17 +1,17 @@
 stages:
   scrape_provinces:
-    cmd: python scrape/scrape_provinces.py
+    cmd: python src/scrape_provinces.py
     deps:
-      - scrape/scrape_provinces.py
-      - scrape/scraper_utils.py
+      - src/scrape_provinces.py
+      - src/utils/scraper_utils.py
     outs:
       - data/raw/scraped_provinces.csv
 
   scrape_regencies:
-    cmd: python scrape/scrape_regencies.py
+    cmd: python src/scrape_regencies.py
     deps:
-      - scrape/scrape_regencies.py
-      - scrape/scraper_utils.py
+      - src/scrape_regencies.py
+      - src/utils/scraper_utils.py
     params:
       - scrape.max_workers
       - scrape.start_province_id
@@ -20,9 +20,9 @@ stages:
       - data/raw/scraped_regencies.csv
 
   transform:
-    cmd: python scrape/transform.py
+    cmd: python src/transform.py
     deps:
-      - scrape/transform.py
+      - src/transform.py
       - data/raw/scraped_provinces.csv
       - data/raw/scraped_regencies.csv
       - data/raw/province.json
@@ -32,9 +32,9 @@ stages:
       - data/transform/transformed_regencies.csv
 
   eda:
-    cmd: python scrape/eda.py
+    cmd: python src/eda.py
     deps:
-      - scrape/eda.py
+      - src/eda.py
       - data/transform/transformed_provinces.csv
       - data/transform/transformed_regencies.csv
     metrics:
