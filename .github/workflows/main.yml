@@ -349,14 +349,14 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > cml_report.md
-          echo "" >> cml_report.md
-          cat reports/eda_summary.md >> cml_report.md
-          echo "" >> cml_report.md
-          cat reports/clustering_report.md >> cml_report.md
-          echo "" >> cml_report.md
+          echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > reports/cml_report.md
+          echo "" >> reports/cml_report.md
+          cat reports/eda_summary.md >> reports/cml_report.md
+          echo "" >> reports/cml_report.md
+          cat reports/clustering_report.md >> reports/cml_report.md
+          echo "" >> reports/cml_report.md
 
-          cml comment create cml_report.md || echo "CML comment created."
+          cml comment create reports/cml_report.md || echo "CML comment created."
 
       - name: Commit & Push to GitHub
         run: |
