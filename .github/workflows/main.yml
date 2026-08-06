@@ -35,11 +35,14 @@ jobs:
           install_playwright: 'true'
 
       - name: Reproduce Parallel DVC Stage (${{ matrix.stage }})
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force ${{ matrix.stage }}
+            dvc repro --pull --force ${{ matrix.stage }}
           else
-            dvc repro ${{ matrix.stage }}
+            dvc repro --pull ${{ matrix.stage }}
           fi
 
       - name: Push Data to Cloudflare R2
@@ -70,18 +73,15 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Pull Scraped Raw Data from Cloudflare R2
-        uses: ./.github/actions/dvc-r2-pull
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Reproduce Transform Stage
+      - name: Reproduce Transform Stage (with DVC Auto-Pull)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force transform
+            dvc repro --pull --force transform
           else
-            dvc repro transform
+            dvc repro --pull transform
           fi
 
       - name: Push Transformed Data to Cloudflare R2
@@ -112,18 +112,15 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Pull Transformed Data from Cloudflare R2
-        uses: ./.github/actions/dvc-r2-pull
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Reproduce EDA Stage
+      - name: Reproduce EDA Stage (with DVC Auto-Pull)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force eda
+            dvc repro --pull --force eda
           else
-            dvc repro eda
+            dvc repro --pull eda
           fi
 
       - name: Push Reports to Cloudflare R2
@@ -154,18 +151,15 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Pull Transformed Data from Cloudflare R2
-        uses: ./.github/actions/dvc-r2-pull
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Reproduce ML Preprocess Stage
+      - name: Reproduce ML Preprocess Stage (with DVC Auto-Pull)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force preprocess
+            dvc repro --pull --force preprocess
           else
-            dvc repro preprocess
+            dvc repro --pull preprocess
           fi
 
       - name: Push Preprocessed Data to Cloudflare R2
@@ -196,18 +190,15 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Pull Preprocessed Data from Cloudflare R2
-        uses: ./.github/actions/dvc-r2-pull
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Reproduce Model Stage
+      - name: Reproduce Model Stage (with DVC Auto-Pull)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force model
+            dvc repro --pull --force model
           else
-            dvc repro model
+            dvc repro --pull model
           fi
 
       - name: Push Model Artifacts to Cloudflare R2
@@ -238,18 +229,15 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Pull Model Data & Reports from Cloudflare R2
-        uses: ./.github/actions/dvc-r2-pull
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Reproduce Evaluate Stage
+      - name: Reproduce Evaluate Stage (with DVC Auto-Pull)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force evaluate
+            dvc repro --pull --force evaluate
           else
-            dvc repro evaluate
+            dvc repro --pull evaluate
           fi
 
       - name: Push Evaluation Reports to Cloudflare R2
