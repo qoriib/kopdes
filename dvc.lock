@@ -1,0 +1,34 @@
+schema: '2.0'
+stages:
+  scrape_provinces:
+    cmd: python scrape/scrape_provinces.py
+    deps:
+    - path: scrape/scrape_provinces.py
+      hash: md5
+      md5: f7adebd2155a172b5749990471c4e2de
+      size: 1324
+    - path: scrape/scraper_utils.py
+      hash: md5
+      md5: fe98bd03e6a471a6640293976f3206fa
+      size: 3799
+    outs:
+    - path: data/scraped_provinces.csv
+      hash: md5
+      md5: 7d747670fe3e0e4891b646fed7469a04
+      size: 3991
+  scrape_districts:
+    cmd: python scrape/scrape_districts.py
+    deps:
+    - path: scrape/scrape_districts.py
+      hash: md5
+      md5: 8df1cf45831c1790d144c3c7213e2ace
+      size: 2367
+    - path: scrape/scraper_utils.py
+      hash: md5
+      md5: fe98bd03e6a471a6640293976f3206fa
+      size: 3799
+    outs:
+    - path: data/scraped_districts.csv
+      hash: md5
+      md5: 3aa8a3dfb414bdd861695947cade938b
+      size: 35922
