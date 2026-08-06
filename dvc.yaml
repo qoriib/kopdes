@@ -19,24 +19,24 @@ stages:
     outs:
       - data/raw/scraped_regencies.csv
 
-  preprocess:
-    cmd: python scrape/preprocess.py
+  transform:
+    cmd: python scrape/transform.py
     deps:
-      - scrape/preprocess.py
+      - scrape/transform.py
       - data/raw/scraped_provinces.csv
       - data/raw/scraped_regencies.csv
       - data/raw/province.json
       - data/raw/regency.json
     outs:
-      - data/preprocess/cleaned_provinces.csv
-      - data/preprocess/cleaned_regencies.csv
+      - data/transform/transformed_provinces.csv
+      - data/transform/transformed_regencies.csv
 
   eda:
     cmd: python scrape/eda.py
     deps:
       - scrape/eda.py
-      - data/preprocess/cleaned_provinces.csv
-      - data/preprocess/cleaned_regencies.csv
+      - data/transform/transformed_provinces.csv
+      - data/transform/transformed_regencies.csv
     metrics:
       - reports/metrics.json:
           cache: false

@@ -55,7 +55,7 @@ jobs:
           path: dvc.lock
 
   pipeline_sequential:
-    name: Sequential Pipeline (Preprocess & EDA)
+    name: Sequential Pipeline (Transform & EDA)
     needs: scrape_matrix
     runs-on: ubuntu-latest
     steps:
@@ -70,12 +70,12 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Sequential Pipeline (preprocess & eda)
+      - name: Reproduce Sequential Pipeline (transform & eda)
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force preprocess eda
+            dvc repro --force transform eda
           else
-            dvc repro preprocess eda
+            dvc repro transform eda
           fi
 
       - name: Push Processed Data to Cloudflare R2
@@ -104,6 +104,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock .dvc/config data/preprocess/.gitignore reports/
-          git commit -m "auto: reproduce sequential preprocess & eda pipeline [skip ci]" || echo "Tidak ada perubahan data."
+          git add dvc.lock .dvc/config data/transform/.gitignore reports/
+          git commit -m "auto: reproduce sequential transform & eda pipeline [skip ci]" || echo "Tidak ada perubahan data."
           git push

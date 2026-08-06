@@ -8,17 +8,21 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
-PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
+TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
 
 RAW_PROVINCES_CSV = os.path.join(RAW_DIR, "scraped_provinces.csv")
 RAW_REGENCIES_CSV = os.path.join(RAW_DIR, "scraped_regencies.csv")
 GEO_PROVINCES_JSON = os.path.join(RAW_DIR, "province.json")
 GEO_REGENCIES_JSON = os.path.join(RAW_DIR, "regency.json")
 
-CLEANED_PROVINCES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_provinces.csv")
-CLEANED_REGENCIES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_regencies.csv")
+TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.csv")
+TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
 
 def parse_num(val):
+    """
+    Membersihkan string angka/mata uang seperti 'Rp 511.287.785', '6.534', '27.97'
+    menjadi float atau int murni.
+    """
     if val is None:
         return 0
     s = str(val).strip()
@@ -48,12 +52,12 @@ def load_geo_json(filepath):
             pass
     return []
 
-def preprocess_provinces():
-    print(f"[*] Preprocessing Data Provinsi dari {RAW_PROVINCES_CSV}...")
+def transform_provinces():
+    print(f"[*] Transforming Data Provinsi dari {RAW_PROVINCES_CSV}...")
     geo_data = load_geo_json(GEO_PROVINCES_JSON)
     geo_map = {int(p['province_id']): (p.get('latitude', 0.0), p.get('longitude', 0.0)) for p in geo_data if 'province_id' in p}
 
-    cleaned_rows = []
+    transformed_rows = []
     headers = [
         'province_id', 'province_name', 'jumlah_koperasi', 'koperasi_nib', 
         'koperasi_npwp', 'koperasi_rat', 'simpanan_pokok', 'simpanan_wajib', 
@@ -84,20 +88,20 @@ def preprocess_provinces():
 
             lat, lon = geo_map.get(prov_id, (0.0, 0.0))
 
-            cleaned_rows.append([
+            transformed_rows.append([
                 prov_id, name, jml, nib, npwp, rat, pokok, wajib,
                 vol, nilai, lahan, lahan_pct, gerai_pct, lat, lon
             ])
 
-    save_csv(CLEANED_PROVINCES_CSV, headers, cleaned_rows)
-    print(f"[OK] Preprocessed {len(cleaned_rows)} provinsi -> {CLEANED_PROVINCES_CSV}")
+    save_csv(TRANSFORMED_PROVINCES_CSV, headers, transformed_rows)
+    print(f"[OK] Transformed {len(transformed_rows)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
 
-def preprocess_regencies():
-    print(f"[*] Preprocessing Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
+def transform_regencies():
+    print(f"[*] Transforming Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
     geo_map = {(int(r['province_id']), int(r['regency_no'])): (r.get('latitude', 0.0), r.get('longitude', 0.0)) for r in geo_data if 'province_id' in r and 'regency_no' in r}
 
-    cleaned_rows = []
+    transformed_rows = []
     headers = [
         'province_id', 'regency_no', 'regency_name', 'jumlah_koperasi', 
         'koperasi_nib', 'koperasi_npwp', 'koperasi_rat', 'simpanan_pokok', 
@@ -125,13 +129,13 @@ def preprocess_regencies():
 
             lat, lon = geo_map.get((prov_id, reg_no), (0.0, 0.0))
 
-            cleaned_rows.append([
+            transformed_rows.append([
                 prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
                 wajib, vol, nilai, lat, lon
             ])
 
-    save_csv(CLEANED_REGENCIES_CSV, headers, cleaned_rows)
-    print(f"[OK] Preprocessed {len(cleaned_rows)} kabupaten/kota -> {CLEANED_REGENCIES_CSV}")
+    save_csv(TRANSFORMED_REGENCIES_CSV, headers, transformed_rows)
+    print(f"[OK] Transformed {len(transformed_rows)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
 
 def save_csv(filename, headers, rows):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -141,10 +145,10 @@ def save_csv(filename, headers, rows):
         writer.writerows(rows)
 
 def main():
-    print("[+] Memulai Stage Preprocessing & Data Cleaning...")
-    preprocess_provinces()
-    preprocess_regencies()
-    print("[DONE] Preprocessing selesai.")
+    print("[+] Memulai Stage Data Transformation & Geo-Enrichment...")
+    transform_provinces()
+    transform_regencies()
+    print("[DONE] Transformation selesai.")
 
 if __name__ == "__main__":
     main()

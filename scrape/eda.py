@@ -6,11 +6,11 @@ import json
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
+TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
 
-CLEANED_PROVINCES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_provinces.csv")
-CLEANED_REGENCIES_CSV = os.path.join(PREPROCESS_DIR, "cleaned_regencies.csv")
+TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.csv")
+TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
 
 METRICS_JSON = os.path.join(REPORTS_DIR, "metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
@@ -33,8 +33,8 @@ def main():
     print("[+] Memulai Tahap Analisis Eksplorasi Data (EDA)...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
 
-    prov_data = read_csv_data(CLEANED_PROVINCES_CSV)
-    reg_data = read_csv_data(CLEANED_REGENCIES_CSV)
+    prov_data = read_csv_data(TRANSFORMED_PROVINCES_CSV)
+    reg_data = read_csv_data(TRANSFORMED_REGENCIES_CSV)
 
     total_provinces = len(prov_data)
     total_regencies = len(reg_data)
@@ -56,7 +56,6 @@ def main():
     top_regencies_koperasi = sorted(reg_data, key=lambda x: x.get('jumlah_koperasi', 0), reverse=True)[:5]
     top_regencies_transaksi = sorted(reg_data, key=lambda x: x.get('nilai_transaksi', 0), reverse=True)[:5]
 
-    # DVC Metrics JSON
     metrics = {
         "summary": {
             "total_provinces": total_provinces,
@@ -86,7 +85,6 @@ def main():
         json.dump(metrics, f, indent=2, ensure_ascii=False)
     print(f"[SAVED] DVC Metrics -> {METRICS_JSON}")
 
-    # Laporan Markdown EDA Formal
     md_content = f"""# Laporan Analisis Eksplorasi Data SIMKOPDES
 
 Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES berbasis Data Version Control (DVC).
