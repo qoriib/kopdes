@@ -16,35 +16,19 @@ stages:
       hash: md5
       md5: f52d5008fc4ac62b2063f8f2fb9bd535
       size: 3990
-  scrape_districts:
-    cmd: python scrape/scrape_districts.py
+  scrape_regencies:
+    cmd: python scrape/scrape_regencies.py
     deps:
-    - path: scrape/scrape_districts.py
+    - path: scrape/scrape_regencies.py
       hash: md5
-      md5: 8df1cf45831c1790d144c3c7213e2ace
-      size: 2367
+      md5: 725f9b2b1b8a87f9247ea06a8dd6caff
+      size: 2378
     - path: scrape/scraper_utils.py
       hash: md5
       md5: fe98bd03e6a471a6640293976f3206fa
       size: 3799
     outs:
-    - path: data/scraped_districts.csv
+    - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 3aa8a3dfb414bdd861695947cade938b
+      md5: ea0f62dcc23b917fe9949c98d41ee2a2
       size: 35922
-  fetch_geo_json:
-    cmd: python scrape/fetch_openadmin.py
-    deps:
-    - path: scrape/fetch_openadmin.py
-      hash: md5
-      md5: 7973369cda4eb6bc78eae320444d01aa
-      size: 3152
-    outs:
-    - path: data/raw/province.json
-      hash: md5
-      md5: 930e32a7a814510473e217dae4b23b4b
-      size: 8282
-    - path: data/raw/regency.json
-      hash: md5
-      md5: 98f57cbc7c7352e19b820416bdebfeca
-      size: 182678
