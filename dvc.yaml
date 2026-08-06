@@ -18,3 +18,27 @@ stages:
       - scrape.end_province_id
     outs:
       - data/raw/scraped_regencies.csv
+
+  preprocess:
+    cmd: python scrape/preprocess.py
+    deps:
+      - scrape/preprocess.py
+      - data/raw/scraped_provinces.csv
+      - data/raw/scraped_regencies.csv
+      - data/raw/province.json
+      - data/raw/regency.json
+    outs:
+      - data/processed/cleaned_provinces.csv
+      - data/processed/cleaned_regencies.csv
+
+  eda:
+    cmd: python scrape/eda.py
+    deps:
+      - scrape/eda.py
+      - data/processed/cleaned_provinces.csv
+      - data/processed/cleaned_regencies.csv
+    metrics:
+      - reports/metrics.json:
+          cache: false
+    outs:
+      - reports/eda_summary.md

@@ -1,4 +1,4 @@
-name: Auto Scraper SIMKOPDES DVC Pipeline (Parallel)
+name: Auto Scraper & DVC Data Pipeline
 
 on:
   workflow_dispatch: # Pemicu tombol manual di GitHub Actions
@@ -31,10 +31,10 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium --with-deps
 
-      - name: Reproduce DVC Stage (${{ matrix.stage }})
+      - name: Reproduce Parallel DVC Scrape Stage (${{ matrix.stage }})
         run: dvc repro ${{ matrix.stage }}
 
-      - name: Push Data to Cloudflare R2 (DVC Remote)
+      - name: Push Scraped Data to Cloudflare R2 (DVC Remote)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -46,28 +46,39 @@ jobs:
           name: dvc-lock-${{ matrix.stage }}
           path: dvc.lock
 
-  sync_commit:
+  pipeline_sequential:
     needs: scrape_matrix
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python & DVC
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install DVC
-        run: pip install dvc
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Download all Lockfile Artifacts
+      - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Sync & Commit Updated Lockfile
+      - name: Reproduce Sequential Pipeline (preprocess & eda)
+        run: dvc repro preprocess eda
+
+      - name: Push Processed Data to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: dvc push || echo "DVC Push skipped if R2 credentials not configured."
+
+      - name: Commit & Push Updated Lockfile and Reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock .dvc/config data/raw/.gitignore params.yaml
-          git commit -m "auto: parallel reproduce DVC pipeline & sync lockfile [skip ci]" || echo "Tidak ada perubahan data."
+          git add dvc.lock .dvc/config data/processed/.gitignore reports/
+          git commit -m "auto: reproduce sequential preprocess & eda pipeline [skip ci]" || echo "Tidak ada perubahan data."
           git push

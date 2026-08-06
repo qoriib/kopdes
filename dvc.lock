@@ -21,14 +21,75 @@ stages:
     deps:
     - path: scrape/scrape_regencies.py
       hash: md5
-      md5: 725f9b2b1b8a87f9247ea06a8dd6caff
-      size: 2378
+      md5: 8bf263571fba97e562630ee0394af69b
+      size: 3280
     - path: scrape/scraper_utils.py
       hash: md5
       md5: fe98bd03e6a471a6640293976f3206fa
       size: 3799
+    params:
+      params.yaml:
+        scrape.end_province_id: 38
+        scrape.max_workers: 4
+        scrape.start_province_id: 1
     outs:
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: ea0f62dcc23b917fe9949c98d41ee2a2
+      md5: 740ebe21e576230a49f29005d5c284e0
       size: 35922
+  preprocess:
+    cmd: python scrape/preprocess.py
+    deps:
+    - path: data/raw/province.json
+      hash: md5
+      md5: 408531398a27c7fa9741a492f5716834
+      size: 4356
+    - path: data/raw/regency.json
+      hash: md5
+      md5: 618167adbf40bdecbf8e1521a1975f0c
+      size: 71671
+    - path: data/raw/scraped_provinces.csv
+      hash: md5
+      md5: f52d5008fc4ac62b2063f8f2fb9bd535
+      size: 3990
+    - path: data/raw/scraped_regencies.csv
+      hash: md5
+      md5: 740ebe21e576230a49f29005d5c284e0
+      size: 35922
+    - path: scrape/preprocess.py
+      hash: md5
+      md5: a5bf0ee3ed28efa89990a4ffcd25b5c3
+      size: 5478
+    outs:
+    - path: data/processed/cleaned_provinces.csv
+      hash: md5
+      md5: ae22206e878faa338dcbb5aaac258a6f
+      size: 4025
+    - path: data/processed/cleaned_regencies.csv
+      hash: md5
+      md5: 55a5537a2ca87a3fe38279e04b4a5d17
+      size: 39249
+  eda:
+    cmd: python scrape/eda.py
+    deps:
+    - path: data/processed/cleaned_provinces.csv
+      hash: md5
+      md5: ae22206e878faa338dcbb5aaac258a6f
+      size: 4025
+    - path: data/processed/cleaned_regencies.csv
+      hash: md5
+      md5: 55a5537a2ca87a3fe38279e04b4a5d17
+      size: 39249
+    - path: scrape/eda.py
+      hash: md5
+      md5: c49e98465f1794008291e4d755685fcb
+      size: 5647
+    outs:
+    - path: reports/eda_summary.md
+      hash: md5
+      md5: e6831366e17f8d6677d88418adee4a84
+      size: 1647
+    - path: reports/metrics.json
+      hash: md5
+      md5: bc008461dcc58155d16349964fa08e43
+      size: 592
