@@ -5,7 +5,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
   statuses: write
 
 env:
@@ -24,27 +23,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Install Playwright
-        run: playwright install chromium --with-deps
+          install-playwright: 'true'
 
       - name: Scrape Province Data
-        run: dvc exp run --name scrape-provinces scrape_provinces
+        run: dvc repro scrape_provinces
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin scrape-provinces
+      - name: DVC Push
+        run: dvc push
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-provinces.lock
+
+      - name: Cache Provinces Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-provinces.lock
+          key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
 
   scrape_regencies:
     name: Scrape Regencies
@@ -54,27 +51,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Install Playwright
-        run: playwright install chromium --with-deps
+          install-playwright: 'true'
 
       - name: Scrape Regency Data
-        run: dvc exp run --name scrape-regencies scrape_regencies
+        run: dvc repro scrape_regencies
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin scrape-regencies
+      - name: DVC Push
+        run: dvc push
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-regencies.lock
+
+      - name: Cache Regencies Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-regencies.lock
+          key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 2: Data Transformation
@@ -88,33 +83,51 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore Provinces Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-provinces.lock
+          key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
+      - name: Restore Regencies Lock
+        uses: actions/cache/restore@v4
+        with:
+          path: dvc-lock-regencies.lock
+          key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Merge DVC Locks
-        run: python src/utils/dvc_exp_helper.py merge scrape-provinces scrape-regencies
+        run: |
+          python -c '
+          import yaml
+          merged = {"schema": "2.0", "stages": {}}
+          for name in ["provinces", "regencies"]:
+              with open(f"dvc-lock-{name}.lock") as f:
+                  lock_data = yaml.safe_load(f) or {}
+                  merged["stages"].update(lock_data.get("stages", {}))
+          with open("dvc.lock", "w") as f:
+              yaml.dump(merged, f)
+          '
 
       - name: DVC Pull Raw Data
         run: dvc pull
 
       - name: Run Transform
-        run: dvc exp run --name transform transform
+        run: dvc repro transform
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin transform
+      - name: DVC Push
+        run: dvc push
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-transform.lock
+
+      - name: Cache Transform Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-transform.lock
+          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 3a: Exploratory Data Analysis
@@ -128,42 +141,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore Transform Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-transform.lock
+          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
-
-      - name: Checkout DVC Lock
-        run: python src/utils/dvc_exp_helper.py checkout transform
+      - name: Setup DVC Lock
+        run: cp dvc-lock-transform.lock dvc.lock
 
       - name: DVC Pull Transformed Data
         run: dvc pull
 
       - name: Run EDA
-        run: dvc exp run --name eda eda
+        run: dvc repro eda
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin eda
+      - name: DVC Push
+        run: dvc push
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+      - name: Post EDA Report to Step Summary
+        run: cat reports/eda_summary.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Post CML EDA Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cml comment create reports/eda_summary.md
+      - name: Upload EDA Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eda-report
+          path: reports/eda_summary.md
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-eda.lock
+
+      - name: Cache EDA Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-eda.lock
+          key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
@@ -177,33 +192,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore Transform Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-transform.lock
+          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
-
-      - name: Checkout DVC Lock
-        run: python src/utils/dvc_exp_helper.py checkout transform
+      - name: Setup DVC Lock
+        run: cp dvc-lock-transform.lock dvc.lock
 
       - name: DVC Pull Transformed Data
         run: dvc pull
 
       - name: Run Preprocessing
-        run: dvc exp run --name preprocess preprocess
+        run: dvc repro preprocess
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin preprocess
+      - name: DVC Push
+        run: dvc push
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-preprocess.lock
+
+      - name: Cache Preprocess Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-preprocess.lock
+          key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
@@ -217,33 +234,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore Preprocess Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-preprocess.lock
+          key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
-
-      - name: Checkout DVC Lock
-        run: python src/utils/dvc_exp_helper.py checkout preprocess
+      - name: Setup DVC Lock
+        run: cp dvc-lock-preprocess.lock dvc.lock
 
       - name: DVC Pull Preprocessed & Transformed Data
         run: dvc pull
 
       - name: Run Model Training
-        run: dvc exp run --name model model
+        run: dvc repro model
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin model
+      - name: DVC Push
+        run: dvc push
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-model.lock
+
+      - name: Cache Model Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-model.lock
+          key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 5: Model Evaluation
@@ -257,42 +276,60 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore EDA Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-eda.lock
+          key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
+      - name: Restore Model Lock
+        uses: actions/cache/restore@v4
+        with:
+          path: dvc-lock-model.lock
+          key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Merge DVC Locks
-        run: python src/utils/dvc_exp_helper.py merge eda model
+        run: |
+          python -c '
+          import yaml
+          merged = {"schema": "2.0", "stages": {}}
+          for name in ["eda", "model"]:
+              with open(f"dvc-lock-{name}.lock") as f:
+                  lock_data = yaml.safe_load(f) or {}
+                  merged["stages"].update(lock_data.get("stages", {}))
+          with open("dvc.lock", "w") as f:
+              yaml.dump(merged, f)
+          '
 
       - name: DVC Pull All Upstream Data
         run: dvc pull
 
       - name: Run Evaluation
-        run: dvc exp run --name evaluate evaluate
+        run: dvc repro evaluate
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin evaluate
+      - name: DVC Push
+        run: dvc push
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+      - name: Post Evaluation Report to Step Summary
+        run: cat reports/evaluate_report.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Post CML Evaluation Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cml comment create reports/evaluate_report.md
+      - name: Upload Evaluation Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluate-report
+          path: reports/evaluate_report.md
+
+      - name: Copy Lock for Caching
+        run: cp dvc.lock dvc-lock-evaluate.lock
+
+      - name: Cache Evaluate Lock
+        uses: actions/cache/save@v4
+        with:
+          path: dvc-lock-evaluate.lock
+          key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
 
   interpret:
     name: AI Interpretation
@@ -303,24 +340,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: Restore Evaluate Lock
+        uses: actions/cache/restore@v4
         with:
-          python-version: '3.11'
+          path: dvc-lock-evaluate.lock
+          key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Setup DVC
-        uses: treeverse/setup-dvc@v3
-
-      - name: Fetch DVC Experiments
-        run: git fetch origin 'refs/exps/*:refs/exps/*'
-
-      - name: Checkout DVC Lock
-        run: python src/utils/dvc_exp_helper.py checkout evaluate
+      - name: Setup DVC Lock
+        run: cp dvc-lock-evaluate.lock dvc.lock
 
       - name: DVC Pull Upstream Data
         run: dvc pull
@@ -329,17 +359,28 @@ jobs:
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc exp run --name interpret interpret
+        run: dvc repro interpret
 
-      - name: Push DVC Experiment
-        run: dvc exp push origin interpret
+      - name: DVC Push
+        run: dvc push
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+      - name: Post AI Interpretation Report to Step Summary
+        run: cat reports/interpret_report.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Post CML AI Interpretation Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload AI Interpretation Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: interpret-report
+          path: reports/interpret_report.md
+
+      - name: Commit & Push to GitHub
         run: |
-          cml comment create reports/interpret_report.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "auto: update DVC tracking files and AI reports [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi
 
