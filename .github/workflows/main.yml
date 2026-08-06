@@ -52,7 +52,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-scrape-provinces
           path: |
@@ -90,7 +90,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-scrape-regencies
           path: |
@@ -121,7 +121,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           pattern: dvc-files-scrape-*
           merge-multiple: true
@@ -139,7 +139,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-transform
           path: |
@@ -172,7 +172,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: dvc-files-transform
 
@@ -188,7 +188,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-eda
           path: |
@@ -223,7 +223,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: dvc-files-transform
 
@@ -240,7 +240,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-preprocess
           path: |
@@ -275,7 +275,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: dvc-files-preprocess
 
@@ -292,7 +292,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-model
           path: |
@@ -325,7 +325,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           pattern: dvc-files-{eda,model}
           merge-multiple: true
@@ -342,7 +342,7 @@ jobs:
           dvc push
 
       - name: Upload DVC Tracking Files
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dvc-files-evaluate
           path: |
@@ -377,7 +377,7 @@ jobs:
         uses: treeverse/setup-dvc@v3
 
       - name: Download Upstream DVC Files
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: dvc-files-evaluate
 
