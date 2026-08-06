@@ -41,16 +41,10 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Scrape Province Data
-        run: dvc repro scrape_provinces
+        run: dvc exp run --name scrape-provinces scrape_provinces
 
-      - name: DVC Push
-        run: dvc push
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-scrape-provinces
-          path: dvc.lock
+      - name: Push DVC Experiment
+        run: dvc exp push origin scrape-provinces
 
   scrape_regencies:
     name: Scrape Regencies
@@ -77,16 +71,10 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Scrape Regency Data
-        run: dvc repro scrape_regencies
+        run: dvc exp run --name scrape-regencies scrape_regencies
 
-      - name: DVC Push
-        run: dvc push
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-scrape-regencies
-          path: dvc.lock
+      - name: Push DVC Experiment
+        run: dvc exp push origin scrape-regencies
 
   # ──────────────────────────────────────────────
   # Stage 2: Data Transformation
@@ -113,40 +101,20 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Locks
-        uses: actions/download-artifact@v8
-        with:
-          pattern: dvc-lock-scrape-*
-          merge-multiple: false
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
 
       - name: Merge DVC Locks
-        run: |
-          python -c '
-          import yaml, glob
-          merged = {"schema": "2.0", "stages": {}}
-          for path in glob.glob("dvc-lock-scrape-*/dvc.lock"):
-              with open(path) as f:
-                  lock_data = yaml.safe_load(f) or {}
-                  merged["stages"].update(lock_data.get("stages", {}))
-          with open("dvc.lock", "w") as f:
-              yaml.dump(merged, f)
-          '
-          rm -rf dvc-lock-scrape-*
+        run: python src/utils/dvc_exp_helper.py merge scrape-provinces scrape-regencies
 
       - name: DVC Pull Raw Data
         run: dvc pull
 
       - name: Run Transform
-        run: dvc repro transform
+        run: dvc exp run --name transform transform
 
-      - name: DVC Push
-        run: dvc push
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-transform
-          path: dvc.lock
+      - name: Push DVC Experiment
+        run: dvc exp push origin transform
 
   # ──────────────────────────────────────────────
   # Stage 3a: Exploratory Data Analysis
@@ -173,19 +141,20 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Lock
-        uses: actions/download-artifact@v8
-        with:
-          name: dvc-lock-transform
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
+
+      - name: Checkout DVC Lock
+        run: python src/utils/dvc_exp_helper.py checkout transform
 
       - name: DVC Pull Transformed Data
         run: dvc pull
 
       - name: Run EDA
-        run: dvc repro eda
+        run: dvc exp run --name eda eda
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push DVC Experiment
+        run: dvc exp push origin eda
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
@@ -195,12 +164,6 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml comment create reports/eda_summary.md
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-eda
-          path: dvc.lock
 
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
@@ -227,25 +190,20 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Lock
-        uses: actions/download-artifact@v8
-        with:
-          name: dvc-lock-transform
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
+
+      - name: Checkout DVC Lock
+        run: python src/utils/dvc_exp_helper.py checkout transform
 
       - name: DVC Pull Transformed Data
         run: dvc pull
 
       - name: Run Preprocessing
-        run: dvc repro preprocess
+        run: dvc exp run --name preprocess preprocess
 
-      - name: DVC Push
-        run: dvc push
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-preprocess
-          path: dvc.lock
+      - name: Push DVC Experiment
+        run: dvc exp push origin preprocess
 
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
@@ -272,25 +230,20 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Lock
-        uses: actions/download-artifact@v8
-        with:
-          name: dvc-lock-preprocess
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
+
+      - name: Checkout DVC Lock
+        run: python src/utils/dvc_exp_helper.py checkout preprocess
 
       - name: DVC Pull Preprocessed & Transformed Data
         run: dvc pull
 
       - name: Run Model Training
-        run: dvc repro model
+        run: dvc exp run --name model model
 
-      - name: DVC Push
-        run: dvc push
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-model
-          path: dvc.lock
+      - name: Push DVC Experiment
+        run: dvc exp push origin model
 
   # ──────────────────────────────────────────────
   # Stage 5: Model Evaluation
@@ -317,34 +270,20 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Locks
-        uses: actions/download-artifact@v8
-        with:
-          pattern: dvc-lock-{eda,model}
-          merge-multiple: false
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
 
       - name: Merge DVC Locks
-        run: |
-          python -c '
-          import yaml, glob
-          merged = {"schema": "2.0", "stages": {}}
-          for path in glob.glob("dvc-lock-*/dvc.lock"):
-              with open(path) as f:
-                  lock_data = yaml.safe_load(f) or {}
-                  merged["stages"].update(lock_data.get("stages", {}))
-          with open("dvc.lock", "w") as f:
-              yaml.dump(merged, f)
-          '
-          rm -rf dvc-lock-eda dvc-lock-model
+        run: python src/utils/dvc_exp_helper.py merge eda model
 
       - name: DVC Pull All Upstream Data
         run: dvc pull
 
       - name: Run Evaluation
-        run: dvc repro evaluate
+        run: dvc exp run --name evaluate evaluate
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push DVC Experiment
+        run: dvc exp push origin evaluate
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
@@ -354,12 +293,6 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml comment create reports/evaluate_report.md
-
-      - name: Upload DVC Lock
-        uses: actions/upload-artifact@v7
-        with:
-          name: dvc-lock-evaluate
-          path: dvc.lock
 
   interpret:
     name: AI Interpretation
@@ -383,10 +316,11 @@ jobs:
       - name: Setup DVC
         uses: treeverse/setup-dvc@v3
 
-      - name: Download Upstream DVC Lock
-        uses: actions/download-artifact@v8
-        with:
-          name: dvc-lock-evaluate
+      - name: Fetch DVC Experiments
+        run: git fetch origin 'refs/exps/*:refs/exps/*'
+
+      - name: Checkout DVC Lock
+        run: python src/utils/dvc_exp_helper.py checkout evaluate
 
       - name: DVC Pull Upstream Data
         run: dvc pull
@@ -395,10 +329,10 @@ jobs:
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc repro interpret
+        run: dvc exp run --name interpret interpret
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push DVC Experiment
+        run: dvc exp push origin interpret
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
@@ -408,15 +342,4 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml comment create reports/interpret_report.md
-
-      - name: Commit & Push to GitHub
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "auto: update DVC tracking files and AI reports [skip ci]"
-            git pull --rebase origin main
-            git push
-          fi
 
