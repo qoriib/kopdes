@@ -1,0 +1,5 @@
+outs:
+- md5: 618167adbf40bdecbf8e1521a1975f0c
+  size: 71671
+  hash: md5
+  path: regency.json

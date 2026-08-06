@@ -1,0 +1,5 @@
+outs:
+- md5: 408531398a27c7fa9741a492f5716834
+  size: 4356
+  hash: md5
+  path: province.json
