@@ -54,8 +54,8 @@ jobs:
           name: dvc-lock-${{ matrix.stage }}
           path: dvc.lock
 
-  pipeline_sequential:
-    name: Sequential Pipeline (Transform & EDA)
+  transform:
+    name: Data Transformation & Geo-Enrichment
     needs: scrape_matrix
     runs-on: ubuntu-latest
     steps:
@@ -70,15 +70,51 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Sequential Pipeline (transform & eda)
+      - name: Reproduce Transform Stage
         run: |
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --force transform eda
+            dvc repro --force transform
           else
-            dvc repro transform eda
+            dvc repro transform
           fi
 
-      - name: Push Processed Data to Cloudflare R2
+      - name: Push Transformed Data to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Upload Lockfile Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-lock-transform
+          path: dvc.lock
+
+  eda:
+    name: Exploratory Data Analysis & CML Report
+    needs: transform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'false'
+
+      - name: Download Lockfile Artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Reproduce EDA Stage
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force eda
+          else
+            dvc repro eda
+          fi
+
+      - name: Push Reports to Cloudflare R2
         uses: ./.github/actions/dvc-r2-push
         with:
           r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -105,5 +141,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dvc.lock .dvc/config data/transform/.gitignore reports/
-          git commit -m "auto: reproduce sequential transform & eda pipeline [skip ci]" || echo "Tidak ada perubahan data."
+          git commit -m "auto: reproduce transform and eda stages [skip ci]" || echo "Tidak ada perubahan data."
           git push
