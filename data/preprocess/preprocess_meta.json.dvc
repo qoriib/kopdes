@@ -1,5 +1,0 @@
-outs:
-- md5: b4bcfc38c4a03bb13edf7fa2f8c211b1
-  size: 330
-  hash: md5
-  path: preprocess_meta.json

@@ -1,0 +1,68 @@
+stages:
+  scrape_provinces:
+    cmd: python src/scrape_provinces.py
+    deps:
+      - src/scrape_provinces.py
+      - src/utils/scraper_utils.py
+    outs:
+      - data/raw/scraped_provinces.csv
+
+  scrape_regencies:
+    cmd: python src/scrape_regencies.py
+    deps:
+      - src/scrape_regencies.py
+      - src/utils/scraper_utils.py
+    outs:
+      - data/raw/scraped_regencies.csv
+
+  transform:
+    cmd: python src/transform.py
+    deps:
+      - src/transform.py
+      - data/raw/scraped_provinces.csv
+      - data/raw/scraped_regencies.csv
+      - data/raw/province.json
+      - data/raw/regency.json
+    outs:
+      - data/transform/transformed_provinces.csv
+      - data/transform/transformed_regencies.csv
+
+  eda:
+    cmd: python src/eda.py
+    deps:
+      - src/eda.py
+      - data/transform/transformed_provinces.csv
+      - data/transform/transformed_regencies.csv
+    outs:
+      - reports/eda_summary.md
+      - reports/metrics.json
+
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/transform/transformed_regencies.csv
+    outs:
+      - data/preprocess/scaled_features.csv
+      - data/preprocess/preprocess_meta.json
+
+  model:
+    cmd: python src/model.py
+    deps:
+      - src/model.py
+      - data/preprocess/scaled_features.csv
+      - data/preprocess/preprocess_meta.json
+      - data/transform/transformed_regencies.csv
+    outs:
+      - models/kmeans_model.pkl
+      - data/model/clustered_regencies.csv
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - data/preprocess/scaled_features.csv
+      - data/model/clustered_regencies.csv
+    outs:
+      - reports/clustering_report.md
+      - reports/model_metrics.json
