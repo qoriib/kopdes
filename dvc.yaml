@@ -12,5 +12,9 @@ stages:
     deps:
       - scrape/scrape_regencies.py
       - scrape/scraper_utils.py
+    params:
+      - scrape.max_workers
+      - scrape.start_province_id
+      - scrape.end_province_id
     outs:
       - data/raw/scraped_regencies.csv
