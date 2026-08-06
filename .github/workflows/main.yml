@@ -392,13 +392,74 @@ jobs:
         run: |
           cml comment create reports/clustering_report.md || echo "CML comment created."
 
+      - name: Upload DVC Lock
+        uses: actions/upload-artifact@v7
+        with:
+          name: dvc-lock-evaluate
+          path: dvc.lock
+
+  interpret:
+    name: AI Interpretation
+    needs: evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup DVC
+        uses: treeverse/setup-dvc@v3
+
+      - name: Download Upstream DVC Lock
+        uses: actions/download-artifact@v8
+        with:
+          name: dvc-lock-evaluate
+
+      - name: DVC Pull Upstream Data
+        run: dvc pull
+
+      - name: Run AI Interpretation
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: dvc repro interpret
+
+      - name: DVC Push
+        run: dvc push
+
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
+        with:
+          vega: false
+
+      - name: Post CML AI Interpretation Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cml comment create reports/ai_interpretation.md || echo "CML comment created."
+
       - name: Commit & Push to GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           if ! git diff --cached --quiet; then
-            git commit -m "auto: update DVC tracking files and reports [skip ci]"
+            git commit -m "auto: update DVC tracking files and AI reports [skip ci]"
             git pull --rebase origin main
             git push
           fi

@@ -160,3 +160,23 @@ stages:
       hash: md5
       md5: 32bafe55bce2dc395a4d7f1d9b7b0783
       size: 39249
+  interpret:
+    cmd: python src/interpret.py
+    deps:
+    - path: data/model/clustered_regencies.csv
+      hash: md5
+      md5: 24ea5b3944414272966686e4b5b37a9b
+      size: 41308
+    - path: reports/model_metrics.json
+      hash: md5
+      md5: d55929a88eae43e8d5897c4e37c909b8
+      size: 175
+    - path: src/interpret.py
+      hash: md5
+      md5: e5e926884cd75571071a520e3ddf920d
+      size: 4889
+    outs:
+    - path: reports/ai_interpretation.md
+      hash: md5
+      md5: f4afc5ef4913b14b89074fecb8c172be
+      size: 2048
