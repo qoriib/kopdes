@@ -1,4 +1,4 @@
-name: SIMKOPDES End-to-End Data Pipeline
+name: SIMKOPDES End-to-End Data & ML Pipeline
 
 on:
   workflow_dispatch:
@@ -97,7 +97,7 @@ jobs:
           path: dvc.lock
 
   eda:
-    name: Exploratory Data Analysis & CML Report
+    name: Exploratory Data Analysis
     needs: transform
     runs-on: ubuntu-latest
     steps:
@@ -132,6 +132,132 @@ jobs:
           r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
+      - name: Upload Lockfile Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-lock-eda
+          path: dvc.lock
+
+  preprocess:
+    name: ML Preprocessing & Feature Scaling
+    needs: transform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'false'
+
+      - name: Download Lockfile Artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Pull Transformed Data from Cloudflare R2
+        uses: ./.github/actions/dvc-r2-pull
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Reproduce ML Preprocess Stage
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force preprocess
+          else
+            dvc repro preprocess
+          fi
+
+      - name: Push Preprocessed Data to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Upload Lockfile Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-lock-preprocess
+          path: dvc.lock
+
+  model:
+    name: KMeans Clustering Modeling
+    needs: preprocess
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'false'
+
+      - name: Download Lockfile Artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Pull Preprocessed Data from Cloudflare R2
+        uses: ./.github/actions/dvc-r2-pull
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Reproduce Model Stage
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force model
+          else
+            dvc repro model
+          fi
+
+      - name: Push Model Artifacts to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Upload Lockfile Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-lock-model
+          path: dvc.lock
+
+  evaluate:
+    name: ML Model Evaluation & CML Report
+    needs: [eda, model]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'false'
+
+      - name: Download Lockfile Artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Pull Model Data & Reports from Cloudflare R2
+        uses: ./.github/actions/dvc-r2-pull
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
+      - name: Reproduce Evaluate Stage
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force evaluate
+          else
+            dvc repro evaluate
+          fi
+
+      - name: Push Evaluation Reports to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+
       - name: Setup CML (Continuous Machine Learning)
         uses: iterative/setup-cml@v1
 
@@ -139,19 +265,21 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "# Laporan Pemrosesan Data SIMKOPDES DVC" > cml_report.md
+          echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > cml_report.md
           echo "" >> cml_report.md
           cat reports/eda_summary.md >> cml_report.md
           echo "" >> cml_report.md
-          echo "## Metrik DVC" >> cml_report.md
+          cat reports/clustering_report.md >> cml_report.md
+          echo "" >> cml_report.md
+          echo "## Metrik Evaluasi Model DVC" >> cml_report.md
           dvc metrics show --markdown >> cml_report.md
 
           cml comment create cml_report.md || echo "CML comment created."
 
-      - name: Commit & Push Updated Lockfile and Reports
+      - name: Commit & Push Updated Lockfile, Models and Reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock .dvc/config data/transform/.gitignore reports/
-          git commit -m "auto: reproduce transform and eda stages [skip ci]" || echo "Tidak ada perubahan data."
+          git add dvc.lock .dvc/config data/transform/.gitignore data/preprocess/.gitignore data/model/.gitignore models/.gitignore reports/
+          git commit -m "auto: reproduce end-to-end ML pipeline stages [skip ci]" || echo "Tidak ada perubahan data."
           git push

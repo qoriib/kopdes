@@ -42,3 +42,35 @@ stages:
           cache: false
     outs:
       - reports/eda_summary.md
+
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/transform/transformed_regencies.csv
+    outs:
+      - data/preprocess/scaled_features.csv
+      - data/preprocess/preprocess_meta.json
+
+  model:
+    cmd: python src/model.py
+    deps:
+      - src/model.py
+      - data/preprocess/scaled_features.csv
+      - data/preprocess/preprocess_meta.json
+      - data/transform/transformed_regencies.csv
+    outs:
+      - models/kmeans_model.pkl
+      - data/model/clustered_regencies.csv
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - data/preprocess/scaled_features.csv
+      - data/model/clustered_regencies.csv
+    metrics:
+      - reports/model_metrics.json:
+          cache: false
+    outs:
+      - reports/clustering_report.md
