@@ -40,16 +40,5 @@ stages:
     metrics:
       - reports/metrics.json:
           cache: false
-    plots:
-      - reports/plots/top_provinces.csv:
-          x: province_name
-          y: jumlah_koperasi
-          title: Top 10 Provinces by Koperasi Count
-          cache: false
-      - reports/plots/koperasi_status.csv:
-          x: status
-          y: jumlah
-          title: Koperasi Compliance Status Breakdown
-          cache: false
     outs:
       - reports/eda_summary.md

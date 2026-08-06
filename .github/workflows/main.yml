@@ -75,11 +75,11 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "## 🚀 SIMKOPDES DVC Data Pipeline Report" > cml_report.md
+          echo "# Laporan Pemrosesan Data SIMKOPDES DVC" > cml_report.md
           echo "" >> cml_report.md
           cat reports/eda_summary.md >> cml_report.md
           echo "" >> cml_report.md
-          echo "## 📊 DVC Metrics Summary" >> cml_report.md
+          echo "## Metrik DVC" >> cml_report.md
           dvc metrics show --markdown >> cml_report.md
 
           cml comment create cml_report.md || echo "CML comment created."
