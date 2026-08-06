@@ -39,10 +39,15 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force ${{ matrix.stage }}
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG ${{ matrix.stage }}
           else
-            dvc repro --pull ${{ matrix.stage }}
+            dvc repro $FORCE_FLAG ${{ matrix.stage }}
           fi
 
       - name: Push Data to Cloudflare R2
@@ -73,15 +78,20 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Transform Stage (with DVC Auto-Pull)
+      - name: Reproduce Transform Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force transform
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG transform
           else
-            dvc repro --pull transform
+            dvc repro $FORCE_FLAG transform
           fi
 
       - name: Push Transformed Data to Cloudflare R2
@@ -112,15 +122,20 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce EDA Stage (with DVC Auto-Pull)
+      - name: Reproduce EDA Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force eda
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG eda
           else
-            dvc repro --pull eda
+            dvc repro $FORCE_FLAG eda
           fi
 
       - name: Push Reports to Cloudflare R2
@@ -151,15 +166,20 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce ML Preprocess Stage (with DVC Auto-Pull)
+      - name: Reproduce ML Preprocess Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force preprocess
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG preprocess
           else
-            dvc repro --pull preprocess
+            dvc repro $FORCE_FLAG preprocess
           fi
 
       - name: Push Preprocessed Data to Cloudflare R2
@@ -190,15 +210,20 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Model Stage (with DVC Auto-Pull)
+      - name: Reproduce Model Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force model
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG model
           else
-            dvc repro --pull model
+            dvc repro $FORCE_FLAG model
           fi
 
       - name: Push Model Artifacts to Cloudflare R2
@@ -229,15 +254,20 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Evaluate Stage (with DVC Auto-Pull)
+      - name: Reproduce Evaluate Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force evaluate
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG evaluate
           else
-            dvc repro --pull evaluate
+            dvc repro $FORCE_FLAG evaluate
           fi
 
       - name: Push Evaluation Reports to Cloudflare R2
@@ -268,17 +298,22 @@ jobs:
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
 
-      - name: Reproduce Interpret Stage (with DVC Auto-Pull & Cloudflare Workers AI)
+      - name: Reproduce Interpret Stage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
+          FORCE_FLAG=""
           if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            dvc repro --pull --force interpret
+            FORCE_FLAG="--force"
+          fi
+          
+          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
+            dvc repro --pull $FORCE_FLAG interpret
           else
-            dvc repro --pull interpret
+            dvc repro $FORCE_FLAG interpret
           fi
 
       - name: Push Interpretation Reports to Cloudflare R2
