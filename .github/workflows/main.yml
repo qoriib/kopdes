@@ -1,7 +1,13 @@
 name: SIMKOPDES End-to-End Data Pipeline
 
 on:
-  workflow_dispatch: # Pemicu tombol manual di GitHub Actions
+  workflow_dispatch:
+    inputs:
+      force_repro:
+        description: 'Paksa eksekusi ulang seluruh stage pipeline DVC (--force)'
+        required: false
+        type: boolean
+        default: false
   schedule:
     - cron: '0 0 * * *' # Berjalan otomatis setiap hari pukul 00:00 UTC
 
@@ -29,7 +35,12 @@ jobs:
           install_playwright: 'true'
 
       - name: Reproduce Parallel DVC Stage (${{ matrix.stage }})
-        run: dvc repro ${{ matrix.stage }}
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force ${{ matrix.stage }}
+          else
+            dvc repro ${{ matrix.stage }}
+          fi
 
       - name: Push Data to Cloudflare R2
         uses: ./.github/actions/dvc-r2-push
@@ -60,7 +71,12 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Reproduce Sequential Pipeline (preprocess & eda)
-        run: dvc repro preprocess eda
+        run: |
+          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
+            dvc repro --force preprocess eda
+          else
+            dvc repro preprocess eda
+          fi
 
       - name: Push Processed Data to Cloudflare R2
         uses: ./.github/actions/dvc-r2-push
