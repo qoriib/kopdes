@@ -20,25 +20,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Environment & Playwright
+        uses: ./.github/actions/setup-dvc-env
         with:
-          python-version: '3.11'
+          install_playwright: 'true'
 
-      - name: Install dependencies & Playwright Chromium
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install chromium --with-deps
-
-      - name: Reproduce Parallel DVC Scrape Stage (${{ matrix.stage }})
+      - name: Reproduce Parallel DVC Stage (${{ matrix.stage }})
         run: dvc repro ${{ matrix.stage }}
 
-      - name: Push Scraped Data to Cloudflare R2 (DVC Remote)
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: dvc push || echo "DVC Push skipped if R2 credentials not configured."
+      - name: Push Data to Cloudflare R2
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
       - name: Upload Lockfile Artifact
         uses: actions/upload-artifact@v4
@@ -53,15 +47,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Environment
+        uses: ./.github/actions/setup-dvc-env
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          install_playwright: 'false'
 
       - name: Download Lockfile Artifacts
         uses: actions/download-artifact@v4
@@ -70,10 +59,10 @@ jobs:
         run: dvc repro preprocess eda
 
       - name: Push Processed Data to Cloudflare R2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: dvc push || echo "DVC Push skipped if R2 credentials not configured."
+        uses: ./.github/actions/dvc-r2-push
+        with:
+          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
       - name: Commit & Push Updated Lockfile and Reports
         run: |

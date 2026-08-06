@@ -1,0 +1,22 @@
+name: 'Push DVC Remote to Cloudflare R2'
+description: 'Push updated DVC artifacts to Cloudflare R2 remote'
+
+inputs:
+  r2_access_key_id:
+    description: 'Cloudflare R2 Access Key ID'
+    required: false
+    default: ''
+  r2_secret_access_key:
+    description: 'Cloudflare R2 Secret Access Key'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Push Data to Cloudflare R2
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.r2_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.r2_secret_access_key }}
+      run: dvc push || echo "DVC Push skipped if R2 credentials not configured."
