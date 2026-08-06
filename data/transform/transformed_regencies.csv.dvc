@@ -1,0 +1,5 @@
+outs:
+- md5: 32bafe55bce2dc395a4d7f1d9b7b0783
+  size: 39249
+  hash: md5
+  path: transformed_regencies.csv

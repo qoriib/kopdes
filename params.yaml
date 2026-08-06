@@ -1,4 +1,0 @@
-scrape:
-  max_workers: 4
-  start_province_id: 1
-  end_province_id: 38

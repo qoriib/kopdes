@@ -1,0 +1,5 @@
+outs:
+- md5: 24ea5b3944414272966686e4b5b37a9b
+  size: 41308
+  hash: md5
+  path: clustered_regencies.csv

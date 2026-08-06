@@ -1,8 +1,0 @@
-{
-  "clustering_metrics": {
-    "silhouette_score": 0.2211,
-    "calinski_harabasz_score": 136.39,
-    "davies_bouldin_score": 1.1603,
-    "number_of_clusters": 6
-  }
-}

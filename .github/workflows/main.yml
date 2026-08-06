@@ -2,333 +2,322 @@ name: SIMKOPDES End-to-End Data & ML Pipeline
 
 on:
   workflow_dispatch:
-    inputs:
-      force_repro:
-        description: 'Paksa eksekusi ulang seluruh stage pipeline DVC (--force)'
-        required: false
-        type: boolean
-        default: false
   schedule:
-    - cron: '0 0 * * *' # Berjalan otomatis setiap hari pukul 00:00 UTC
+    - cron: '0 0 * * *'
 
 permissions:
   contents: write
   pull-requests: write
   statuses: write
 
-jobs:
-  scrape_matrix:
-    name: Parallel Scraping (${{ matrix.stage }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        stage: [scrape_provinces, scrape_regencies]
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
+jobs:
+  # ──────────────────────────────────────────────
+  # Stage 1: Parallel Scraping
+  # ──────────────────────────────────────────────
+  scrape_provinces:
+    name: Scrape Provinces
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment & Playwright
         uses: ./.github/actions/setup-dvc-env
         with:
           install_playwright: 'true'
 
-      - name: Reproduce Parallel DVC Stage (${{ matrix.stage }})
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      - name: Scrape Province Data
+        run: python src/scrape_provinces.py
+
+      - name: DVC Add & Push
         run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG ${{ matrix.stage }}
-          else
-            dvc repro $FORCE_FLAG ${{ matrix.stage }}
-          fi
+          dvc add data/raw/scraped_provinces.csv
+          dvc push
 
-      - name: Push Data to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Upload Lockfile Artifact
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-${{ matrix.stage }}
-          path: dvc.lock
+          name: dvc-files-scrape-provinces
+          path: |
+            data/raw/scraped_provinces.csv.dvc
+            data/raw/.gitignore
 
-  transform:
-    name: Data Transformation & Geo-Enrichment
-    needs: scrape_matrix
+  scrape_regencies:
+    name: Scrape Regencies
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup Environment & Playwright
+        uses: ./.github/actions/setup-dvc-env
+        with:
+          install_playwright: 'true'
+
+      - name: Scrape Regency Data
+        run: python src/scrape_regencies.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add data/raw/scraped_regencies.csv
+          dvc push
+
+      - name: Upload DVC Tracking Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: dvc-files-scrape-regencies
+          path: |
+            data/raw/scraped_regencies.csv.dvc
+            data/raw/.gitignore
+
+  # ──────────────────────────────────────────────
+  # Stage 2: Data Transformation & Geo-Enrichment
+  # ──────────────────────────────────────────────
+  transform:
+    name: Data Transformation & Geo-Enrichment
+    needs: [scrape_provinces, scrape_regencies]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
-
-      - name: Reproduce Transform Stage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG transform
-          else
-            dvc repro $FORCE_FLAG transform
-          fi
-
-      - name: Push Transformed Data to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
         with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          pattern: dvc-files-scrape-*
+          merge-multiple: true
 
-      - name: Upload Lockfile Artifact
+      - name: DVC Pull Raw Data
+        run: dvc pull
+
+      - name: Run Transform
+        run: python src/transform.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add data/transform/transformed_provinces.csv \
+                  data/transform/transformed_regencies.csv
+          dvc push
+
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-transform
-          path: dvc.lock
+          name: dvc-files-transform
+          path: |
+            data/raw/*.dvc
+            data/raw/.gitignore
+            data/transform/*.dvc
+            data/transform/.gitignore
 
+  # ──────────────────────────────────────────────
+  # Stage 3a: Exploratory Data Analysis
+  # ──────────────────────────────────────────────
   eda:
     name: Exploratory Data Analysis
     needs: transform
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
-
-      - name: Reproduce EDA Stage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG eda
-          else
-            dvc repro $FORCE_FLAG eda
-          fi
-
-      - name: Push Reports to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
         with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          name: dvc-files-transform
 
-      - name: Upload Lockfile Artifact
+      - name: DVC Pull Transformed Data
+        run: dvc pull
+
+      - name: Run EDA
+        run: python src/eda.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add reports/eda_summary.md reports/metrics.json
+          dvc push
+
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-eda
-          path: dvc.lock
+          name: dvc-files-eda
+          path: |
+            data/raw/*.dvc
+            data/raw/.gitignore
+            data/transform/*.dvc
+            data/transform/.gitignore
+            reports/*.dvc
+            reports/.gitignore
 
+  # ──────────────────────────────────────────────
+  # Stage 3b: ML Preprocessing & Feature Scaling
+  # ──────────────────────────────────────────────
   preprocess:
     name: ML Preprocessing & Feature Scaling
     needs: transform
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
-
-      - name: Reproduce ML Preprocess Stage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG preprocess
-          else
-            dvc repro $FORCE_FLAG preprocess
-          fi
-
-      - name: Push Preprocessed Data to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
         with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          name: dvc-files-transform
 
-      - name: Upload Lockfile Artifact
+      - name: DVC Pull Transformed Data
+        run: dvc pull
+
+      - name: Run Preprocessing
+        run: python src/preprocess.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add data/preprocess/scaled_features.csv \
+                  data/preprocess/preprocess_meta.json
+          dvc push
+
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-preprocess
-          path: dvc.lock
+          name: dvc-files-preprocess
+          path: |
+            data/raw/*.dvc
+            data/raw/.gitignore
+            data/transform/*.dvc
+            data/transform/.gitignore
+            data/preprocess/*.dvc
+            data/preprocess/.gitignore
 
+  # ──────────────────────────────────────────────
+  # Stage 4: KMeans Clustering Model
+  # ──────────────────────────────────────────────
   model:
     name: KMeans Clustering Modeling
     needs: preprocess
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
-
-      - name: Reproduce Model Stage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG model
-          else
-            dvc repro $FORCE_FLAG model
-          fi
-
-      - name: Push Model Artifacts to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
         with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          name: dvc-files-preprocess
 
-      - name: Upload Lockfile Artifact
+      - name: DVC Pull Preprocessed & Transformed Data
+        run: dvc pull
+
+      - name: Run Model Training
+        run: python src/model.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add models/kmeans_model.pkl \
+                  data/model/clustered_regencies.csv
+          dvc push
+
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-model
-          path: dvc.lock
+          name: dvc-files-model
+          path: |
+            data/**/*.dvc
+            data/**/.gitignore
+            models/*.dvc
+            models/.gitignore
 
+  # ──────────────────────────────────────────────
+  # Stage 5: ML Model Evaluation
+  # ──────────────────────────────────────────────
   evaluate:
     name: ML Model Evaluation
     needs: [eda, model]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
-
-      - name: Reproduce Evaluate Stage
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG evaluate
-          else
-            dvc repro $FORCE_FLAG evaluate
-          fi
-
-      - name: Push Evaluation Reports to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
         with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          pattern: dvc-files-{eda,model}
+          merge-multiple: true
 
-      - name: Upload Lockfile Artifact
+      - name: DVC Pull All Upstream Data
+        run: dvc pull
+
+      - name: Run Evaluation
+        run: python src/evaluate.py
+
+      - name: DVC Add & Push
+        run: |
+          dvc add reports/clustering_report.md reports/model_metrics.json
+          dvc push
+
+      - name: Upload DVC Tracking Files
         uses: actions/upload-artifact@v4
         with:
-          name: dvc-lock-evaluate
-          path: dvc.lock
+          name: dvc-files-evaluate
+          path: |
+            data/**/*.dvc
+            data/**/.gitignore
+            models/*.dvc
+            models/.gitignore
+            reports/*.dvc
+            reports/.gitignore
 
+  # ──────────────────────────────────────────────
+  # Stage 6: AI Interpretation & Final Report
+  # ──────────────────────────────────────────────
   interpret:
-    name: Cloudflare AI Interpretation Report
+    name: Cloudflare AI Interpretation & Report
     needs: evaluate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: ./.github/actions/setup-dvc-env
-        with:
-          install_playwright: 'false'
 
-      - name: Download Lockfile Artifacts
+      - name: Download Upstream DVC Files
         uses: actions/download-artifact@v4
+        with:
+          name: dvc-files-evaluate
 
-      - name: Reproduce Interpret Stage
+      - name: DVC Pull All Upstream Data
+        run: dvc pull
+
+      - name: Run AI Interpretation
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: python src/interpret.py
+
+      - name: DVC Add & Push
         run: |
-          FORCE_FLAG=""
-          if [ "${{ github.event.inputs.force_repro }}" = "true" ]; then
-            FORCE_FLAG="--force"
-          fi
-          
-          if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ]; then
-            dvc repro --pull $FORCE_FLAG interpret
-          else
-            dvc repro $FORCE_FLAG interpret
-          fi
+          dvc add reports/ai_interpretation.md reports/cluster_labels.json
+          dvc push
 
-      - name: Push Interpretation Reports to Cloudflare R2
-        uses: ./.github/actions/dvc-r2-push
-        with:
-          r2_access_key_id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          r2_secret_access_key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-
-      - name: Setup CML (Continuous Machine Learning)
+      - name: Setup CML
         uses: iterative/setup-cml@v1
 
       - name: Generate & Post CML Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Pull report files for CML (already local from dvc pull + script output)
           echo "# Laporan Pemrosesan Data & Machine Learning SIMKOPDES" > cml_report.md
           echo "" >> cml_report.md
           cat reports/eda_summary.md >> cml_report.md
@@ -337,15 +326,13 @@ jobs:
           echo "" >> cml_report.md
           cat reports/ai_interpretation.md >> cml_report.md
           echo "" >> cml_report.md
-          echo "## Metrik Evaluasi Model DVC" >> cml_report.md
-          dvc metrics show --markdown >> cml_report.md
 
           cml comment create cml_report.md || echo "CML comment created."
 
-      - name: Commit & Push Updated Lockfile, Models and Reports
+      - name: Commit & Push to GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dvc.lock .dvc/config data/transform/.gitignore data/preprocess/.gitignore data/model/.gitignore models/.gitignore reports/
-          git commit -m "auto: reproduce end-to-end ML pipeline and AI interpretation stages [skip ci]" || echo "Tidak ada perubahan data."
+          git add -A
+          git diff --cached --quiet || git commit -m "auto: update DVC tracking files and reports [skip ci]"
           git push
