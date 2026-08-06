@@ -1,12 +1,7 @@
 name: SIMKOPDES End-to-End Data & ML Pipeline
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 
 permissions:
   contents: write
