@@ -146,6 +146,7 @@ jobs:
           with open("dvc.lock", "w") as f:
               yaml.dump(merged, f)
           '
+          rm -rf dvc-lock-scrape-*
 
       - name: DVC Pull Raw Data
         run: dvc pull
@@ -371,6 +372,7 @@ jobs:
           with open("dvc.lock", "w") as f:
               yaml.dump(merged, f)
           '
+          rm -rf dvc-lock-eda dvc-lock-model
 
       - name: DVC Pull All Upstream Data
         run: dvc pull
