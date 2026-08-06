@@ -141,7 +141,7 @@ def save_csv(filename, headers, rows):
         writer.writerows(rows)
 
 def main():
-    print("[+] Memulai Stage Data Transformation & Geo-Enrichment...")
+    print("[+] Memulai Stage Data Transformation...")
     transform_provinces()
     transform_regencies()
     print("[DONE] Transformation selesai.")

@@ -73,10 +73,10 @@ jobs:
             data/raw/.gitignore
 
   # ──────────────────────────────────────────────
-  # Stage 2: Data Transformation & Geo-Enrichment
+  # Stage 2: Data Transformation
   # ──────────────────────────────────────────────
   transform:
-    name: Data Transformation & Geo-Enrichment
+    name: Data Transformation
     needs: [scrape_provinces, scrape_regencies]
     runs-on: ubuntu-latest
     steps:
@@ -155,10 +155,10 @@ jobs:
             reports/.gitignore
 
   # ──────────────────────────────────────────────
-  # Stage 3b: ML Preprocessing & Feature Scaling
+  # Stage 3b: ML Preprocessing
   # ──────────────────────────────────────────────
   preprocess:
-    name: ML Preprocessing & Feature Scaling
+    name: ML Preprocessing
     needs: transform
     runs-on: ubuntu-latest
     steps:
@@ -197,10 +197,10 @@ jobs:
             data/preprocess/.gitignore
 
   # ──────────────────────────────────────────────
-  # Stage 4: KMeans Clustering Model
+  # Stage 4: Clustering
   # ──────────────────────────────────────────────
   model:
-    name: KMeans Clustering Modeling
+    name: Clustering
     needs: preprocess
     runs-on: ubuntu-latest
     steps:
@@ -237,10 +237,10 @@ jobs:
             models/.gitignore
 
   # ──────────────────────────────────────────────
-  # Stage 5: ML Model Evaluation
+  # Stage 5: Model Evaluation
   # ──────────────────────────────────────────────
   evaluate:
-    name: ML Model Evaluation
+    name: Model Evaluation
     needs: [eda, model]
     runs-on: ubuntu-latest
     steps:
@@ -279,10 +279,10 @@ jobs:
             reports/.gitignore
 
   # ──────────────────────────────────────────────
-  # Stage 6: AI Interpretation & Final Report
+  # Stage 6: AI Interpretation
   # ──────────────────────────────────────────────
   interpret:
-    name: Cloudflare AI Interpretation & Report
+    name: AI Interpretation
     needs: evaluate
     runs-on: ubuntu-latest
     steps:
