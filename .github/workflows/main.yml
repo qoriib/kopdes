@@ -110,8 +110,8 @@ jobs:
           name: eda-report
           path: reports/eda_summary.md
 
-      - name: Install CML
-        run: npm install -g @cmlrun/cml
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
 
       - name: Generate & Post CML EDA Report
         env:
@@ -157,8 +157,8 @@ jobs:
           name: preprocess-report
           path: reports/preprocess_report.md
 
-      - name: Install CML
-        run: npm install -g @cmlrun/cml
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
 
       - name: Generate & Post CML Preprocess Report
         env:
@@ -228,8 +228,8 @@ jobs:
           name: evaluate-report
           path: reports/evaluate_report.md
 
-      - name: Install CML
-        run: npm install -g @cmlrun/cml
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
 
       - name: Generate & Post CML Evaluate Report
         env:
@@ -275,8 +275,8 @@ jobs:
           name: interpret-report
           path: reports/interpret_report.md
 
-      - name: Install CML
-        run: npm install -g @cmlrun/cml
+      - name: Setup CML
+        uses: iterative/setup-cml@v2
 
       - name: Generate & Post CML Interpret Report
         env:
