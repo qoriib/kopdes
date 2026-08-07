@@ -26,6 +26,8 @@ CLUSTERED_REGENCIES_CSV = os.path.join(DATA_MODEL_DIR, "clustered_regencies.csv"
 MODEL_METRICS_JSON = os.path.join(REPORTS_DIR, "evaluate_metrics.json")
 CLUSTERING_REPORT_MD = os.path.join(REPORTS_DIR, "evaluate_report.md")
 
+FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
+
 def generate_base64_plot(fig):
     buf = io.BytesIO()
     fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
@@ -34,9 +36,16 @@ def generate_base64_plot(fig):
     plt.close(fig)
     return img_str
 
+def save_plot_to_file(fig, filepath):
+    """Save a matplotlib figure to a PNG file."""
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
+    print(f"[SAVED] Plot -> {filepath}")
+
 def main():
     print("[+] Memulai Stage Evaluasi Model Clustering yang Dikembangkan...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
 
     if not os.path.exists(CLUSTERED_REGENCIES_CSV) or not os.path.exists(SCALED_FEATURES_CSV):
         print("[-] File model clustering atau scaled features tidak ditemukan. Jalankan pipeline model terlebih dahulu.")
@@ -100,6 +109,7 @@ def main():
     ax1.set_ylabel('Principal Component 2', fontsize=11, fontweight='bold', color='#2c3e50')
     ax1.legend(loc='best', frameon=True, facecolor='white', edgecolor='none')
     fig1.tight_layout()
+    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eval_pca_projection.png"))
     img_pca_b64 = generate_base64_plot(fig1)
 
     # Plot 2: Cluster Membership Counts
@@ -118,6 +128,7 @@ def main():
         ax2.text(bar.get_x() + bar.get_width()/2, height + (height * 0.01) + 1, f"{int(height)}", 
                  va='bottom', ha='center', fontsize=10, fontweight='bold', color='#34495e')
     fig2.tight_layout()
+    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eval_cluster_distribution.png"))
     img_dist_b64 = generate_base64_plot(fig2)
 
     # Plot 3: Average Transaction Value per Cluster
@@ -135,6 +146,7 @@ def main():
         ax3.text(bar.get_x() + bar.get_width()/2, height + (height * 0.01), f"{height:,.2f}", 
                  va='bottom', ha='center', fontsize=10, fontweight='bold', color='#34495e')
     fig3.tight_layout()
+    save_plot_to_file(fig3, os.path.join(FIGURES_DIR, "eval_avg_transaction.png"))
     img_trans_b64 = generate_base64_plot(fig3)
 
     # 4. Laporan Markdown Evaluasi Formal

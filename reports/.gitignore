@@ -6,5 +6,9 @@
 /interpret_labels.json
 /cluster_labels.json
 /preprocess_report.md
-/cml_report.md
+/cml_eda.md
+/cml_preprocess.md
+/cml_evaluate.md
+/cml_interpret.md
+/figures/
 

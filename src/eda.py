@@ -23,6 +23,8 @@ TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.c
 METRICS_JSON = os.path.join(REPORTS_DIR, "eda_metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
 
+FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
+
 def generate_base64_plot(fig):
     buf = io.BytesIO()
     fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
@@ -31,9 +33,16 @@ def generate_base64_plot(fig):
     plt.close(fig)
     return img_str
 
+def save_plot_to_file(fig, filepath):
+    """Save a matplotlib figure to a PNG file."""
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
+    print(f"[SAVED] Plot -> {filepath}")
+
 def main():
     print("[+] Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
 
     if not os.path.exists(TRANSFORMED_PROVINCES_CSV) or not os.path.exists(TRANSFORMED_REGENCIES_CSV):
         print("[-] Data transform tidak ditemukan. Silakan jalankan transform terlebih dahulu.")
@@ -107,6 +116,7 @@ def main():
         ax1.text(width + (width * 0.01), bar.get_y() + bar.get_height()/2, f"{int(width):,}", 
                  va='center', ha='left', fontsize=10, fontweight='bold', color='#34495e')
     fig1.tight_layout()
+    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
     img_prov_b64 = generate_base64_plot(fig1)
 
     # Chart 2: Top 10 Regencies by Nilai Transaksi
@@ -125,6 +135,7 @@ def main():
         ax2.text(width + (width * 0.01), bar.get_y() + bar.get_height()/2, f"{width:,.2f}", 
                  va='center', ha='left', fontsize=10, fontweight='bold', color='#34495e')
     fig2.tight_layout()
+    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
     img_reg_b64 = generate_base64_plot(fig2)
 
     # Save metrics

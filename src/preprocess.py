@@ -32,6 +32,8 @@ FEATURE_COLUMNS = [
     'latitude', 'longitude'
 ]
 
+FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
+
 def generate_base64_plot(fig):
     buf = io.BytesIO()
     fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
@@ -39,6 +41,12 @@ def generate_base64_plot(fig):
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close(fig)
     return img_str
+
+def save_plot_to_file(fig, filepath):
+    """Save a matplotlib figure to a PNG file."""
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
+    print(f"[SAVED] Plot -> {filepath}")
 
 def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     k_range = list(range(min_k, max_k + 1))
@@ -76,6 +84,7 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     ax.set_ylabel('Inertia / WCSS', fontsize=11, fontweight='bold', color='#2c3e50')
     ax.legend(loc='best', frameon=True, facecolor='white', edgecolor='none')
     fig.tight_layout()
+    save_plot_to_file(fig, os.path.join(FIGURES_DIR, "preprocess_elbow_curve.png"))
     img_elbow_b64 = generate_base64_plot(fig)
 
     return int(optimal_k), k_range, inertias, img_elbow_b64
@@ -84,6 +93,7 @@ def main():
     print("[+] Memulai Stage Preprocessing Machine Learning...")
     os.makedirs(PREPROCESS_DIR, exist_ok=True)
     os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
 
     if not os.path.exists(INPUT_REGENCIES_CSV):
         raise FileNotFoundError(f"Berkas input {INPUT_REGENCIES_CSV} tidak ditemukan.")
