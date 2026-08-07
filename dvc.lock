@@ -13,8 +13,8 @@ stages:
       size: 37763
     - path: src/eda.py
       hash: md5
-      md5: 1af3da10259ce35d84b8dca724991066
-      size: 11000
+      md5: cd8403a9f7541c4c7923171bc27661d6
+      size: 9720
     params:
       params.yaml:
         eda.plot_dpi: 120
@@ -28,16 +28,16 @@ stages:
       size: 598
     - path: reports/eda_summary.md
       hash: md5
-      md5: cc1327f43bd97bf6a56dbad00ff5454d
-      size: 160002
+      md5: 70af6a546a599a9eb8f816b9a1611d85
+      size: 124813
     - path: reports/figures/eda_top_provinces.png
       hash: md5
-      md5: 8f7b1daad4a4f2e9f3bd464274b47273
-      size: 52584
+      md5: e80321c62d40c0030dd9345fb4a13aa6
+      size: 42225
     - path: reports/figures/eda_top_regencies_transaksi.png
       hash: md5
-      md5: 08ff99d82b1ed627a1d380b66c23f108
-      size: 63273
+      md5: 56306c3161a52286f2a81419464a0286
+      size: 47272
   evaluate:
     cmd: python src/evaluate.py
     deps:
@@ -51,8 +51,8 @@ stages:
       size: 98854
     - path: src/evaluate.py
       hash: md5
-      md5: bfd40db9fc217368d6ef2cbb56b7251d
-      size: 9294
+      md5: 5fc1e5cda8170f038174a20408e19dc5
+      size: 7509
     outs:
     - path: reports/evaluate_metrics.json
       hash: md5
@@ -60,20 +60,20 @@ stages:
       size: 175
     - path: reports/evaluate_report.md
       hash: md5
-      md5: ab6fe357c3b7182aa628904a1b96b09d
-      size: 185272
+      md5: 64a3d9eba1ce267fda406171e8c451a4
+      size: 184290
     - path: reports/figures/eval_avg_transaction.png
       hash: md5
-      md5: b6ece208ee07309fbfc271faee86257c
-      size: 29208
+      md5: 802d6adcde0e0d7422fe01b412c07276
+      size: 24811
     - path: reports/figures/eval_cluster_distribution.png
       hash: md5
-      md5: 3ad5639cbf13d8e823d7d3a4f154b591
-      size: 26649
+      md5: e4e343559847ec7b154594de40850fbb
+      size: 24904
     - path: reports/figures/eval_pca_projection.png
       hash: md5
-      md5: 24df955c81ef80c13dabb70645ec54dd
-      size: 81751
+      md5: da4f278df116a49ec69f608968bb3ce8
+      size: 87172
   interpret:
     cmd: python src/interpret.py
     deps:
@@ -87,8 +87,8 @@ stages:
       size: 175
     - path: src/interpret.py
       hash: md5
-      md5: c632cb8ef5b5d3a1a24f8b6ce1e7573d
-      size: 8694
+      md5: 581d2948a6466332001fec1ff8559e88
+      size: 8879
     params:
       params.yaml:
         interpret.max_tokens: 3000
@@ -96,12 +96,12 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 7936bd4bd845a453f21e289554a35cd6
-      size: 1159
+      md5: 1f275a5e844bd8d35415d5a42d405c1e
+      size: 1325
     - path: reports/interpret_report.md
       hash: md5
-      md5: 7e10a9936548db6948bed7ec305539ed
-      size: 2260
+      md5: 2e7bc9c4120fffca5f350df1bef85134
+      size: 3004
   model:
     cmd: python src/model.py
     deps:
@@ -119,8 +119,8 @@ stages:
       size: 37763
     - path: src/model.py
       hash: md5
-      md5: 3bb3c2523ccd5d51e7cc56d2d8baa2c4
-      size: 2714
+      md5: 9a54811a1ec1d7d03a2b78b26c6424b3
+      size: 2747
     params:
       params.yaml:
         model.n_init: 10
@@ -133,8 +133,8 @@ stages:
       size: 39742
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: 7ceb00888215bcfc7b792ce6aeb87076
-      size: 2943
+      md5: b9d62e455b82b7ab65fd4a39388f66d7
+      size: 2812
   preprocess:
     cmd: python src/preprocess.py
     deps:
@@ -144,8 +144,8 @@ stages:
       size: 37763
     - path: src/preprocess.py
       hash: md5
-      md5: 2266d1c41b9f6efef2e5e092cc9192ce
-      size: 6898
+      md5: ff906baaeb0c817c799f730f56efaca3
+      size: 6389
     params:
       params.yaml:
         preprocess.fallback_k: 3
@@ -166,12 +166,12 @@ stages:
       size: 98854
     - path: reports/figures/preprocess_elbow_curve.png
       hash: md5
-      md5: a73dd4c8d253fb6a705d74c9e4ed48a7
-      size: 51059
+      md5: f6c8184ae72e9787db29456ea53d4e61
+      size: 43323
     - path: reports/preprocess_report.md
       hash: md5
-      md5: 9e8b138698395fd96daf25e95cc8cf09
-      size: 68829
+      md5: 62dc949622e84ccfb5875bd1dd928659
+      size: 58494
   scrape_provinces:
     cmd: python src/scrape_provinces.py
     deps:

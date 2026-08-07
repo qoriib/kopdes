@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import yaml
-import joblib
+import pickle
 import pandas as pd
 from sklearn.cluster import KMeans
 
@@ -57,7 +57,8 @@ def main():
     cluster_labels = kmeans.fit_predict(X_scaled)
 
     # 3. Menyimpan Artifact Model Trained PKL
-    joblib.dump(kmeans, MODEL_PKL)
+    with open(MODEL_PKL, "wb") as f:
+        pickle.dump(kmeans, f)
     print(f"[SAVED] Trained Model PKL -> {MODEL_PKL}")
 
     # 4. Penggabungan Label Klaster ke Dataset Kabupaten/Kota

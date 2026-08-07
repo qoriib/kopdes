@@ -10,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from kneed import KneeLocator
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -91,17 +92,13 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     else:
         print(f"[*] KneeLocator mendeteksi elbow point pada K = {optimal_k}")
 
-    # Generate Elbow Curve plot
-    plt.style.use(PLOT_STYLE if PLOT_STYLE in plt.style.available else 'default')
+    # Generate Elbow Curve plot using standard seaborn lineplot
+    sns.set_theme()
     fig, ax = plt.subplots(figsize=(8, 4.5))
-    ax.plot(k_range, inertias, marker='o', color='#2b5c8f', linewidth=2, markersize=6, label='Inertia (WCSS)')
-    ax.axvline(x=optimal_k, color='#e74c3c', linestyle='--', linewidth=2, label=f'Optimal K ({optimal_k})')
-    ax.scatter(optimal_k, inertias[k_range.index(optimal_k)], color='#e74c3c', s=100, zorder=5)
-    
-    ax.set_title('Metode Elbow untuk Penentuan K Optimal', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax.set_xlabel('Jumlah Klaster (K)', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax.set_ylabel('Inertia / WCSS', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax.legend(loc='best', frameon=True, facecolor='white', edgecolor='none')
+    sns.lineplot(x=list(k_range), y=inertias, marker='o', ax=ax)
+    ax.set_title('Metode Elbow untuk Penentuan K Optimal')
+    ax.set_xlabel('Jumlah Klaster (K)')
+    ax.set_ylabel('Inertia / WCSS')
     fig.tight_layout()
     save_plot_to_file(fig, os.path.join(FIGURES_DIR, "preprocess_elbow_curve.png"))
     img_elbow_b64 = generate_base64_plot(fig)
@@ -153,15 +150,11 @@ def main():
 
 Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster optimal (K) menggunakan metode Elbow.
 
----
-
 ## 1. Parameter Penentuan K Optimal (Kneedle Algorithm)
 
 - **K Terbaik Terdeteksi**: **K = {optimal_k}**
 - **Metode Pendeteksian**: KneeLocator (`kneed`)
 - **Jenis Standarisasi**: StandardScaler
-
----
 
 ## 2. Nilai WCSS (Within-Cluster Sum of Squares)
 
@@ -172,7 +165,6 @@ Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster opti
         md_content += f"| **K = {k}** | {inertia:,.2f} |\n"
 
     md_content += f"""
----
 
 ## 3. Kurva Elbow Visualisasi
 ![Kurva Elbow](data:image/png;base64,{img_elbow_b64})"""

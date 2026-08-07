@@ -6,6 +6,7 @@ import io
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 from sklearn.decomposition import PCA
 
@@ -87,8 +88,8 @@ def main():
         'nilai_transaksi': 'mean'
     }).round(2)
 
-    # 4. Generate Visualizations
-    plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')
+    # Generate Visualizations using standard seaborn defaults
+    sns.set_theme()
 
     # Plot 1: 2D PCA Projection
     pca = PCA(n_components=2)
@@ -97,17 +98,12 @@ def main():
     df_pca['cluster'] = labels
 
     fig1, ax1 = plt.subplots(figsize=(8, 6))
-    unique_labels = np.unique(labels)
-    colors = matplotlib.colormaps['tab10']
-    
-    for i, cluster in enumerate(unique_labels):
-        c_data = df_pca[df_pca['cluster'] == cluster]
-        ax1.scatter(c_data['PCA1'], c_data['PCA2'], label=f'Klaster {cluster}', color=colors(i), alpha=0.7, edgecolors='w', s=50)
+    sns.scatterplot(x='PCA1', y='PCA2', hue='cluster', data=df_pca, palette='tab10', ax=ax1)
 
-    ax1.set_title('Proyeksi 2D Hasil Clustering KMeans (Metode PCA)', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax1.set_xlabel('Principal Component 1', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax1.set_ylabel('Principal Component 2', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax1.legend(loc='best', frameon=True, facecolor='white', edgecolor='none')
+    ax1.set_title('Proyeksi 2D Hasil Clustering KMeans (Metode PCA)')
+    ax1.set_xlabel('Principal Component 1')
+    ax1.set_ylabel('Principal Component 2')
+    ax1.legend(title='Klaster')
     fig1.tight_layout()
     save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eval_pca_projection.png"))
     img_pca_b64 = generate_base64_plot(fig1)
@@ -115,36 +111,18 @@ def main():
     # Plot 2: Cluster Membership Counts
     fig2, ax2 = plt.subplots(figsize=(8, 4))
     cluster_counts = df_clustered['cluster_label'].value_counts().sort_index()
-    colors2 = matplotlib.colormaps['Set2']
-    bars2 = ax2.bar(cluster_counts.index.map(lambda x: f"Klaster {x}"), cluster_counts.values, color=colors2(np.arange(len(unique_labels))), edgecolor='none', width=0.5)
-    ax2.set_title('Distribusi Jumlah Kabupaten/Kota per Klaster', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax2.set_ylabel('Jumlah Kabupaten/Kota', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['right'].set_visible(False)
-    ax2.spines['left'].set_color('#cccccc')
-    ax2.spines['bottom'].set_color('#cccccc')
-    for bar in bars2:
-        height = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2, height + (height * 0.01) + 1, f"{int(height)}", 
-                 va='bottom', ha='center', fontsize=10, fontweight='bold', color='#34495e')
+    sns.barplot(x=cluster_counts.index.map(lambda x: f"Klaster {x}"), y=cluster_counts.values, ax=ax2)
+    ax2.set_title('Distribusi Jumlah Kabupaten/Kota per Klaster')
+    ax2.set_ylabel('Jumlah Kabupaten/Kota')
     fig2.tight_layout()
     save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eval_cluster_distribution.png"))
     img_dist_b64 = generate_base64_plot(fig2)
 
     # Plot 3: Average Transaction Value per Cluster
     fig3, ax3 = plt.subplots(figsize=(8, 4))
-    colors3 = matplotlib.colormaps['Accent']
-    bars3 = ax3.bar(cluster_profile.index.map(lambda x: f"Klaster {x}"), cluster_profile['nilai_transaksi'] / 1e6, color=colors3(np.arange(len(unique_labels))), edgecolor='none', width=0.5)
-    ax3.set_title('Rata-Rata Nilai Transaksi per Klaster (Juta Rp)', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax3.set_ylabel('Nilai Transaksi (Juta Rp)', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax3.spines['top'].set_visible(False)
-    ax3.spines['right'].set_visible(False)
-    ax3.spines['left'].set_color('#cccccc')
-    ax3.spines['bottom'].set_color('#cccccc')
-    for bar in bars3:
-        height = bar.get_height()
-        ax3.text(bar.get_x() + bar.get_width()/2, height + (height * 0.01), f"{height:,.2f}", 
-                 va='bottom', ha='center', fontsize=10, fontweight='bold', color='#34495e')
+    sns.barplot(x=cluster_profile.index.map(lambda x: f"Klaster {x}"), y=cluster_profile['nilai_transaksi'] / 1e6, ax=ax3)
+    ax3.set_title('Rata-Rata Nilai Transaksi per Klaster (Juta Rp)')
+    ax3.set_ylabel('Nilai Transaksi (Juta Rp)')
     fig3.tight_layout()
     save_plot_to_file(fig3, os.path.join(FIGURES_DIR, "eval_avg_transaction.png"))
     img_trans_b64 = generate_base64_plot(fig3)
@@ -154,8 +132,6 @@ def main():
 
 Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster kabupaten/kota berbasis algoritma KMeans.
 
----
-
 ## 1. Evaluasi Kinerja Pengelompokan
 
 | Metrik Evaluasi | Nilai Kinerja | Keterangan |
@@ -164,8 +140,6 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
 | **Calinski-Harabasz Index** | **{ch_score}** | Rasio dispersi antar-klaster terhadap dalam-klaster (semakin tinggi semakin baik) |
 | **Davies-Bouldin Index** | **{db_score}** | Mengukur rata-rata kesamaan tiap klaster dengan klaster paling serupa (semakin rendah semakin baik) |
 | **Jumlah Klaster Terbentuk** | **{len(set(labels))}** | Hasil optimasi dari KElbowVisualizer |
-
----
 
 ## 2. Visualisasi Pengelompokan dan Kinerja
 
@@ -178,8 +152,6 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
 ### C. Rata-Rata Nilai Transaksi Keuangan per Klaster
 ![Rata-rata Nilai Transaksi](data:image/png;base64,{img_trans_b64})
 
----
-
 ## 3. Profil Rata-Rata per Klaster
 
 | Klaster | Rata-rata Jumlah Koperasi | Rata-rata Koperasi NIB | Rata-rata Koperasi NPWP | Rata-rata Koperasi RAT | Rata-rata Nilai Transaksi (Rp) |
@@ -188,7 +160,7 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
     for cluster_id, row in cluster_profile.iterrows():
         md_content += f"| **Klaster {cluster_id}** | {row['jumlah_koperasi']:,} | {row['koperasi_nib']:,} | {row['koperasi_npwp']:,} | {row['koperasi_rat']:,} | Rp {row['nilai_transaksi']:,} |\n"
 
-    md_content += "\n---\n\n## 4. Distribusi Anggota Klaster\n\n"
+    md_content += "\n\n## 4. Distribusi Anggota Klaster\n\n"
     for cluster_id, count in cluster_counts.items():
         md_content += f"- **Klaster {cluster_id}**: {count} Kabupaten/Kota\n"
 

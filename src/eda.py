@@ -7,6 +7,7 @@ import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -112,43 +113,26 @@ def main():
     desc_reg = df_reg[num_cols_reg].describe().T
     desc_reg.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', 'Median', '75%', 'Max']
     desc_reg_markdown = desc_reg.to_markdown(floatfmt=",.2f")
+    sns.set_theme() # Gunakan styling default dari seaborn
 
-    # Generate Sleek Charts
     # Chart 1: Top Provinces by Total Koperasi
-    plt.style.use(PLOT_STYLE if PLOT_STYLE in plt.style.available else 'default')
     fig1, ax1 = plt.subplots(figsize=(10, 5))
-    colors = plt.cm.Blues(np.linspace(0.4, 0.9, TOP_PROVINCES_LIMIT))
     prov_sorted = df_prov.sort_values(by='jumlah_koperasi', ascending=True).tail(TOP_PROVINCES_LIMIT)
-    bars1 = ax1.barh(prov_sorted['province_name'], prov_sorted['jumlah_koperasi'], color=colors, edgecolor='none', height=0.6)
-    ax1.set_title(f'{TOP_PROVINCES_LIMIT} Provinsi dengan Jumlah Koperasi Terbanyak', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax1.set_xlabel('Jumlah Koperasi', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax1.spines['top'].set_visible(False)
-    ax1.spines['right'].set_visible(False)
-    ax1.spines['left'].set_color('#cccccc')
-    ax1.spines['bottom'].set_color('#cccccc')
-    for bar in bars1:
-        width = bar.get_width()
-        ax1.text(width + (width * 0.01), bar.get_y() + bar.get_height()/2, f"{int(width):,}", 
-                 va='center', ha='left', fontsize=10, fontweight='bold', color='#34495e')
+    sns.barplot(x='jumlah_koperasi', y='province_name', data=prov_sorted, ax=ax1)
+    ax1.set_title(f'{TOP_PROVINCES_LIMIT} Provinsi dengan Jumlah Koperasi Terbanyak')
+    ax1.set_xlabel('Jumlah Koperasi')
+    ax1.set_ylabel('')
     fig1.tight_layout()
     save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
     img_prov_b64 = generate_base64_plot(fig1)
 
     # Chart 2: Top Regencies by Nilai Transaksi
     fig2, ax2 = plt.subplots(figsize=(10, 5))
-    colors2 = plt.cm.viridis(np.linspace(0.4, 0.8, TOP_PROVINCES_LIMIT))
     reg_sorted = df_reg.sort_values(by='nilai_transaksi', ascending=True).tail(TOP_PROVINCES_LIMIT)
-    bars2 = ax2.barh(reg_sorted['regency_name'], reg_sorted['nilai_transaksi'] / 1e6, color=colors2, edgecolor='none', height=0.6)
-    ax2.set_title(f'{TOP_PROVINCES_LIMIT} Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
-    ax2.set_xlabel('Nilai Transaksi (Juta Rp)', fontsize=11, fontweight='bold', color='#2c3e50')
-    ax2.spines['top'].set_visible(False)
-    ax2.spines['right'].set_visible(False)
-    ax2.spines['left'].set_color('#cccccc')
-    ax2.spines['bottom'].set_color('#cccccc')
-    for bar in bars2:
-        width = bar.get_width()
-        ax2.text(width + (width * 0.01), bar.get_y() + bar.get_height()/2, f"{width:,.2f}", 
-                 va='center', ha='left', fontsize=10, fontweight='bold', color='#34495e')
+    sns.barplot(x=reg_sorted['nilai_transaksi'] / 1e6, y=reg_sorted['regency_name'], ax=ax2)
+    ax2.set_title(f'{TOP_PROVINCES_LIMIT} Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)')
+    ax2.set_xlabel('Nilai Transaksi (Juta Rp)')
+    ax2.set_ylabel('')
     fig2.tight_layout()
     save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
     img_reg_b64 = generate_base64_plot(fig2)
@@ -188,8 +172,6 @@ def main():
 
 Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES berbasis Data Version Control (DVC).
 
----
-
 ## Ringkasan Statistik Nasional
 
 | Indikator Kinerja | Jumlah | Persentase |
@@ -204,8 +186,6 @@ Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES ber
 | Total Simpanan Wajib | Rp {simpanan_wajib:,.2f} | - |
 | Total Nilai Transaksi | Rp {total_nilai_transaksi:,.2f} | - |
 
----
-
 ## Visualisasi Analisis Eksplorasi Data
 
 ### 1. Distribusi Koperasi di Tingkat Provinsi
@@ -214,32 +194,26 @@ Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES ber
 ### 2. Nilai Transaksi di Tingkat Kabupaten/Kota
 ![10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi](data:image/png;base64,{img_reg_b64})
 
----
-
 ## Statistik Deskriptif Tingkat Provinsi
 Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Provinsi:
 
 {desc_prov_markdown}
-
----
 
 ## Statistik Deskriptif Tingkat Kabupaten/Kota
 Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Kabupaten/Kota:
 
 {desc_reg_markdown}
 
----
-
 ## Provinsi Teratas dengan Jumlah Koperasi Terbanyak
 """
     for idx, (_, p) in enumerate(top_provinces_koperasi.iterrows(), 1):
         md_content += f"{idx}. **{p['province_name']}**: {int(p['jumlah_koperasi']):,} Koperasi (NIB: {int(p['koperasi_nib']):,}, RAT: {int(p['koperasi_rat']):,})\n"
 
-    md_content += "\n---\n\n## Kabupaten/Kota Teratas dengan Jumlah Koperasi Terbanyak\n\n"
+    md_content += "\n\n## Kabupaten/Kota Teratas dengan Jumlah Koperasi Terbanyak\n\n"
     for idx, (_, r) in enumerate(top_regencies_koperasi.iterrows(), 1):
         md_content += f"{idx}. **{r['regency_name']}**: {int(r['jumlah_koperasi']):,} Koperasi\n"
 
-    md_content += "\n---\n\n## Kabupaten/Kota Teratas dengan Nilai Transaksi Tertinggi\n\n"
+    md_content += "\n\n## Kabupaten/Kota Teratas dengan Nilai Transaksi Tertinggi\n\n"
     for idx, (_, r) in enumerate(top_regencies_transaksi.iterrows(), 1):
         md_content += f"{idx}. **{r['regency_name']}**: Rp {float(r['nilai_transaksi']):,.2f}\n"
 

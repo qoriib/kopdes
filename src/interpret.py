@@ -123,7 +123,7 @@ Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
   "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 3-4 paragraf. Jelaskan interpretasi mendalam karakteristik unik dari masing-masing klaster (kekuatan, kelemahan, pola) serta rekomendasi kebijakan pembangunan daerah yang spesifik untuk setiap klaster. Gunakan format Markdown untuk isi laporan ini.]"
 }}
 
-Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'.
+Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'. DILARANG KERAS menggunakan emoji, simbol grafis sejenis, maupun separator garis horizontal (seperti `---`) di dalam nama klaster, deskripsi, maupun laporan markdown yang Anda hasilkan.
 """
 
     url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{MODEL_NAME}"
