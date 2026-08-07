@@ -120,3 +120,20 @@ stages:
     outs:
       - reports/interpret_labels.json
       - reports/interpret_report.md
+
+artifacts:
+  kmeans-model:
+    path: models/kmeans_model.pkl
+    type: model
+    desc: "K-Means clustering model trained on SIMKOPDES regency data."
+    labels:
+      - kmeans
+      - model
+      - clustering
+  clustered-regencies:
+    path: data/model/clustered_regencies.csv
+    type: dataset
+    desc: "Clustered regencies dataset containing assigned cluster labels and details."
+    labels:
+      - dataset
+      - regencies
