@@ -3,6 +3,7 @@ import sys
 import json
 import base64
 import io
+import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,9 +26,23 @@ EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
 
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
 
+PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
+params = {}
+if os.path.exists(PARAMS_FILE):
+    try:
+        with open(PARAMS_FILE, encoding='utf-8') as f:
+            params = yaml.safe_load(f).get('eda', {})
+    except Exception:
+        pass
+
+TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
+TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 5)
+PLOT_DPI = params.get('plot_dpi', 120)
+PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
+
 def generate_base64_plot(fig):
     buf = io.BytesIO()
-    fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
+    fig.savefig(buf, format='png', dpi=PLOT_DPI, bbox_inches='tight')
     buf.seek(0)
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close(fig)
@@ -36,7 +51,7 @@ def generate_base64_plot(fig):
 def save_plot_to_file(fig, filepath):
     """Save a matplotlib figure to a PNG file."""
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
+    fig.savefig(filepath, format='png', dpi=PLOT_DPI, bbox_inches='tight')
     print(f"[SAVED] Plot -> {filepath}")
 
 def main():
@@ -85,9 +100,9 @@ def main():
     pct_rat = round((total_rat / total_koperasi * 100), 2) if total_koperasi else 0
 
     # Top items
-    top_provinces_koperasi = df_prov.sort_values(by='jumlah_koperasi', ascending=False).head(10)
-    top_regencies_koperasi = df_reg.sort_values(by='jumlah_koperasi', ascending=False).head(5)
-    top_regencies_transaksi = df_reg.sort_values(by='nilai_transaksi', ascending=False).head(5)
+    top_provinces_koperasi = df_prov.sort_values(by='jumlah_koperasi', ascending=False).head(TOP_PROVINCES_LIMIT)
+    top_regencies_koperasi = df_reg.sort_values(by='jumlah_koperasi', ascending=False).head(TOP_REGENCIES_LIMIT)
+    top_regencies_transaksi = df_reg.sort_values(by='nilai_transaksi', ascending=False).head(TOP_REGENCIES_LIMIT)
 
     # Descriptive Stats
     desc_prov = df_prov[num_cols_prov].describe().T
@@ -99,13 +114,13 @@ def main():
     desc_reg_markdown = desc_reg.to_markdown(floatfmt=",.2f")
 
     # Generate Sleek Charts
-    # Chart 1: Top 10 Provinces by Total Koperasi
-    plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')
+    # Chart 1: Top Provinces by Total Koperasi
+    plt.style.use(PLOT_STYLE if PLOT_STYLE in plt.style.available else 'default')
     fig1, ax1 = plt.subplots(figsize=(10, 5))
-    colors = plt.cm.Blues(np.linspace(0.4, 0.9, 10))
-    prov_sorted = df_prov.sort_values(by='jumlah_koperasi', ascending=True).tail(10)
+    colors = plt.cm.Blues(np.linspace(0.4, 0.9, TOP_PROVINCES_LIMIT))
+    prov_sorted = df_prov.sort_values(by='jumlah_koperasi', ascending=True).tail(TOP_PROVINCES_LIMIT)
     bars1 = ax1.barh(prov_sorted['province_name'], prov_sorted['jumlah_koperasi'], color=colors, edgecolor='none', height=0.6)
-    ax1.set_title('10 Provinsi dengan Jumlah Koperasi Terbanyak', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
+    ax1.set_title(f'{TOP_PROVINCES_LIMIT} Provinsi dengan Jumlah Koperasi Terbanyak', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
     ax1.set_xlabel('Jumlah Koperasi', fontsize=11, fontweight='bold', color='#2c3e50')
     ax1.spines['top'].set_visible(False)
     ax1.spines['right'].set_visible(False)
@@ -119,12 +134,12 @@ def main():
     save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
     img_prov_b64 = generate_base64_plot(fig1)
 
-    # Chart 2: Top 10 Regencies by Nilai Transaksi
+    # Chart 2: Top Regencies by Nilai Transaksi
     fig2, ax2 = plt.subplots(figsize=(10, 5))
-    colors2 = plt.cm.viridis(np.linspace(0.4, 0.8, 10))
-    reg_sorted = df_reg.sort_values(by='nilai_transaksi', ascending=True).tail(10)
+    colors2 = plt.cm.viridis(np.linspace(0.4, 0.8, TOP_PROVINCES_LIMIT))
+    reg_sorted = df_reg.sort_values(by='nilai_transaksi', ascending=True).tail(TOP_PROVINCES_LIMIT)
     bars2 = ax2.barh(reg_sorted['regency_name'], reg_sorted['nilai_transaksi'] / 1e6, color=colors2, edgecolor='none', height=0.6)
-    ax2.set_title('10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
+    ax2.set_title(f'{TOP_PROVINCES_LIMIT} Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)', fontsize=14, pad=15, fontweight='bold', color='#2c3e50')
     ax2.set_xlabel('Nilai Transaksi (Juta Rp)', fontsize=11, fontweight='bold', color='#2c3e50')
     ax2.spines['top'].set_visible(False)
     ax2.spines['right'].set_visible(False)
@@ -215,16 +230,16 @@ Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat
 
 ---
 
-## Lima Provinsi dengan Jumlah Koperasi Terbanyak
+## Provinsi Teratas dengan Jumlah Koperasi Terbanyak
 """
-    for idx, (_, p) in enumerate(top_provinces_koperasi.head(5).iterrows(), 1):
+    for idx, (_, p) in enumerate(top_provinces_koperasi.iterrows(), 1):
         md_content += f"{idx}. **{p['province_name']}**: {int(p['jumlah_koperasi']):,} Koperasi (NIB: {int(p['koperasi_nib']):,}, RAT: {int(p['koperasi_rat']):,})\n"
 
-    md_content += "\n---\n\n## Lima Kabupaten/Kota dengan Jumlah Koperasi Terbanyak\n\n"
+    md_content += "\n---\n\n## Kabupaten/Kota Teratas dengan Jumlah Koperasi Terbanyak\n\n"
     for idx, (_, r) in enumerate(top_regencies_koperasi.iterrows(), 1):
         md_content += f"{idx}. **{r['regency_name']}**: {int(r['jumlah_koperasi']):,} Koperasi\n"
 
-    md_content += "\n---\n\n## Lima Kabupaten/Kota dengan Nilai Transaksi Tertinggi\n\n"
+    md_content += "\n---\n\n## Kabupaten/Kota Teratas dengan Nilai Transaksi Tertinggi\n\n"
     for idx, (_, r) in enumerate(top_regencies_transaksi.iterrows(), 1):
         md_content += f"{idx}. **{r['regency_name']}**: Rp {float(r['nilai_transaksi']):,.2f}\n"
 

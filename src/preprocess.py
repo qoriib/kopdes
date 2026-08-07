@@ -3,6 +3,7 @@ import sys
 import json
 import base64
 import io
+import yaml
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -34,6 +35,24 @@ FEATURE_COLUMNS = [
 
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
 
+PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
+params = {}
+if os.path.exists(PARAMS_FILE):
+    try:
+        with open(PARAMS_FILE, encoding='utf-8') as f:
+            params = yaml.safe_load(f).get('preprocess', {})
+    except Exception:
+        pass
+
+MIN_K = params.get('min_k', 2)
+MAX_K = params.get('max_k', 8)
+RANDOM_STATE = params.get('random_state', 42)
+N_INIT = params.get('n_init', 10)
+KNEEDLE_CURVE = params.get('kneedle', {}).get('curve', 'convex')
+KNEEDLE_DIRECTION = params.get('kneedle', {}).get('direction', 'decreasing')
+FALLBACK_K = params.get('fallback_k', 3)
+PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
+
 def generate_base64_plot(fig):
     buf = io.BytesIO()
     fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
@@ -54,26 +73,26 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     
     print(f"[*] Menghitung inertia untuk K dari {min_k} sampai {max_k}...")
     for k in k_range:
-        km = KMeans(n_clusters=k, random_state=42, n_init=10)
+        km = KMeans(n_clusters=k, random_state=RANDOM_STATE, n_init=N_INIT)
         km.fit(X_scaled)
         inertias.append(km.inertia_)
         
     kneedle = KneeLocator(
         x=k_range,
         y=inertias,
-        curve="convex",
-        direction="decreasing"
+        curve=KNEEDLE_CURVE,
+        direction=KNEEDLE_DIRECTION
     )
     
     optimal_k = kneedle.knee
     if optimal_k is None:
-        print("[*] KneeLocator tidak mendeteksi elbow point. Menggunakan K = 3 sebagai fallback.")
-        optimal_k = 3
+        print(f"[*] KneeLocator tidak mendeteksi elbow point. Menggunakan K = {FALLBACK_K} sebagai fallback.")
+        optimal_k = FALLBACK_K
     else:
         print(f"[*] KneeLocator mendeteksi elbow point pada K = {optimal_k}")
 
     # Generate Elbow Curve plot
-    plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')
+    plt.style.use(PLOT_STYLE if PLOT_STYLE in plt.style.available else 'default')
     fig, ax = plt.subplots(figsize=(8, 4.5))
     ax.plot(k_range, inertias, marker='o', color='#2b5c8f', linewidth=2, markersize=6, label='Inertia (WCSS)')
     ax.axvline(x=optimal_k, color='#e74c3c', linestyle='--', linewidth=2, label=f'Optimal K ({optimal_k})')
@@ -110,7 +129,7 @@ def main():
 
     # 3. Penentuan K Terbaik Menggunakan KneeLocator
     print("[*] Menentukan nilai K terbaik dengan KneeLocator...")
-    optimal_k, k_range, inertias, img_elbow_b64 = find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8)
+    optimal_k, k_range, inertias, img_elbow_b64 = find_optimal_k_and_plot(X_scaled, min_k=MIN_K, max_k=MAX_K)
     print(f"[OK] K Terbaik yang terdeteksi: K = {optimal_k}")
 
     # 4. Simpan Scaled Features ke CSV

@@ -20,17 +20,23 @@ if os.path.exists(PARAMS_FILE):
 MAX_WORKERS = params.get('max_workers', 4)
 START_PROVINCE_ID = params.get('start_province_id', 1)
 END_PROVINCE_ID = params.get('end_province_id', 38)
-TABLE_INDEX = 2
-BASE_URL_TEMPLATE = "https://simkopdes.go.id/pers/dashboard/district/{id}"
+TABLE_INDEX = params.get('table_index', 2)
+BASE_URL_TEMPLATE = params.get('base_url_template', "https://simkopdes.go.id/pers/dashboard/district/{id}")
 OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_regencies.csv")
 
 def scrape_single_province(prov_id):
     target_url = BASE_URL_TEMPLATE.format(id=prov_id)
+    playwright_config = params.get('playwright', {})
+    headless = playwright_config.get('headless', True)
+    width = playwright_config.get('width', 1280)
+    height = playwright_config.get('height', 800)
+    user_agent = playwright_config.get('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=headless)
         page = browser.new_page(
-            viewport={'width': 1280, 'height': 800},
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            viewport={'width': width, 'height': height},
+            user_agent=user_agent
         )
         try:
             headers, rows = scrape_table_with_pagination(page, target_url, TABLE_INDEX)

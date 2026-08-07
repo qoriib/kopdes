@@ -110,9 +110,6 @@ jobs:
           name: eda-report
           path: reports/eda_summary.md
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
-
       - name: Generate & Post CML EDA Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -157,8 +154,7 @@ jobs:
           name: preprocess-report
           path: reports/preprocess_report.md
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+
 
       - name: Generate & Post CML Preprocess Report
         env:
@@ -228,8 +224,7 @@ jobs:
           name: evaluate-report
           path: reports/evaluate_report.md
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+
 
       - name: Generate & Post CML Evaluate Report
         env:
@@ -275,8 +270,7 @@ jobs:
           name: interpret-report
           path: reports/interpret_report.md
 
-      - name: Setup CML
-        uses: iterative/setup-cml@v2
+
 
       - name: Generate & Post CML Interpret Report
         env:

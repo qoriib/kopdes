@@ -4,6 +4,13 @@ stages:
     deps:
       - src/scrape_provinces.py
       - src/utils/scraper_utils.py
+    params:
+      - scrape.target_url
+      - scrape.table_index
+      - scrape.playwright.headless
+      - scrape.playwright.width
+      - scrape.playwright.height
+      - scrape.playwright.user_agent
     outs:
       - data/raw/scraped_provinces.csv
 
@@ -12,6 +19,16 @@ stages:
     deps:
       - src/scrape_regencies.py
       - src/utils/scraper_utils.py
+    params:
+      - scrape.base_url_template
+      - scrape.table_index
+      - scrape.max_workers
+      - scrape.start_province_id
+      - scrape.end_province_id
+      - scrape.playwright.headless
+      - scrape.playwright.width
+      - scrape.playwright.height
+      - scrape.playwright.user_agent
     outs:
       - data/raw/scraped_regencies.csv
 
@@ -33,6 +50,11 @@ stages:
       - src/eda.py
       - data/transform/transformed_provinces.csv
       - data/transform/transformed_regencies.csv
+    params:
+      - eda.top_provinces_limit
+      - eda.top_regencies_limit
+      - eda.plot_dpi
+      - eda.plot_style
     outs:
       - reports/eda_summary.md
       - reports/eda_metrics.json
@@ -44,6 +66,14 @@ stages:
     deps:
       - src/preprocess.py
       - data/transform/transformed_regencies.csv
+    params:
+      - preprocess.min_k
+      - preprocess.max_k
+      - preprocess.random_state
+      - preprocess.n_init
+      - preprocess.kneedle.curve
+      - preprocess.kneedle.direction
+      - preprocess.fallback_k
     outs:
       - data/preprocess/scaled_features.csv
       - data/preprocess/preprocess_meta.json
@@ -57,6 +87,10 @@ stages:
       - data/preprocess/scaled_features.csv
       - data/preprocess/preprocess_meta.json
       - data/transform/transformed_regencies.csv
+    params:
+      - model.random_state
+      - model.n_init
+      - model.override_k
     outs:
       - models/kmeans_model.pkl
       - data/model/clustered_regencies.csv
@@ -80,6 +114,9 @@ stages:
       - src/interpret.py
       - reports/evaluate_metrics.json
       - data/model/clustered_regencies.csv
+    params:
+      - interpret.model
+      - interpret.max_tokens
     outs:
       - reports/interpret_labels.json
       - reports/interpret_report.md

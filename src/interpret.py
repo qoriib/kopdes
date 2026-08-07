@@ -4,6 +4,7 @@ import json
 import re
 import urllib.request
 import urllib.error
+import yaml
 import pandas as pd
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -19,8 +20,40 @@ def load_env():
                     k, v = line.split("=", 1)
                     os.environ[k.strip()] = v.strip()
 
+PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
+params = {}
+if os.path.exists(PARAMS_FILE):
+    try:
+        with open(PARAMS_FILE, encoding='utf-8') as f:
+            params = yaml.safe_load(f).get('interpret', {})
+    except Exception:
+        pass
+
+MODEL_NAME = params.get('model', "@cf/openai/gpt-oss-120b")
+MAX_TOKENS = params.get('max_tokens', 3000)
+
+def sanitize_json_string(s):
+    in_quote = False
+    escaped = False
+    chars = []
+    for char in s:
+        if char == '"' and not escaped:
+            in_quote = not in_quote
+        if char == '\\' and not escaped:
+            escaped = True
+        else:
+            escaped = False
+            
+        if in_quote and char == '\n':
+            chars.append('\\n')
+        elif in_quote and char == '\r':
+            chars.append('\\r')
+        else:
+            chars.append(char)
+    return "".join(chars)
+
 def main():
-    print("[+] Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI (@cf/openai/gpt-oss-120b)...")
+    print(f"[+] Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI ({MODEL_NAME})...")
     load_env()
     
     account_id = os.environ.get("CF_ACCOUNT_ID")
@@ -90,10 +123,10 @@ Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
   "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 3-4 paragraf. Jelaskan interpretasi mendalam karakteristik unik dari masing-masing klaster (kekuatan, kelemahan, pola) serta rekomendasi kebijakan pembangunan daerah yang spesifik untuk setiap klaster. Gunakan format Markdown untuk isi laporan ini.]"
 }}
 
-Pastikan output hanya berupa JSON valid dan tidak mengandung format markdown tambahan atau penjelasan lain di luar JSON tersebut.
+Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'.
 """
 
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/@cf/openai/gpt-oss-120b"
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{MODEL_NAME}"
     headers = {
         "Authorization": f"Bearer {api_token}",
         "Content-Type": "application/json"
@@ -104,7 +137,7 @@ Pastikan output hanya berupa JSON valid dan tidak mengandung format markdown tam
             {"role": "system", "content": "Anda adalah asisten analisis data ahli perkoperasian Indonesia yang hanya menjawab dalam format JSON sesuai spesifikasi."},
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": 3000
+        "max_tokens": MAX_TOKENS
     }
     
     req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
@@ -137,6 +170,8 @@ Pastikan output hanya berupa JSON valid dan tidak mengandung format markdown tam
                 if clean_text.startswith("```"):
                     clean_text = re.sub(r"^```(?:json)?\n", "", clean_text)
                     clean_text = re.sub(r"\n```$", "", clean_text)
+                
+                clean_text = sanitize_json_string(clean_text)
                 
                 try:
                     result_json = json.loads(clean_text)
