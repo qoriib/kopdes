@@ -34,15 +34,6 @@ jobs:
       - name: DVC Push
         run: dvc push
 
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-provinces.lock
-
-      - name: Cache Provinces Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-provinces.lock
-          key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
-
   scrape_regencies:
     name: Scrape Regencies
     runs-on: ubuntu-latest
@@ -62,15 +53,6 @@ jobs:
       - name: DVC Push
         run: dvc push
 
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-regencies.lock
-
-      - name: Cache Regencies Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-regencies.lock
-          key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
-
   # ──────────────────────────────────────────────
   # Stage 2: Data Transformation
   # ──────────────────────────────────────────────
@@ -86,48 +68,14 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore Provinces Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-provinces.lock
-          key: dvc-lock-provinces-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Restore Regencies Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-regencies.lock
-          key: dvc-lock-regencies-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Merge DVC Locks
-        run: |
-          python -c '
-          import yaml
-          merged = {"schema": "2.0", "stages": {}}
-          for name in ["provinces", "regencies"]:
-              with open(f"dvc-lock-{name}.lock") as f:
-                  lock_data = yaml.safe_load(f) or {}
-                  merged["stages"].update(lock_data.get("stages", {}))
-          with open("dvc.lock", "w") as f:
-              yaml.dump(merged, f)
-          '
-
       - name: DVC Pull Raw Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run Transform
         run: dvc repro transform
 
       - name: DVC Push
         run: dvc push
-
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-transform.lock
-
-      - name: Cache Transform Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-transform.lock
-          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 3a: Exploratory Data Analysis
@@ -144,17 +92,8 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore Transform Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-transform.lock
-          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Setup DVC Lock
-        run: cp dvc-lock-transform.lock dvc.lock
-
       - name: DVC Pull Transformed Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run EDA
         run: dvc repro eda
@@ -185,15 +124,6 @@ jobs:
             --title "📊 CML: Laporan EDA SIMKOPDES"
           cml comment create reports/cml_eda.md
 
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-eda.lock
-
-      - name: Cache EDA Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-eda.lock
-          key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
-
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
   # ──────────────────────────────────────────────
@@ -209,17 +139,8 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore Transform Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-transform.lock
-          key: dvc-lock-transform-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Setup DVC Lock
-        run: cp dvc-lock-transform.lock dvc.lock
-
       - name: DVC Pull Transformed Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run Preprocessing
         run: dvc repro preprocess
@@ -250,15 +171,6 @@ jobs:
             --title "⚙️ CML: Laporan Preprocessing SIMKOPDES"
           cml comment create reports/cml_preprocess.md
 
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-preprocess.lock
-
-      - name: Cache Preprocess Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-preprocess.lock
-          key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
-
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
   # ──────────────────────────────────────────────
@@ -274,32 +186,14 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore Preprocess Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-preprocess.lock
-          key: dvc-lock-preprocess-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Setup DVC Lock
-        run: cp dvc-lock-preprocess.lock dvc.lock
-
       - name: DVC Pull Preprocessed & Transformed Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run Model Training
         run: dvc repro model
 
       - name: DVC Push
         run: dvc push
-
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-model.lock
-
-      - name: Cache Model Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-model.lock
-          key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
 
   # ──────────────────────────────────────────────
   # Stage 5: Model Evaluation
@@ -316,33 +210,8 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore EDA Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-eda.lock
-          key: dvc-lock-eda-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Restore Model Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-model.lock
-          key: dvc-lock-model-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Merge DVC Locks
-        run: |
-          python -c '
-          import yaml
-          merged = {"schema": "2.0", "stages": {}}
-          for name in ["eda", "model"]:
-              with open(f"dvc-lock-{name}.lock") as f:
-                  lock_data = yaml.safe_load(f) or {}
-                  merged["stages"].update(lock_data.get("stages", {}))
-          with open("dvc.lock", "w") as f:
-              yaml.dump(merged, f)
-          '
-
       - name: DVC Pull All Upstream Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run Evaluation
         run: dvc repro evaluate
@@ -373,15 +242,6 @@ jobs:
             --title "🔬 CML: Laporan Evaluasi Clustering SIMKOPDES"
           cml comment create reports/cml_evaluate.md
 
-      - name: Copy Lock for Caching
-        run: cp dvc.lock dvc-lock-evaluate.lock
-
-      - name: Cache Evaluate Lock
-        uses: actions/cache/save@v5
-        with:
-          path: dvc-lock-evaluate.lock
-          key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
-
   interpret:
     name: AI Interpretation
     needs: evaluate
@@ -394,17 +254,8 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Restore Evaluate Lock
-        uses: actions/cache/restore@v5
-        with:
-          path: dvc-lock-evaluate.lock
-          key: dvc-lock-evaluate-${{ github.run_id }}-${{ github.run_attempt }}
-
-      - name: Setup DVC Lock
-        run: cp dvc-lock-evaluate.lock dvc.lock
-
       - name: DVC Pull Upstream Data
-        run: dvc pull
+        run: dvc pull --run-cache
 
       - name: Run AI Interpretation
         env:
@@ -447,4 +298,3 @@ jobs:
             git pull --rebase origin main
             git push
           fi
-
