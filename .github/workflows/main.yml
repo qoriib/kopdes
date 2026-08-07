@@ -104,12 +104,6 @@ jobs:
       - name: Post EDA Report to Step Summary
         run: cat reports/eda_summary.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload EDA Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: eda-report
-          path: reports/eda_summary.md
-
       - name: Generate & Post CML EDA Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -147,14 +141,6 @@ jobs:
 
       - name: Post Preprocess Report to Step Summary
         run: cat reports/preprocess_report.md >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload Preprocess Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: preprocess-report
-          path: reports/preprocess_report.md
-
-
 
       - name: Generate & Post CML Preprocess Report
         env:
@@ -218,14 +204,6 @@ jobs:
       - name: Post Evaluation Report to Step Summary
         run: cat reports/evaluate_report.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload Evaluation Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: evaluate-report
-          path: reports/evaluate_report.md
-
-
-
       - name: Generate & Post CML Evaluate Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -264,14 +242,6 @@ jobs:
       - name: Post AI Interpretation Report to Step Summary
         run: cat reports/interpret_report.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload AI Interpretation Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: interpret-report
-          path: reports/interpret_report.md
-
-
-
       - name: Generate & Post CML Interpret Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -281,6 +251,45 @@ jobs:
             --output reports/cml_interpret.md \
             --title "CML: Laporan Interpretasi AI SIMKOPDES"
           cml comment create reports/cml_interpret.md
+
+  artifact:
+    name: Upload Artifacts
+    needs: interpret
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Pipeline Environment
+        uses: ./.github/actions/setup-pipeline
+
+      - name: DVC Pull All Reports
+        run: dvc pull
+
+      - name: Upload EDA Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: eda-report
+          path: reports/eda_summary.md
+
+      - name: Upload Preprocess Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprocess-report
+          path: reports/preprocess_report.md
+
+      - name: Upload Evaluation Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluate-report
+          path: reports/evaluate_report.md
+
+      - name: Upload AI Interpretation Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: interpret-report
+          path: reports/interpret_report.md
 
       - name: Commit & Push to GitHub
         run: |
