@@ -13,10 +13,10 @@ env:
 
 jobs:
   # ──────────────────────────────────────────────
-  # Stage 1: Parallel Scraping
+  # Stage 1: Scraping
   # ──────────────────────────────────────────────
-  scrape_provinces:
-    name: Scrape Provinces
+  scrape:
+    name: Scrape Data
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -25,28 +25,13 @@ jobs:
 
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
-        with:
-          install-playwright: 'true'
+
+      - name: Install Playwright
+        shell: bash
+        run: playwright install chromium --with-deps
 
       - name: Scrape Province Data
         run: dvc repro scrape_provinces
-
-      - name: DVC Push
-        run: dvc push
-
-  scrape_regencies:
-    name: Scrape Regencies
-    needs: scrape_provinces
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-        with:
-          install-playwright: 'true'
 
       - name: Scrape Regency Data
         run: dvc repro scrape_regencies
@@ -59,7 +44,7 @@ jobs:
   # ──────────────────────────────────────────────
   transform:
     name: Data Transformation
-    needs: [scrape_provinces, scrape_regencies]
+    needs: scrape
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
