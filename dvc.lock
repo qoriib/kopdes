@@ -195,7 +195,7 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: eaa3e1654e55abe8e097a3c61af37fda
+      md5: 76aa5f9f02eaf18df2d9f5289b1f87bf
       size: 3994
   scrape_regencies:
     cmd: python src/scrape_regencies.py
