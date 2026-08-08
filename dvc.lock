@@ -177,8 +177,8 @@ stages:
     deps:
     - path: src/scrape_provinces.py
       hash: md5
-      md5: 2b50f4c3f07e390ff3872ab1d865a86b
-      size: 1959
+      md5: c0bc713b33883ba7b74e30327d6ba231
+      size: 1683
     - path: src/utils/scraper_utils.py
       hash: md5
       md5: ab1cf03ae5b9110d259f8fb5b71fa214
@@ -195,8 +195,8 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: fc2b2bb6cd13bbe47e9cccf5520dfb94
-      size: 3994
+      md5: e96c0d0ff177fd39ac9993e4d2c187c4
+      size: 3519
   scrape_regencies:
     cmd: python src/scrape_regencies.py
     deps:
