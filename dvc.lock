@@ -79,16 +79,16 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 9f619e7adb9d8be9ded5882e48b78e0d
-      size: 40369
+      md5: fe09701599118049f62602f2d57ec198
+      size: 39742
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 7fdc6e1387f6fdde02b2becdc10ab340
-      size: 174
+      md5: 49c934ca6c2eb6db37efc0f1d85ca08e
+      size: 175
     - path: src/interpret.py
       hash: md5
-      md5: 06c8ef4df3fcdfb19e3d746e4f898bbe
-      size: 8037
+      md5: 581d2948a6466332001fec1ff8559e88
+      size: 8879
     params:
       params.yaml:
         interpret.max_tokens: 3000
@@ -181,8 +181,8 @@ stages:
       size: 1683
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: fbcc50b6a54f3b09436024476718eaeb
-      size: 7133
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.playwright.headless: true
@@ -195,8 +195,8 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: e96c0d0ff177fd39ac9993e4d2c187c4
-      size: 3519
+      md5: c8313d236cc806be9a236e31c2ecc69b
+      size: 3993
   scrape_regencies:
     cmd: python src/scrape_regencies.py
     deps:
@@ -206,8 +206,8 @@ stages:
       size: 3351
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: fbcc50b6a54f3b09436024476718eaeb
-      size: 7133
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.base_url_template: 
@@ -224,8 +224,8 @@ stages:
     outs:
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 0c27a6913952be65c47e563b7062bb14
-      size: 35122
+      md5: 13e20b77665dc9fa4f80d841fb3e8f0b
+      size: 5347
   transform:
     cmd: python src/transform.py
     deps:
@@ -263,16 +263,16 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 9f619e7adb9d8be9ded5882e48b78e0d
-      size: 40369
+      md5: fe09701599118049f62602f2d57ec198
+      size: 39742
     - path: data/transform/transformed_provinces.csv
       hash: md5
-      md5: 317206bf32b37bf810bf7f853f369d65
-      size: 3668
+      md5: 753aa816880d68789551faecd1f6fd75
+      size: 4029
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 7fdc6e1387f6fdde02b2becdc10ab340
-      size: 174
+      md5: 49c934ca6c2eb6db37efc0f1d85ca08e
+      size: 175
     - path: reports/interpret_labels.json
       hash: md5
       md5: 1f275a5e844bd8d35415d5a42d405c1e
@@ -283,8 +283,8 @@ stages:
       size: 3004
     - path: src/store.py
       hash: md5
-      md5: e49142579a21a945d1b6adb15df3a5bf
-      size: 4807
+      md5: 0a7af3120055aea16e64b5481e0dc0be
+      size: 4980
     outs:
     - path: data/seed.sql
       hash: md5
