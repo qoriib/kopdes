@@ -43,12 +43,16 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: e297464e45cfdb354dc4af9d5f8a3168
-      size: 4423
+      md5: 45e1d8827e1dc6b7fe9b22982d069c32
+      size: 4366
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 006cce52d8ca1d60c82025b6e941474e
-      size: 11386
+      md5: 012549fb95205192de495e28d17e2d50
+      size: 11329
+    - path: models/kmeans_model.pkl
+      hash: md5
+      md5: ff73c61cb042e3eaffdff336de8d847a
+      size: 1225
     - path: src/evaluate.py
       hash: md5
       md5: 7e6e4f55a726d8e75b056b5532cea7df
