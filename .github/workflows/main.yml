@@ -313,11 +313,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -326,7 +321,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd web/backend
-          pnpm install --frozen-lockfile
+          npm ci
 
       - name: Deploy Worker
         env:
@@ -334,7 +329,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
           cd web/backend
-          pnpm exec wrangler deploy --minify
+          npx wrangler deploy --minify
 
   deploy_frontend:
     name: Deploy Frontend
@@ -343,11 +338,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -356,12 +346,12 @@ jobs:
       - name: Install dependencies
         run: |
           cd web/frontend
-          pnpm install --frozen-lockfile
+          npm ci
 
       - name: Build Frontend
         run: |
           cd web/frontend
-          pnpm run build
+          npm run build
 
       - name: Deploy to Cloudflare Pages
         env:
@@ -369,5 +359,5 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
           cd web/frontend
-          pnpm exec wrangler pages project create simkopdes --production-branch main || true
-          pnpm exec wrangler pages deploy dist --project-name=simkopdes --branch=main
+          npx wrangler pages project create simkopdes --production-branch main || true
+          npx wrangler pages deploy dist --project-name=simkopdes --branch=main

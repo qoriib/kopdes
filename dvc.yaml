@@ -103,6 +103,7 @@ stages:
       - src/evaluate.py
       - data/preprocess/scaled_features.csv
       - data/model/clustered_regencies.csv
+      - models/kmeans_model.pkl
     outs:
       - reports/evaluate_report.md
       - reports/evaluate_metrics.json
