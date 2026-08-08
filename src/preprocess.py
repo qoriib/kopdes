@@ -19,7 +19,7 @@ from config import (
     FIGURES_DIR,
     get_params
 )
-from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
 
 logger = get_logger("preprocess")
@@ -74,9 +74,8 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     ax.set_ylabel('Inertia / WCSS')
     fig.tight_layout()
     save_plot_to_file(fig, os.path.join(FIGURES_DIR, "preprocess_elbow_curve.png"))
-    img_elbow_b64 = generate_base64_plot(fig)
 
-    return int(optimal_k), k_range, inertias, img_elbow_b64
+    return int(optimal_k), k_range, inertias
 
 def main():
     logger.info("Memulai Stage Preprocessing Machine Learning...")
@@ -99,7 +98,7 @@ def main():
 
     # 3. Penentuan K Terbaik Menggunakan KneeLocator
     logger.info("Menentukan nilai K terbaik dengan KneeLocator...")
-    optimal_k, k_range, inertias, img_elbow_b64 = find_optimal_k_and_plot(X_scaled, min_k=MIN_K, max_k=MAX_K)
+    optimal_k, k_range, inertias = find_optimal_k_and_plot(X_scaled, min_k=MIN_K, max_k=MAX_K)
     logger.info(f"K Terbaik yang terdeteksi: K = {optimal_k}")
 
     # 4. Simpan Scaled Features ke CSV
@@ -140,7 +139,7 @@ Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster opti
     md_content += f"""
 
 ## 3. Kurva Elbow Visualisasi
-<img src="data:image/png;base64,{img_elbow_b64}" alt="Kurva Elbow" width="300">"""
+<img src="figures/preprocess_elbow_curve.png" alt="Kurva Elbow" width="300">"""
     with open(PREPROCESS_REPORT_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
     logger.info(f"Laporan Markdown Preprocessing -> {PREPROCESS_REPORT_MD}")

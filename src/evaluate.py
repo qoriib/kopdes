@@ -16,7 +16,7 @@ from config import (
     REPORTS_DIR,
     FIGURES_DIR
 )
-from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
 
 logger = get_logger("evaluate")
@@ -84,7 +84,6 @@ def main():
     ax1.legend(title='Klaster')
     fig1.tight_layout()
     save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eval_pca_projection.png"))
-    img_pca_b64 = generate_base64_plot(fig1)
 
     # Plot 2: Cluster Membership Counts
     fig2, ax2 = plt.subplots(figsize=(8, 4))
@@ -94,7 +93,6 @@ def main():
     ax2.set_ylabel('Jumlah Kabupaten/Kota')
     fig2.tight_layout()
     save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eval_cluster_distribution.png"))
-    img_dist_b64 = generate_base64_plot(fig2)
 
     # Plot 3: Average Transaction Value per Cluster
     fig3, ax3 = plt.subplots(figsize=(8, 4))
@@ -103,7 +101,6 @@ def main():
     ax3.set_ylabel('Nilai Transaksi (Juta Rp)')
     fig3.tight_layout()
     save_plot_to_file(fig3, os.path.join(FIGURES_DIR, "eval_avg_transaction.png"))
-    img_trans_b64 = generate_base64_plot(fig3)
 
     # 4. Laporan Markdown Evaluasi Formal
     md_content = f"""# Laporan Evaluasi Pengelompokan (Clustering) KMeans SIMKOPDES
@@ -122,13 +119,13 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
 ## 2. Visualisasi Pengelompokan dan Kinerja
 
 ### A. Proyeksi 2D Klaster (PCA)
-<img src="data:image/png;base64,{img_pca_b64}" alt="Proyeksi PCA 2D" width="300">
+<img src="figures/eval_pca_projection.png" alt="Proyeksi PCA 2D" width="300">
 
 ### B. Distribusi Anggota Klaster
-<img src="data:image/png;base64,{img_dist_b64}" alt="Distribusi Anggota" width="300">
+<img src="figures/eval_cluster_distribution.png" alt="Distribusi Anggota" width="300">
 
 ### C. Rata-Rata Nilai Transaksi Keuangan per Klaster
-<img src="data:image/png;base64,{img_trans_b64}" alt="Rata-rata Nilai Transaksi" width="300">
+<img src="figures/eval_avg_transaction.png" alt="Rata-rata Nilai Transaksi" width="300">
 
 ## 3. Profil Rata-Rata per Klaster
 

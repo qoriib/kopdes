@@ -93,22 +93,19 @@ def strip_base64_images(md_content):
     return re.sub(pattern_html, '', content)
 
 
-def build_cml_report(report_md_path, figure_paths, title=None):
+def build_cml_report(report_md_path, figure_paths=None, title=None):
     """
-    Build a CML-compatible markdown report.
-
-    Reads the original markdown report, strips base64 images, publishes
-    PNG figures via `cml image`, and assembles the final report.
+    Build a CML-compatible markdown report by finding and publishing
+    all locally referenced figures inline.
 
     Args:
         report_md_path: Path to the source markdown report.
-        figure_paths: List of PNG file paths to publish via CML.
+        figure_paths: Unused, kept for CLI compatibility.
         title: Optional title override for the report header.
 
     Returns:
-        CML-ready markdown string.
+        CML-ready markdown string with published inline images.
     """
-    # Read source report
     if not os.path.exists(report_md_path):
         logger.error(f"Report not found: {report_md_path}")
         return ""
@@ -116,25 +113,41 @@ def build_cml_report(report_md_path, figure_paths, title=None):
     with open(report_md_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Strip base64 images
-    content = strip_base64_images(content)
+    report_dir = os.path.dirname(report_md_path)
 
-    # Clean up empty lines left by stripped images
-    content = re.sub(r'\n{3,}', '\n\n', content)
-
-    # Publish figures and build image section
-    if figure_paths:
-        image_section = "\n\n## Visualisasi\n\n"
-        for fig_path in figure_paths:
-            if os.path.exists(fig_path):
-                img_tag = cml_publish_image(fig_path)
+    # 1. Parse and replace HTML <img src="..."> tags inline
+    def replace_html_img(match):
+        full_tag = match.group(0)
+        src = match.group(2)
+        # Check if it is a local path
+        if not (src.startswith("http://") or src.startswith("https://") or src.startswith("data:")):
+            resolved_path = os.path.normpath(os.path.join(report_dir, src))
+            if os.path.exists(resolved_path):
+                img_tag = cml_publish_image(resolved_path)
                 if img_tag:
-                    image_section += f"{img_tag}\n\n"
-        content += image_section
+                    return img_tag
+        return full_tag
+
+    # Matches <img ... src="path" ...>
+    content = re.sub(r'<img([^>]+)src=["\'\s]([^"\'\s>]+)["\'\s]([^>]*)>', replace_html_img, content)
+
+    # 2. Parse and replace Markdown ![alt](src) tags inline
+    def replace_md_img(match):
+        full_tag = match.group(0)
+        alt = match.group(1)
+        src = match.group(2)
+        if not (src.startswith("http://") or src.startswith("https://") or src.startswith("data:")):
+            resolved_path = os.path.normpath(os.path.join(report_dir, src))
+            if os.path.exists(resolved_path):
+                img_tag = cml_publish_image(resolved_path)
+                if img_tag:
+                    return img_tag
+        return full_tag
+
+    content = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', replace_md_img, content)
 
     # Optionally override the title
     if title:
-        # Replace the first H1 heading
         content = re.sub(r'^#\s+.+$', f'# {title}', content, count=1, flags=re.MULTILINE)
 
     return content

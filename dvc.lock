@@ -5,7 +5,7 @@ stages:
     deps:
     - path: data/transform/transformed_provinces.csv
       hash: md5
-      md5: eaaf4306077b1259d0203abe874885b2
+      md5: 373175da8ba854153112497d04d50916
       size: 4029
     - path: data/transform/transformed_regencies.csv
       hash: md5
@@ -13,8 +13,8 @@ stages:
       size: 5743
     - path: src/eda.py
       hash: md5
-      md5: aac81051a777b83e92c8f41a03e073bc
-      size: 8878
+      md5: 4b5e1ade67cf386c43ab555cad7bc780
+      size: 8732
     params:
       params.yaml:
         eda.plot_dpi: 120
@@ -28,8 +28,8 @@ stages:
       size: 597
     - path: reports/eda_summary.md
       hash: md5
-      md5: 885194d7f9aa1f49c0824501974b0670
-      size: 126142
+      md5: bed67a30a068d9ba2dec5739b7bb6f82
+      size: 5530
     - path: reports/figures/eda_top_provinces.png
       hash: md5
       md5: e80321c62d40c0030dd9345fb4a13aa6
@@ -55,8 +55,8 @@ stages:
       size: 1295
     - path: src/evaluate.py
       hash: md5
-      md5: 7e4ed86294c7caa0b5b15bf301000997
-      size: 6595
+      md5: 984e400cd87ea1cb011eea1d70d1409d
+      size: 6424
     outs:
     - path: reports/evaluate_metrics.json
       hash: md5
@@ -64,8 +64,8 @@ stages:
       size: 172
     - path: reports/evaluate_report.md
       hash: md5
-      md5: 18d72914b2f40ae53ab624b2b13c3201
-      size: 131686
+      md5: 2327af0901dc0250c96444bc488cc0c3
+      size: 2080
     - path: reports/figures/eval_avg_transaction.png
       hash: md5
       md5: c0f467cd91c71db5584c932667765ee2
@@ -100,12 +100,12 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 1c7b294b43fcbe704dcec8cbfe933d05
-      size: 1991
+      md5: 689d86d474683392c8cc6ebcef9bf5af
+      size: 1791
     - path: reports/interpret_report.md
       hash: md5
-      md5: c81fb4e74c9ab6e4b28a4277917aa863
-      size: 1408
+      md5: 68da88babb32cc627dbc2f4edace11aa
+      size: 1675
   model:
     cmd: python src/model.py
     deps:
@@ -148,8 +148,8 @@ stages:
       size: 5743
     - path: src/preprocess.py
       hash: md5
-      md5: d3aa4ecfeb4de1a2ba329491ab64aedc
-      size: 5397
+      md5: 4235767def406b9c3b4e932750799742
+      size: 5295
     params:
       params.yaml:
         preprocess.fallback_k: 3
@@ -174,8 +174,8 @@ stages:
       size: 39512
     - path: reports/preprocess_report.md
       hash: md5
-      md5: e123d0f57eec6fe4e5886798e88dac95
-      size: 53426
+      md5: 0736ba8fb54497362d9a260d214178a0
+      size: 754
   scrape_provinces:
     cmd: python src/scrape_provinces.py
     deps:
@@ -199,7 +199,7 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: 76aa5f9f02eaf18df2d9f5289b1f87bf
+      md5: 3a2b4bb282fc0ebfe1b3059c687398c7
       size: 3994
   scrape_regencies:
     cmd: python src/scrape_regencies.py
@@ -243,7 +243,7 @@ stages:
       size: 71671
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: 76aa5f9f02eaf18df2d9f5289b1f87bf
+      md5: 3a2b4bb282fc0ebfe1b3059c687398c7
       size: 3994
     - path: data/raw/scraped_regencies.csv
       hash: md5
@@ -256,7 +256,7 @@ stages:
     outs:
     - path: data/transform/transformed_provinces.csv
       hash: md5
-      md5: eaaf4306077b1259d0203abe874885b2
+      md5: 373175da8ba854153112497d04d50916
       size: 4029
     - path: data/transform/transformed_regencies.csv
       hash: md5
@@ -271,7 +271,7 @@ stages:
       size: 5904
     - path: data/transform/transformed_provinces.csv
       hash: md5
-      md5: eaaf4306077b1259d0203abe874885b2
+      md5: 373175da8ba854153112497d04d50916
       size: 4029
     - path: reports/evaluate_metrics.json
       hash: md5
@@ -279,12 +279,12 @@ stages:
       size: 172
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 1c7b294b43fcbe704dcec8cbfe933d05
-      size: 1991
+      md5: 689d86d474683392c8cc6ebcef9bf5af
+      size: 1791
     - path: reports/interpret_report.md
       hash: md5
-      md5: c81fb4e74c9ab6e4b28a4277917aa863
-      size: 1408
+      md5: 68da88babb32cc627dbc2f4edace11aa
+      size: 1675
     - path: src/store.py
       hash: md5
       md5: 26003a5f06264dd2f61613bcc0d27286
@@ -292,5 +292,5 @@ stages:
     outs:
     - path: data/seed.sql
       hash: md5
-      md5: 04c82ca9f821a28938545203c8469a1d
-      size: 26965
+      md5: 78640cc69716016fe2e850729ef20436
+      size: 27032

@@ -15,7 +15,7 @@ from config import (
     FIGURES_DIR,
     get_params
 )
-from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
 
 logger = get_logger("eda")
@@ -95,7 +95,6 @@ def main():
     ax1.set_ylabel('')
     fig1.tight_layout()
     save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"), dpi=PLOT_DPI)
-    img_prov_b64 = generate_base64_plot(fig1, dpi=PLOT_DPI)
 
     # Chart 2: Top Regencies by Nilai Transaksi
     fig2, ax2 = plt.subplots(figsize=(10, 5))
@@ -106,7 +105,6 @@ def main():
     ax2.set_ylabel('')
     fig2.tight_layout()
     save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"), dpi=PLOT_DPI)
-    img_reg_b64 = generate_base64_plot(fig2, dpi=PLOT_DPI)
 
     # Save metrics
     metrics = {
@@ -160,10 +158,10 @@ Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES ber
 ## Visualisasi Analisis Eksplorasi Data
 
 ### 1. Distribusi Koperasi di Tingkat Provinsi
-<img src="data:image/png;base64,{img_prov_b64}" alt="10 Provinsi dengan Koperasi Terbanyak" width="300">
+<img src="figures/eda_top_provinces.png" alt="10 Provinsi dengan Koperasi Terbanyak" width="300">
 
 ### 2. Nilai Transaksi di Tingkat Kabupaten/Kota
-<img src="data:image/png;base64,{img_reg_b64}" alt="10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi" width="300">
+<img src="figures/eda_top_regencies_transaksi.png" alt="10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi" width="300">
 
 ## Statistik Deskriptif Tingkat Provinsi
 Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Provinsi:
