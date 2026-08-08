@@ -4,9 +4,6 @@ import sys
 from bs4 import BeautifulSoup
 from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
 
-# Ensure src/ is in sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from utils.log_utils import get_logger
 
 # Konfigurasi UTF-8 untuk output terminal

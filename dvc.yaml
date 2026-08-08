@@ -8,10 +8,6 @@ stages:
     params:
       - scrape.target_url
       - scrape.table_index
-      - scrape.playwright.headless
-      - scrape.playwright.width
-      - scrape.playwright.height
-      - scrape.playwright.user_agent
     outs:
       - data/raw/scraped_provinces.csv
 
@@ -21,16 +17,11 @@ stages:
     deps:
       - src/scrape_regencies.py
       - src/utils/scraper_utils.py
+      - data/raw/scraped_provinces.csv
     params:
       - scrape.base_url_template
       - scrape.table_index
       - scrape.max_workers
-      - scrape.start_province_id
-      - scrape.end_province_id
-      - scrape.playwright.headless
-      - scrape.playwright.width
-      - scrape.playwright.height
-      - scrape.playwright.user_agent
     outs:
       - data/raw/scraped_regencies.csv
 

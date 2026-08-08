@@ -1,37 +1,60 @@
 import os
-import sys
 import time
+import csv
+import dvc.api
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from config import RAW_REGENCIES_CSV, get_params
+from config import RAW_REGENCIES_CSV, RAW_PROVINCES_CSV
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 from utils.log_utils import get_logger
 
 logger = get_logger("scrape_regencies")
-params = get_params('scrape')
+params = dvc.api.params_show().get('scrape', {})
 
 MAX_WORKERS = params.get('max_workers', 4)
-START_PROVINCE_ID = params.get('start_province_id', 1)
-END_PROVINCE_ID = params.get('end_province_id', 38)
 TABLE_INDEX = params.get('table_index', 2)
 BASE_URL_TEMPLATE = params.get('base_url_template', "https://simkopdes.go.id/pers/dashboard/district/{id}")
 
+def load_scraped_province_ids():
+    prov_ids = []
+    from config import GEO_PROVINCES_JSON
+    import json
+    
+    geo_id_map = {}
+    if os.path.exists(GEO_PROVINCES_JSON):
+        try:
+            with open(GEO_PROVINCES_JSON, encoding='utf-8') as f:
+                prov_data = json.load(f)
+                geo_id_map = {p['name'].strip().upper(): int(p['province_id']) for p in prov_data if 'name' in p}
+        except Exception as e:
+            logger.error(f"Gagal memuat province.json untuk resolusi ID: {e}")
+
+    if os.path.exists(RAW_PROVINCES_CSV):
+        try:
+            with open(RAW_PROVINCES_CSV, encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                header = next(reader, None)
+                for row in reader:
+                    if not row or len(row) < 2:
+                        continue
+                    name = row[1].strip().upper()
+                    if name.lower() == "no data":
+                        continue
+                    geo_id = geo_id_map.get(name)
+                    if geo_id is not None:
+                        prov_ids.append(geo_id)
+                    else:
+                        logger.warning(f"Province name '{name}' dari scraped_provinces.csv tidak ditemukan di province.json!")
+        except Exception as e:
+            logger.error(f"Gagal membaca province IDs dari {RAW_PROVINCES_CSV}: {e}")
+    return prov_ids
+
 def scrape_single_province(prov_id):
     target_url = BASE_URL_TEMPLATE.format(id=prov_id)
-    playwright_config = params.get('playwright', {})
-    headless = playwright_config.get('headless', True)
-    width = playwright_config.get('width', 1280)
-    height = playwright_config.get('height', 800)
-    user_agent = playwright_config.get('user_agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless)
-        page = browser.new_page(
-            viewport={'width': width, 'height': height},
-            user_agent=user_agent
-        )
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
         try:
             headers, rows = scrape_table_with_pagination(page, target_url, TABLE_INDEX)
             browser.close()
@@ -41,7 +64,13 @@ def scrape_single_province(prov_id):
             raise e
 
 def main():
-    logger.info(f"Memulai Scraping Data Kabupaten/Kota ID {START_PROVINCE_ID}-{END_PROVINCE_ID} Parallel ({MAX_WORKERS} Workers)...")
+    prov_ids = load_scraped_province_ids()
+    if not prov_ids:
+        logger.warning("Tidak ada province ID yang terdeteksi untuk di-scrape.")
+        save_to_csv(RAW_REGENCIES_CSV, [], [])
+        return
+
+    logger.info(f"Memulai Scraping Data Kabupaten/Kota untuk ID: {prov_ids} Parallel ({MAX_WORKERS} Workers)...")
     logger.info(f"Output CSV : {RAW_REGENCIES_CSV}")
     start_time = time.time()
 
@@ -51,7 +80,7 @@ def main():
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {
             executor.submit(scrape_single_province, prov_id): prov_id
-            for prov_id in range(START_PROVINCE_ID, END_PROVINCE_ID + 1)
+            for prov_id in prov_ids
         }
 
         for future in as_completed(futures):
@@ -61,13 +90,13 @@ def main():
                 if not global_headers and headers:
                     global_headers = ['Province_ID'] + headers
                 prov_results[p_id] = rows
-                logger.info(f"[{p_id}/{END_PROVINCE_ID}] Selesai -> ({len(rows)} baris).")
+                logger.info(f"[{p_id}] Selesai -> ({len(rows)} baris).")
             except Exception as e:
-                logger.error(f"[{prov_id}/{END_PROVINCE_ID}] Error: {str(e)}")
+                logger.error(f"[{prov_id}] Error: {str(e)}")
 
     combined_rows = []
     seen_combined = set()
-    for prov_id in range(START_PROVINCE_ID, END_PROVINCE_ID + 1):
+    for prov_id in prov_ids:
         rows = prov_results.get(prov_id, [])
         for r in rows:
             row_with_id = [prov_id] + r

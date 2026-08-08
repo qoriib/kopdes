@@ -5,6 +5,7 @@ import pickle
 import pandas as pd
 from sklearn.cluster import KMeans
 
+import dvc.api
 from config import (
     SCALED_FEATURES_CSV,
     PREPROCESS_META_JSON,
@@ -12,13 +13,12 @@ from config import (
     MODEL_PKL,
     CLUSTERED_REGENCIES_CSV,
     MODEL_DIR,
-    DATA_MODEL_DIR,
-    get_params
+    DATA_MODEL_DIR
 )
 from utils.log_utils import get_logger
 
 logger = get_logger("model")
-params = get_params('model')
+params = dvc.api.params_show().get('model', {})
 
 RANDOM_STATE = params.get('random_state', 42)
 N_INIT = params.get('n_init', 10)

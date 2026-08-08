@@ -6,18 +6,18 @@ import urllib.request
 import urllib.error
 import pandas as pd
 
+import dvc.api
 from config import (
     CLUSTERED_REGENCIES_CSV,
     MODEL_METRICS_JSON,
     AI_REPORT_MD,
-    AI_LABELS_JSON,
-    get_params
+    AI_LABELS_JSON
 )
 from utils.env_utils import load_env
 from utils.log_utils import get_logger
 
 logger = get_logger("interpret")
-params = get_params('interpret')
+params = dvc.api.params_show().get('interpret', {})
 
 MODEL_NAME = params.get('model', "@cf/openai/gpt-oss-120b")
 MAX_TOKENS = params.get('max_tokens', 3000)

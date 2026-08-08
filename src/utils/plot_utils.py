@@ -1,12 +1,7 @@
 import os
-import sys
 import io
 import base64
 import matplotlib.pyplot as plt
-
-# Ensure src/ is in sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from utils.log_utils import get_logger
 
 logger = get_logger("plot_utils")

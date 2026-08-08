@@ -6,20 +6,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import dvc.api
 from config import (
     TRANSFORMED_PROVINCES_CSV,
     TRANSFORMED_REGENCIES_CSV,
     METRICS_JSON,
     EDA_SUMMARY_MD,
     REPORTS_DIR,
-    FIGURES_DIR,
-    get_params
+    FIGURES_DIR
 )
 from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
 
 logger = get_logger("eda")
-params = get_params('eda')
+params = dvc.api.params_show().get('eda', {})
 
 TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
 TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 5)

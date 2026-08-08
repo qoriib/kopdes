@@ -17,9 +17,6 @@ import re
 import subprocess
 import argparse
 
-# Ensure src/ is in sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from utils.plot_utils import file_to_base64
 from utils.log_utils import get_logger
 

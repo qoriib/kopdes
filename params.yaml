@@ -3,12 +3,7 @@ scrape:
   base_url_template: "https://simkopdes.go.id/pers/dashboard/district/{id}"
   table_index: 2
   max_workers: 5
-  start_province_id: 1
-  end_province_id: 38
   playwright:
-    headless: true
-    width: 1280
-    height: 800
     user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 eda:

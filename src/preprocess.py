@@ -9,6 +9,7 @@ from kneed import KneeLocator
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import dvc.api
 from config import (
     TRANSFORMED_REGENCIES_CSV,
     SCALED_FEATURES_CSV,
@@ -16,8 +17,7 @@ from config import (
     PREPROCESS_REPORT_MD,
     PREPROCESS_DIR,
     REPORTS_DIR,
-    FIGURES_DIR,
-    get_params
+    FIGURES_DIR
 )
 from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
@@ -30,7 +30,7 @@ FEATURE_COLUMNS = [
     'latitude', 'longitude'
 ]
 
-params = get_params('preprocess')
+params = dvc.api.params_show().get('preprocess', {})
 
 MIN_K = params.get('min_k', 2)
 MAX_K = params.get('max_k', 8)

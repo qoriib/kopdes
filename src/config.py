@@ -1,14 +1,4 @@
 import os
-import sys
-import yaml
-import matplotlib
-
-# Set stdout to UTF-8
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
-
-# Headless matplotlib configuration
-matplotlib.use('Agg')
 
 # Directories
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -49,15 +39,3 @@ AI_LABELS_JSON = os.path.join(REPORTS_DIR, "interpret_labels.json")
 SEED_SQL = os.path.join(DATA_DIR, "seed.sql")
 
 PARAMS_FILE = os.path.join(BASE_DIR, "params.yaml")
-
-def get_params(stage_name):
-    """
-    Load parameter configs safely from params.yaml for a given stage.
-    """
-    if os.path.exists(PARAMS_FILE):
-        try:
-            with open(PARAMS_FILE, encoding='utf-8') as f:
-                return yaml.safe_load(f).get(stage_name, {})
-        except Exception:
-            pass
-    return {}

@@ -1,16 +1,14 @@
 import os
-import sys
-import json
 import csv
-import re
-
+import json
+import time
 from config import (
     RAW_PROVINCES_CSV,
     RAW_REGENCIES_CSV,
-    GEO_PROVINCES_JSON,
-    GEO_REGENCIES_JSON,
     TRANSFORMED_PROVINCES_CSV,
-    TRANSFORMED_REGENCIES_CSV
+    TRANSFORMED_REGENCIES_CSV,
+    GEO_PROVINCES_JSON,
+    GEO_REGENCIES_JSON
 )
 from utils.scraper_utils import save_to_csv
 from utils.log_utils import get_logger
@@ -20,18 +18,17 @@ logger = get_logger("transform")
 def parse_num(val):
     if val is None:
         return 0
+    import re
     s = str(val).strip()
     s = re.sub(r'[Rp\s]', '', s)
     if not s or s == '-':
         return 0
-
     if '.' in s and ',' in s:
         s = s.replace('.', '').replace(',', '.')
     elif '.' in s and len(s.split('.')[-1]) == 3:
         s = s.replace('.', '')
     elif ',' in s:
         s = s.replace(',', '.')
-
     try:
         f = float(s)
         return int(f) if f.is_integer() else f
@@ -50,7 +47,8 @@ def load_geo_json(filepath):
 def transform_provinces():
     logger.info(f"Transforming Data Provinsi dari {RAW_PROVINCES_CSV}...")
     geo_data = load_geo_json(GEO_PROVINCES_JSON)
-    geo_map = {int(p['province_id']): (p.get('latitude', 0.0), p.get('longitude', 0.0)) for p in geo_data if 'province_id' in p}
+    # Map name -> (province_id, latitude, longitude)
+    geo_map = {p['name'].strip().upper(): (int(p['province_id']), p.get('latitude', 0.0), p.get('longitude', 0.0)) for p in geo_data if 'name' in p}
 
     transformed_rows = []
     headers = [
@@ -67,7 +65,6 @@ def transform_provinces():
         for row in reader:
             if not row or len(row) < 2:
                 continue
-            prov_id = parse_num(row[0])
             name = str(row[1]).strip()
             jml = parse_num(row[2])
             nib = parse_num(row[3])
@@ -81,10 +78,13 @@ def transform_provinces():
             lahan_pct = parse_num(row[11]) if len(row) > 11 else 0
             gerai_pct = parse_num(row[12]) if len(row) > 12 else 0
 
-            lat, lon = geo_map.get(prov_id, (0.0, 0.0))
+            # Match by name to resolve geographic ID and coordinates
+            actual_prov_id, lat, lon = geo_map.get(name.upper(), (0, 0.0, 0.0))
+            if actual_prov_id == 0:
+                logger.warning(f"Province name '{name}' not matched in province.json!")
 
             transformed_rows.append([
-                prov_id, name, jml, nib, npwp, rat, pokok, wajib,
+                actual_prov_id, name, jml, nib, npwp, rat, pokok, wajib,
                 vol, nilai, lahan, lahan_pct, gerai_pct, lat, lon
             ])
 
@@ -94,14 +94,8 @@ def transform_provinces():
 def transform_regencies():
     logger.info(f"Transforming Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
+    # Match using (province_id, regency_no) directly from geographic-aligned JSON
     geo_map = {(int(r['province_id']), int(r['regency_no'])): (r.get('latitude', 0.0), r.get('longitude', 0.0)) for r in geo_data if 'province_id' in r and 'regency_no' in r}
-
-    # Map sequential scraped Province_ID to actual province_id from scraped_provinces/province.json
-    PROV_ID_MAP = {
-        1: 1,   # Aceh -> Aceh (1)
-        2: 38,  # Sumatera Utara -> Sumatera Utara (38)
-        3: 36   # Sumatera Barat -> Sumatera Barat (36)
-    }
 
     transformed_rows = []
     headers = [
@@ -129,14 +123,11 @@ def transform_regencies():
             vol = parse_num(row[9])
             nilai = parse_num(row[10])
 
-            # Coordinate lookup uses the original prov_id (1, 2, 3) mapped inside regency.json
+            # Directly lookup coordinates since IDs are now aligned
             lat, lon = geo_map.get((prov_id, reg_no), (0.0, 0.0))
 
-            # Database and transformed output use the actual province_id (1, 38, 36)
-            actual_prov_id = PROV_ID_MAP.get(prov_id, prov_id)
-
             transformed_rows.append([
-                actual_prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
+                prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
                 wajib, vol, nilai, lat, lon
             ])
 
