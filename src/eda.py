@@ -1,59 +1,28 @@
 import os
 import sys
 import json
-import base64
-import io
-import yaml
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+from config import (
+    TRANSFORMED_PROVINCES_CSV,
+    TRANSFORMED_REGENCIES_CSV,
+    METRICS_JSON,
+    EDA_SUMMARY_MD,
+    REPORTS_DIR,
+    FIGURES_DIR,
+    get_params
+)
+from utils.plot_utils import generate_base64_plot, save_plot_to_file
 
-# Set matplotlib to run without GUI (headless)
-import matplotlib
-matplotlib.use('Agg')
-
-TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
-REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
-
-TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.csv")
-TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
-
-METRICS_JSON = os.path.join(REPORTS_DIR, "eda_metrics.json")
-EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
-
-FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
-
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('eda', {})
-    except Exception:
-        pass
+params = get_params('eda')
 
 TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
 TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 5)
 PLOT_DPI = params.get('plot_dpi', 120)
 PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
-
-def generate_base64_plot(fig):
-    buf = io.BytesIO()
-    fig.savefig(buf, format='png', dpi=PLOT_DPI, bbox_inches='tight')
-    buf.seek(0)
-    img_str = base64.b64encode(buf.read()).decode('utf-8')
-    plt.close(fig)
-    return img_str
-
-def save_plot_to_file(fig, filepath):
-    """Save a matplotlib figure to a PNG file."""
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    fig.savefig(filepath, format='png', dpi=PLOT_DPI, bbox_inches='tight')
-    print(f"[SAVED] Plot -> {filepath}")
 
 def main():
     print("[+] Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
@@ -123,8 +92,8 @@ def main():
     ax1.set_xlabel('Jumlah Koperasi')
     ax1.set_ylabel('')
     fig1.tight_layout()
-    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
-    img_prov_b64 = generate_base64_plot(fig1)
+    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"), dpi=PLOT_DPI)
+    img_prov_b64 = generate_base64_plot(fig1, dpi=PLOT_DPI)
 
     # Chart 2: Top Regencies by Nilai Transaksi
     fig2, ax2 = plt.subplots(figsize=(10, 5))
@@ -134,8 +103,8 @@ def main():
     ax2.set_xlabel('Nilai Transaksi (Juta Rp)')
     ax2.set_ylabel('')
     fig2.tight_layout()
-    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
-    img_reg_b64 = generate_base64_plot(fig2)
+    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"), dpi=PLOT_DPI)
+    img_reg_b64 = generate_base64_plot(fig2, dpi=PLOT_DPI)
 
     # Save metrics
     metrics = {

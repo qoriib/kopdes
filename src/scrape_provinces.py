@@ -1,24 +1,17 @@
 import os
 import sys
 import time
-import yaml
 from playwright.sync_api import sync_playwright
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from config import RAW_PROVINCES_CSV, get_params
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('scrape', {})
-    except Exception:
-        pass
+params = get_params('scrape')
 
 TARGET_URL = params.get('target_url', "https://simkopdes.go.id/pers/dashboard")
 TABLE_INDEX = params.get('table_index', 2)
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_provinces.csv")
+OUTPUT_CSV = RAW_PROVINCES_CSV
 
 def main():
     print("[+] Memulai Scraping Data Provinsi via Playwright...")

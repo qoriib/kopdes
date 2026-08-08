@@ -1,34 +1,22 @@
 import os
 import sys
 import json
-import yaml
 import pickle
 import pandas as pd
 from sklearn.cluster import KMeans
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+from config import (
+    SCALED_FEATURES_CSV,
+    PREPROCESS_META_JSON,
+    TRANSFORMED_REGENCIES_CSV,
+    MODEL_PKL,
+    CLUSTERED_REGENCIES_CSV,
+    MODEL_DIR,
+    DATA_MODEL_DIR,
+    get_params
+)
 
-TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
-PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
-DATA_MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "model")
-
-SCALED_FEATURES_CSV = os.path.join(PREPROCESS_DIR, "scaled_features.csv")
-PREPROCESS_META_JSON = os.path.join(PREPROCESS_DIR, "preprocess_meta.json")
-TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
-
-MODEL_PKL = os.path.join(MODEL_DIR, "kmeans_model.pkl")
-CLUSTERED_REGENCIES_CSV = os.path.join(DATA_MODEL_DIR, "clustered_regencies.csv")
-
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('model', {})
-    except Exception:
-        pass
+params = get_params('model')
 
 RANDOM_STATE = params.get('random_state', 42)
 N_INIT = params.get('n_init', 10)

@@ -1,9 +1,6 @@
 import os
 import sys
 import json
-import base64
-import io
-import yaml
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -12,21 +9,19 @@ from kneed import KneeLocator
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+from config import (
+    TRANSFORMED_REGENCIES_CSV,
+    SCALED_FEATURES_CSV,
+    PREPROCESS_META_JSON,
+    PREPROCESS_REPORT_MD,
+    PREPROCESS_DIR,
+    REPORTS_DIR,
+    FIGURES_DIR,
+    get_params
+)
+from utils.plot_utils import generate_base64_plot, save_plot_to_file
 
-# Set matplotlib to run without GUI (headless)
-import matplotlib
-matplotlib.use('Agg')
-
-TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
-PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
-REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
-
-INPUT_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
-SCALED_FEATURES_CSV = os.path.join(PREPROCESS_DIR, "scaled_features.csv")
-PREPROCESS_META_JSON = os.path.join(PREPROCESS_DIR, "preprocess_meta.json")
-PREPROCESS_REPORT_MD = os.path.join(REPORTS_DIR, "preprocess_report.md")
+INPUT_REGENCIES_CSV = TRANSFORMED_REGENCIES_CSV
 
 FEATURE_COLUMNS = [
     'jumlah_koperasi', 'koperasi_nib', 'koperasi_npwp', 'koperasi_rat',
@@ -34,16 +29,7 @@ FEATURE_COLUMNS = [
     'latitude', 'longitude'
 ]
 
-FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
-
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('preprocess', {})
-    except Exception:
-        pass
+params = get_params('preprocess')
 
 MIN_K = params.get('min_k', 2)
 MAX_K = params.get('max_k', 8)
@@ -53,20 +39,6 @@ KNEEDLE_CURVE = params.get('kneedle', {}).get('curve', 'convex')
 KNEEDLE_DIRECTION = params.get('kneedle', {}).get('direction', 'decreasing')
 FALLBACK_K = params.get('fallback_k', 3)
 PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
-
-def generate_base64_plot(fig):
-    buf = io.BytesIO()
-    fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
-    buf.seek(0)
-    img_str = base64.b64encode(buf.read()).decode('utf-8')
-    plt.close(fig)
-    return img_str
-
-def save_plot_to_file(fig, filepath):
-    """Save a matplotlib figure to a PNG file."""
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
-    print(f"[SAVED] Plot -> {filepath}")
 
 def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     k_range = list(range(min_k, max_k + 1))

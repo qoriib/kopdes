@@ -4,19 +4,14 @@ import json
 import csv
 import re
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
-
-RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
-TRANSFORM_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "transform")
-
-RAW_PROVINCES_CSV = os.path.join(RAW_DIR, "scraped_provinces.csv")
-RAW_REGENCIES_CSV = os.path.join(RAW_DIR, "scraped_regencies.csv")
-GEO_PROVINCES_JSON = os.path.join(RAW_DIR, "province.json")
-GEO_REGENCIES_JSON = os.path.join(RAW_DIR, "regency.json")
-
-TRANSFORMED_PROVINCES_CSV = os.path.join(TRANSFORM_DIR, "transformed_provinces.csv")
-TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.csv")
+from config import (
+    RAW_PROVINCES_CSV,
+    RAW_REGENCIES_CSV,
+    GEO_PROVINCES_JSON,
+    GEO_REGENCIES_JSON,
+    TRANSFORMED_PROVINCES_CSV,
+    TRANSFORMED_REGENCIES_CSV
+)
 
 def parse_num(val):
     if val is None:

@@ -1,8 +1,6 @@
 import os
 import sys
 import json
-import base64
-import io
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,38 +8,15 @@ import seaborn as sns
 from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 from sklearn.decomposition import PCA
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
-
-# Set matplotlib to run without GUI (headless)
-import matplotlib
-matplotlib.use('Agg')
-
-PREPROCESS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "preprocess")
-DATA_MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "model")
-REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "reports")
-
-SCALED_FEATURES_CSV = os.path.join(PREPROCESS_DIR, "scaled_features.csv")
-CLUSTERED_REGENCIES_CSV = os.path.join(DATA_MODEL_DIR, "clustered_regencies.csv")
-
-MODEL_METRICS_JSON = os.path.join(REPORTS_DIR, "evaluate_metrics.json")
-CLUSTERING_REPORT_MD = os.path.join(REPORTS_DIR, "evaluate_report.md")
-
-FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
-
-def generate_base64_plot(fig):
-    buf = io.BytesIO()
-    fig.savefig(buf, format='png', dpi=120, bbox_inches='tight')
-    buf.seek(0)
-    img_str = base64.b64encode(buf.read()).decode('utf-8')
-    plt.close(fig)
-    return img_str
-
-def save_plot_to_file(fig, filepath):
-    """Save a matplotlib figure to a PNG file."""
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
-    fig.savefig(filepath, format='png', dpi=120, bbox_inches='tight')
-    print(f"[SAVED] Plot -> {filepath}")
+from config import (
+    SCALED_FEATURES_CSV,
+    CLUSTERED_REGENCIES_CSV,
+    MODEL_METRICS_JSON,
+    CLUSTERING_REPORT_MD,
+    REPORTS_DIR,
+    FIGURES_DIR
+)
+from utils.plot_utils import generate_base64_plot, save_plot_to_file
 
 def main():
     print("[+] Memulai Stage Evaluasi Model Clustering yang Dikembangkan...")

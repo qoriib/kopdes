@@ -1,28 +1,21 @@
 import os
 import sys
 import time
-import yaml
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from config import RAW_REGENCIES_CSV, get_params
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('scrape', {})
-    except Exception:
-        pass
+params = get_params('scrape')
 
 MAX_WORKERS = params.get('max_workers', 4)
 START_PROVINCE_ID = params.get('start_province_id', 1)
 END_PROVINCE_ID = params.get('end_province_id', 38)
 TABLE_INDEX = params.get('table_index', 2)
 BASE_URL_TEMPLATE = params.get('base_url_template', "https://simkopdes.go.id/pers/dashboard/district/{id}")
-OUTPUT_CSV = os.path.join(os.path.dirname(__file__), "..", "data", "raw", "scraped_regencies.csv")
+OUTPUT_CSV = RAW_REGENCIES_CSV
 
 def scrape_single_province(prov_id):
     target_url = BASE_URL_TEMPLATE.format(id=prov_id)

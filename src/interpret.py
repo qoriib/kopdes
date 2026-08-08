@@ -4,30 +4,18 @@ import json
 import re
 import urllib.request
 import urllib.error
-import yaml
 import pandas as pd
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+from config import (
+    CLUSTERED_REGENCIES_CSV,
+    MODEL_METRICS_JSON,
+    AI_REPORT_MD,
+    AI_LABELS_JSON,
+    get_params
+)
+from utils.env_utils import load_env
 
-def load_env():
-    env_file = os.path.join(os.path.dirname(__file__), "..", ".env")
-    if os.path.exists(env_file):
-        with open(env_file, encoding='utf-8') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, v = line.split("=", 1)
-                    os.environ[k.strip()] = v.strip()
-
-PARAMS_FILE = os.path.join(os.path.dirname(__file__), "..", "params.yaml")
-params = {}
-if os.path.exists(PARAMS_FILE):
-    try:
-        with open(PARAMS_FILE, encoding='utf-8') as f:
-            params = yaml.safe_load(f).get('interpret', {})
-    except Exception:
-        pass
+params = get_params('interpret')
 
 MODEL_NAME = params.get('model', "@cf/openai/gpt-oss-120b")
 MAX_TOKENS = params.get('max_tokens', 3000)
@@ -63,10 +51,10 @@ def main():
         print("[!] Error: CF_ACCOUNT_ID atau CF_API_TOKEN tidak ditemukan di environment.")
         sys.exit(1)
         
-    data_path = os.path.join(os.path.dirname(__file__), "..", "data", "model", "clustered_regencies.csv")
-    metrics_path = os.path.join(os.path.dirname(__file__), "..", "reports", "evaluate_metrics.json")
-    output_path = os.path.join(os.path.dirname(__file__), "..", "reports", "interpret_report.md")
-    labels_output_path = os.path.join(os.path.dirname(__file__), "..", "reports", "interpret_labels.json")
+    data_path = CLUSTERED_REGENCIES_CSV
+    metrics_path = MODEL_METRICS_JSON
+    output_path = AI_REPORT_MD
+    labels_output_path = AI_LABELS_JSON
     
     if not os.path.exists(data_path) or not os.path.exists(metrics_path):
         print("[!] Error: Data atau metrik evaluasi tidak ditemukan.")
