@@ -45,7 +45,7 @@ def cml_publish_image(filepath):
 
     try:
         res = subprocess.run(
-            ["cml", "publish", filepath],
+            ["cml", "publish", filepath, "--md"],
             capture_output=True,
             text=True,
             check=True

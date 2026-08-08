@@ -1,0 +1,7 @@
+{
+  "name": "simkopdes",
+  "pages_build_output_dir": "dist",
+  "vars": {
+    "VITE_API_URL": "https://backend.klikolio-creative.workers.dev/api"
+  }
+}

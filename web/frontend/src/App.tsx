@@ -1,31 +1,21 @@
 import { useState, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { 
-  LayoutDashboard, 
-  Map, 
   Building2, 
-  BrainCircuit, 
-  Search, 
-  Filter, 
-  ChevronLeft, 
-  ChevronRight,
-  TrendingUp, 
   CheckCircle,
+  TrendingUp, 
   FileSpreadsheet,
   Award,
-  BookOpen
+  BookOpen,
+  Sun,
+  Moon
 } from 'lucide-react'
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  Cell
-} from 'recharts'
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
-const API_BASE_URL = 'http://127.0.0.1:8787/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://backend.klikolio-creative.workers.dev/api'
 
 // Interfaces
 interface SummaryData {
@@ -66,55 +56,44 @@ interface Regency {
   cluster_label: number
 }
 
-interface ClusterProfile {
-  cluster_label: number
-  count: number
-  avg_koperasi: number
-  avg_nib: number
-  avg_npwp: number
-  avg_rat: number
-  avg_nilai_transaksi: number
-}
-
 interface AIReport {
   report_text: string
   labels: Record<string, { label_name: string; description: string }>
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'provinces' | 'regencies' | 'ai'>('overview')
   const [summary, setSummary] = useState<SummaryData | null>(null)
   const [provinces, setProvinces] = useState<Province[]>([])
   const [regencies, setRegencies] = useState<Regency[]>([])
-  const [clusterProfiles, setClusterProfiles] = useState<ClusterProfile[]>([])
   const [aiReport, setAiReport] = useState<AIReport | null>(null)
   const [loading, setLoading] = useState(true)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
-  // Filters for Regencies
-  const [regencySearch, setRegencySearch] = useState('')
-  const [regencyProvinceFilter, setRegencyProvinceFilter] = useState('')
-  const [regencyClusterFilter, setRegencyClusterFilter] = useState('')
-  const [regencyPage, setRegencyPage] = useState(1)
-  const [regencyPagination, setRegencyPagination] = useState({ total_pages: 1, total: 0 })
-
-  // Filters for Provinces
-  const [provinceSearch, setProvinceSearch] = useState('')
+  // Sync theme with HTML root class list
+  useEffect(() => {
+    const root = window.document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+  }, [theme])
 
   // Fetch initial summary & datasets
   useEffect(() => {
     async function fetchInitialData() {
       try {
         setLoading(true)
-        const [sumRes, provRes, profilesRes, aiRes] = await Promise.all([
+        const [sumRes, provRes, regRes, aiRes] = await Promise.all([
           fetch(`${API_BASE_URL}/summary`).then(r => r.json()),
           fetch(`${API_BASE_URL}/provinces`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/cluster-profiles`).then(r => r.json()),
+          fetch(`${API_BASE_URL}/regencies?limit=5`).then(r => r.json()),
           fetch(`${API_BASE_URL}/ai-report`).then(r => r.json())
         ])
 
         if (sumRes.success) setSummary(sumRes.data)
         if (provRes.success) setProvinces(provRes.data)
-        if (profilesRes.success) setClusterProfiles(profilesRes.data)
+        if (regRes.success) setRegencies(regRes.data)
         if (aiRes.success) setAiReport(aiRes.data)
       } catch (err) {
         console.error('Failed to fetch dashboard data:', err)
@@ -125,476 +104,245 @@ export default function App() {
     fetchInitialData()
   }, [])
 
-  // Fetch Regencies on filter/page change
-  useEffect(() => {
-    async function fetchRegencies() {
-      try {
-        const queryParams = new URLSearchParams({
-          page: regencyPage.toString(),
-          limit: '10',
-          search: regencySearch,
-          province_id: regencyProvinceFilter,
-          cluster_label: regencyClusterFilter
-        })
-        const res = await fetch(`${API_BASE_URL}/regencies?${queryParams}`).then(r => r.json())
-        if (res.success) {
-          setRegencies(res.data)
-          setRegencyPagination(res.pagination)
-        }
-      } catch (err) {
-        console.error('Failed to fetch regencies:', err)
-      }
-    }
-    fetchRegencies()
-  }, [regencyPage, regencySearch, regencyProvinceFilter, regencyClusterFilter])
+  // Sort and pick top 5 provinces
+  const topProvinces = [...provinces]
+    .sort((a, b) => b.jumlah_koperasi - a.jumlah_koperasi)
+    .slice(0, 5)
 
-  // Reset pagination on filter change
-  useEffect(() => {
-    setRegencyPage(1)
-  }, [regencySearch, regencyProvinceFilter, regencyClusterFilter])
-
-  // Filtered provinces list
-  const filteredProvinces = provinces.filter(p => 
-    p.province_name.toLowerCase().includes(provinceSearch.toLowerCase())
-  )
-
-  // Chart configuration
-  const clusterColors = ['#3b82f6', '#8b5cf6', '#f59e0b'] // Blue, Purple, Orange
-  const chartData = clusterProfiles.map(p => ({
-    name: `Klaster ${p.cluster_label}`,
-    count: p.count,
-    avg_transaksi: p.avg_nilai_transaksi / 1e6 // in million IDR
-  }))
+  // Pick top 5 regencies by nilai transaksi
+  const topRegencies = [...regencies]
+    .sort((a, b) => b.nilai_transaksi - a.nilai_transaksi)
+    .slice(0, 5)
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-[#e2e8f0] flex flex-col font-sans">
-      {/* Header */}
-      <header className="border-b border-[#334155] bg-[#1e293b]/50 backdrop-blur-md sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <LayoutDashboard className="w-6 h-6 text-white" />
-          </div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-300">
+      {/* Content Area */}
+      <main className="flex-1 p-6 py-10 space-y-8 max-w-6xl w-full mx-auto">
+        {/* Minimalist Top Bar */}
+        <div className="flex items-center justify-between border-b pb-4 border-border">
           <div>
-            <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              SIMKOPDES
-            </h1>
-            <p className="text-xs text-[#94a3b8]">Sistem Analisis & Klasterisasi Koperasi Desa</p>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">SIMKOPDES</h1>
+            <p className="text-xs text-muted-foreground">Sistem Analisis & Klasterisasi Koperasi Desa</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="text-[10px] py-0.5 px-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5 animate-pulse"></span>
+              Live D1
+            </Badge>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 rounded-lg"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            >
+              {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            </Button>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Live Sync D1
-        </div>
-      </header>
 
-      {/* Main Layout */}
-      <div className="flex-1 flex flex-col lg:flex-row">
-        {/* Sidebar */}
-        <aside className="w-full lg:w-64 border-r border-[#334155] bg-[#0f172a]/80 p-4 space-y-2 flex flex-row lg:flex-col items-center lg:items-stretch overflow-x-auto lg:overflow-x-visible">
-          {[
-            { id: 'overview', name: 'Ringkasan', icon: LayoutDashboard },
-            { id: 'provinces', name: 'Provinsi', icon: Map },
-            { id: 'regencies', name: 'Kabupaten/Kota', icon: Building2 },
-            { id: 'ai', name: 'Analisis AI', icon: BrainCircuit }
-          ].map(tab => {
-            const Icon = tab.icon
-            const isActive = activeTab === tab.id
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                  isActive 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/15 font-semibold' 
-                    : 'text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#1e293b]/40'
-                }`}
-              >
-                <Icon className="w-5 h-5 shrink-0" />
-                {tab.name}
-              </button>
-            )
-          })}
-        </aside>
-
-        {/* Content Area */}
-        <main className="flex-1 p-6 space-y-6 overflow-y-auto max-w-7xl w-full mx-auto">
-          {loading ? (
-            <div className="h-[60vh] flex flex-col items-center justify-center gap-3">
-              <div className="w-12 h-12 rounded-full border-4 border-slate-700 border-t-blue-500 animate-spin"></div>
-              <p className="text-[#94a3b8] text-sm font-medium">Memuat data analisis...</p>
+        {loading ? (
+          <div className="h-[50vh] flex flex-col items-center justify-center gap-3">
+            <div className="w-8 h-8 rounded-full border-2 border-muted border-t-primary animate-spin"></div>
+            <p className="text-muted-foreground text-xs">Memuat data analisis...</p>
+          </div>
+        ) : (
+          <>
+            {/* Metric Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { 
+                  title: 'Total Koperasi', 
+                  value: summary?.total_koperasi.toLocaleString(), 
+                  sub: `${summary?.total_provinces} Provinsi / ${summary?.total_regencies} Kota`, 
+                  icon: Building2 
+                },
+                { 
+                  title: 'Koperasi NIB', 
+                  value: summary ? `${((summary.total_nib / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
+                  sub: `${summary?.total_nib.toLocaleString()} Bersertifikat`, 
+                  icon: CheckCircle 
+                },
+                { 
+                  title: 'Koperasi RAT', 
+                  value: summary ? `${((summary.total_rat / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
+                  sub: `${summary?.total_rat.toLocaleString()} Aktif RAT`, 
+                  icon: TrendingUp 
+                },
+                { 
+                  title: 'Total Transaksi', 
+                  value: summary ? `Rp ${(summary.total_nilai_transaksi / 1e12).toFixed(2)} T` : 'Rp 0', 
+                  sub: 'Volume usaha teragregasi', 
+                  icon: FileSpreadsheet 
+                }
+              ].map((card, idx) => {
+                const Icon = card.icon
+                return (
+                  <Card key={idx} className="shadow-none border-border">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <span className="text-xs font-medium text-muted-foreground">{card.title}</span>
+                      <Icon className="w-4 h-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-xl font-bold tracking-tight text-foreground">{card.value}</div>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{card.sub}</p>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
-          ) : (
-            <>
-              {/* Tab 1: Overview */}
-              {activeTab === 'overview' && (
-                <div className="space-y-6">
-                  {/* Summary Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[
-                      { 
-                        title: 'Total Koperasi', 
-                        value: summary?.total_koperasi.toLocaleString(), 
-                        sub: `${summary?.total_provinces} Provinsi / ${summary?.total_regencies} Kota`, 
-                        icon: Building2, 
-                        color: 'from-blue-500/20 to-indigo-500/20 text-blue-400' 
-                      },
-                      { 
-                        title: 'Koperasi NIB', 
-                        value: summary ? `${((summary.total_nib / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
-                        sub: `${summary?.total_nib.toLocaleString()} Koperasi bersertifikat`, 
-                        icon: CheckCircle, 
-                        color: 'from-emerald-500/20 to-teal-500/20 text-emerald-400' 
-                      },
-                      { 
-                        title: 'Koperasi RAT', 
-                        value: summary ? `${((summary.total_rat / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
-                        sub: `${summary?.total_rat.toLocaleString()} Aktif RAT (2025)`, 
-                        icon: TrendingUp, 
-                        color: 'from-purple-500/20 to-fuchsia-500/20 text-purple-400' 
-                      },
-                      { 
-                        title: 'Total Transaksi', 
-                        value: summary ? `Rp ${(summary.total_nilai_transaksi / 1e12).toFixed(2)} T` : 'Rp 0', 
-                        sub: 'Volume usaha teragregasi', 
-                        icon: FileSpreadsheet, 
-                        color: 'from-amber-500/20 to-orange-500/20 text-amber-400' 
-                      }
-                    ].map((card, idx) => {
-                      const Icon = card.icon
+
+            {/* Visual & Analytical Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Executive Report */}
+              <Card className="lg:col-span-2 shadow-none border-border">
+                <CardHeader className="flex flex-row items-center gap-2 pb-3">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  <CardTitle className="text-sm font-bold text-foreground">Laporan Analisis Eksekutif AI</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground text-xs leading-relaxed font-sans">
+                  {aiReport?.report_text ? (
+                    <ReactMarkdown 
+                      components={{
+                        h1: ({node, ...props}) => <h1 className="text-sm font-bold text-foreground mt-4 mb-2 first:mt-0" {...props} />,
+                        h2: ({node, ...props}) => <h2 className="text-xs font-bold text-foreground mt-3 mb-1" {...props} />,
+                        p: ({node, ...props}) => <p className="mb-3 last:mb-0" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 mb-3" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 mb-3" {...props} />,
+                        li: ({node, ...props}) => <li className="pl-1" {...props} />,
+                      }}
+                    >
+                      {aiReport.report_text.replace(/\\n/g, '\n')}
+                    </ReactMarkdown>
+                  ) : (
+                    'Laporan analisis interpretatif AI tidak ditemukan.'
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Model Performance & Labels */}
+              <div className="space-y-6">
+                {/* ML Performance */}
+                <Card className="shadow-none border-border">
+                  <CardHeader className="flex flex-row items-center gap-2 pb-3">
+                    <Award className="w-4 h-4 text-primary" />
+                    <CardTitle className="text-sm font-bold text-foreground">Kinerja Model ML</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 text-xs">
+                    <div className="flex justify-between items-center border-b pb-2 border-border">
+                      <span className="text-muted-foreground">Silhouette Score</span>
+                      <span className="font-semibold text-foreground">{summary?.metrics?.silhouette_score || '0.0'}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b pb-2 border-border">
+                      <span className="text-muted-foreground">Calinski-Harabasz</span>
+                      <span className="font-semibold text-foreground">{summary?.metrics?.calinski_harabasz_index || '0.0'}</span>
+                    </div>
+                    <div className="flex justify-between items-center border-b pb-2 border-border">
+                      <span className="text-muted-foreground">Davies-Bouldin</span>
+                      <span className="font-semibold text-foreground">{summary?.metrics?.davies_bouldin_index || '0.0'}</span>
+                    </div>
+                    <div className="flex justify-between items-center pb-1">
+                      <span className="text-muted-foreground">Jumlah Klaster (K)</span>
+                      <span className="font-semibold text-foreground">{summary?.metrics?.number_of_clusters || '0'}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Cluster Labels Definition */}
+                <Card className="shadow-none border-border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-bold text-foreground">Definisi Klaster</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {aiReport && Object.keys(aiReport.labels).map((key) => {
+                      const clusterLabel = parseInt(key)
+                      const item = aiReport.labels[key]
                       return (
-                        <div key={idx} className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-5 hover:border-slate-500/30 transition-all duration-300 backdrop-blur-sm relative overflow-hidden group">
-                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-transparent rounded-full -mr-6 -mt-6"></div>
-                          <div className="flex justify-between items-start mb-4">
-                            <span className="text-sm font-semibold text-[#94a3b8]">{card.title}</span>
-                            <div className={`p-2 rounded-xl bg-gradient-to-tr ${card.color}`}>
-                              <Icon className="w-5 h-5" />
-                            </div>
+                        <div key={key} className="p-3 rounded-lg border border-border bg-muted/30 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <Badge variant={clusterLabel === 0 ? "default" : clusterLabel === 1 ? "secondary" : "outline"} className="text-[8px] py-0 px-1.5 uppercase font-bold tracking-wider">
+                              Klaster {key}
+                            </Badge>
                           </div>
-                          <div className="space-y-1">
-                            <h3 className="text-2xl font-bold tracking-tight text-[#f8fafc]">{card.value}</h3>
-                            <p className="text-xs text-[#64748b]">{card.sub}</p>
-                          </div>
+                          <h4 className="font-bold text-xs text-foreground mt-1">{item.label_name}</h4>
+                          <p className="text-[10px] text-muted-foreground leading-normal">{item.description}</p>
                         </div>
                       )
                     })}
-                  </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
 
-                  {/* ML Performance & Cluster Overview */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Performance metrics */}
-                    <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Award className="w-5 h-5 text-indigo-400" />
-                          <h3 className="font-bold text-lg text-slate-100">Kinerja Model ML</h3>
-                        </div>
-                        <p className="text-sm text-[#94a3b8] mb-6">
-                          Hasil evaluasi model KMeans Clustering berdasarkan data transaksi dan profil legalitas SIMKOPDES.
-                        </p>
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center border-b border-[#334155]/40 pb-2">
-                            <span className="text-sm text-[#94a3b8]">Silhouette Score</span>
-                            <span className="text-sm font-bold text-indigo-300">{summary?.metrics?.silhouette_score || '0.0'}</span>
-                          </div>
-                          <div className="flex justify-between items-center border-b border-[#334155]/40 pb-2">
-                            <span className="text-sm text-[#94a3b8]">Calinski-Harabasz Index</span>
-                            <span className="text-sm font-bold text-indigo-300">{summary?.metrics?.calinski_harabasz_index || '0.0'}</span>
-                          </div>
-                          <div className="flex justify-between items-center border-b border-[#334155]/40 pb-2">
-                            <span className="text-sm text-[#94a3b8]">Davies-Bouldin Index</span>
-                            <span className="text-sm font-bold text-indigo-300">{summary?.metrics?.davies_bouldin_index || '0.0'}</span>
-                          </div>
-                          <div className="flex justify-between items-center pb-2">
-                            <span className="text-sm text-[#94a3b8]">Jumlah Klaster (K)</span>
-                            <span className="text-sm font-bold text-indigo-300">{summary?.metrics?.number_of_clusters || '0'}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-6 p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10 text-xs text-indigo-300">
-                        * Nilai silhouette score optimal (~0.42) mengindikasikan klasterisasi dengan struktur pengelompokan yang solid dan representatif.
-                      </div>
-                    </div>
+            {/* Top Lists Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Top Provinces */}
+              <Card className="shadow-none border-border">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-bold text-foreground">Top 5 Provinsi (Populasi Koperasi)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider pl-0">Provinsi</TableHead>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Koperasi</TableHead>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right pr-0">RAT</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody className="text-xs text-muted-foreground">
+                      {topProvinces.map((prov, idx) => (
+                        <TableRow key={prov.id || idx}>
+                          <TableCell className="font-medium text-foreground pl-0">{prov.province_name}</TableCell>
+                          <TableCell className="text-right">{prov.jumlah_koperasi.toLocaleString()}</TableCell>
+                          <TableCell className="text-right pr-0">{prov.koperasi_rat.toLocaleString()}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
-                    {/* Chart 1: Cluster Distribution */}
-                    <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6 lg:col-span-2">
-                      <h3 className="font-bold text-lg text-slate-100 mb-4">Distribusi Keanggotaan Klaster</h3>
-                      <p className="text-sm text-[#94a3b8] mb-6">
-                        Jumlah Kabupaten/Kota yang masuk ke masing-masing klaster berdasarkan KMeans.
-                      </p>
-                      <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                            <XAxis dataKey="name" stroke="#64748b" />
-                            <YAxis stroke="#64748b" />
-                            <Tooltip 
-                              contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569', borderRadius: '12px', color: '#f8fafc' }} 
-                            />
-                            <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-                              {chartData.map((_, index) => (
-                                <Cell key={`cell-${index}`} fill={clusterColors[index % clusterColors.length]} />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Avg Transaction Chart */}
-                  <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6">
-                    <h3 className="font-bold text-lg text-slate-100 mb-4">Rata-Rata Nilai Transaksi per Klaster (Juta Rp)</h3>
-                    <p className="text-sm text-[#94a3b8] mb-6">
-                      Bandingkan volume perputaran finansial dari masing-masing klaster koperasi.
-                    </p>
-                    <div className="h-72">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartData}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                          <XAxis dataKey="name" stroke="#64748b" />
-                          <YAxis stroke="#64748b" />
-                          <Tooltip 
-                            contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569', borderRadius: '12px', color: '#f8fafc' }}
-                          />
-                          <Bar dataKey="avg_transaksi" radius={[8, 8, 0, 0]}>
-                            {chartData.map((_, index) => (
-                              <Cell key={`cell-${index}`} fill={clusterColors[index % clusterColors.length]} />
-                            ))}
-                          </Bar>
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 2: Provinces */}
-              {activeTab === 'provinces' && (
-                <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6 space-y-6">
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                      <h2 className="text-lg font-bold text-slate-100">Kinerja Koperasi Tingkat Provinsi</h2>
-                      <p className="text-xs text-[#94a3b8]">Daftar 38 provinsi di Indonesia beserta rekap data koperasinya.</p>
-                    </div>
-                    <div className="relative w-full sm:w-72">
-                      <Search className="w-4 h-4 text-[#64748b] absolute left-3.5 top-3" />
-                      <input
-                        type="text"
-                        placeholder="Cari provinsi..."
-                        value={provinceSearch}
-                        onChange={(e) => setProvinceSearch(e.target.value)}
-                        className="w-full bg-[#0f172a] border border-[#334155] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#e2e8f0] focus:border-blue-500 focus:outline-none transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="overflow-x-auto rounded-xl border border-[#334155]/40">
-                    <table className="w-full text-left text-sm border-collapse">
-                      <thead className="bg-[#0f172a] text-[#94a3b8] font-semibold">
-                        <tr>
-                          <th className="p-4 border-b border-[#334155]">Nama Provinsi</th>
-                          <th className="p-4 border-b border-[#334155] text-right">Jumlah Koperasi</th>
-                          <th className="p-4 border-b border-[#334155] text-right">NIB</th>
-                          <th className="p-4 border-b border-[#334155] text-right">NPWP</th>
-                          <th className="p-4 border-b border-[#334155] text-right">RAT</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#334155]/40">
-                        {filteredProvinces.map((prov) => (
-                          <tr key={prov.id} className="hover:bg-[#1e293b]/20 transition-colors">
-                            <td className="p-4 font-semibold text-slate-200">{prov.province_name}</td>
-                            <td className="p-4 text-right">{prov.jumlah_koperasi.toLocaleString()}</td>
-                            <td className="p-4 text-right">
-                              <div>{prov.koperasi_nib.toLocaleString()}</div>
-                              <div className="text-xs text-slate-500">{((prov.koperasi_nib / prov.jumlah_koperasi) * 100).toFixed(1)}%</div>
-                            </td>
-                            <td className="p-4 text-right">
-                              <div>{prov.koperasi_npwp.toLocaleString()}</div>
-                              <div className="text-xs text-slate-500">{((prov.koperasi_npwp / prov.jumlah_koperasi) * 100).toFixed(1)}%</div>
-                            </td>
-                            <td className="p-4 text-right">
-                              <div>{prov.koperasi_rat.toLocaleString()}</div>
-                              <div className="text-xs text-slate-500">{((prov.koperasi_rat / prov.jumlah_koperasi) * 100).toFixed(1)}%</div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 3: Regencies */}
-              {activeTab === 'regencies' && (
-                <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6 space-y-6">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="text-lg font-bold text-slate-100">Kumpulan Data Klaster Kabupaten/Kota</h2>
-                      <p className="text-xs text-[#94a3b8]">Detail label klastering hasil KMeans dari DVC pipeline.</p>
-                    </div>
-                  </div>
-
-                  {/* Filters bar */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="relative">
-                      <Search className="w-4 h-4 text-[#64748b] absolute left-3.5 top-3" />
-                      <input
-                        type="text"
-                        placeholder="Cari kabupaten/kota..."
-                        value={regencySearch}
-                        onChange={(e) => setRegencySearch(e.target.value)}
-                        className="w-full bg-[#0f172a] border border-[#334155] rounded-xl pl-10 pr-4 py-2.5 text-sm text-[#e2e8f0] focus:border-blue-500 focus:outline-none transition-colors"
-                      />
-                    </div>
-
-                    <div className="flex gap-2">
-                      <div className="p-3 bg-[#0f172a] border border-[#334155] rounded-xl flex items-center justify-center shrink-0">
-                        <Filter className="w-4 h-4 text-[#64748b]" />
-                      </div>
-                      <select
-                        value={regencyProvinceFilter}
-                        onChange={(e) => setRegencyProvinceFilter(e.target.value)}
-                        className="w-full bg-[#0f172a] border border-[#334155] rounded-xl px-4 py-2 text-sm text-[#e2e8f0] focus:border-blue-500 focus:outline-none"
-                      >
-                        <option value="">Semua Provinsi</option>
-                        {provinces.map(p => (
-                          <option key={p.id} value={p.id}>{p.province_name}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <select
-                      value={regencyClusterFilter}
-                      onChange={(e) => setRegencyClusterFilter(e.target.value)}
-                      className="w-full bg-[#0f172a] border border-[#334155] rounded-xl px-4 py-2 text-sm text-[#e2e8f0] focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="">Semua Klaster</option>
-                      <option value="0">Klaster 0</option>
-                      <option value="1">Klaster 1</option>
-                      <option value="2">Klaster 2</option>
-                    </select>
-                  </div>
-
-                  {/* Table */}
-                  <div className="overflow-x-auto rounded-xl border border-[#334155]/40">
-                    <table className="w-full text-left text-sm border-collapse">
-                      <thead className="bg-[#0f172a] text-[#94a3b8] font-semibold">
-                        <tr>
-                          <th className="p-4 border-b border-[#334155]">Nama Daerah</th>
-                          <th className="p-4 border-b border-[#334155]">Provinsi</th>
-                          <th className="p-4 border-b border-[#334155] text-right">Jumlah Koperasi</th>
-                          <th className="p-4 border-b border-[#334155] text-right">Nilai Transaksi (Rp)</th>
-                          <th className="p-4 border-b border-[#334155] text-center">Label Klaster</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#334155]/40">
-                        {regencies.map((reg) => (
-                          <tr key={reg.id} className="hover:bg-[#1e293b]/20 transition-colors">
-                            <td className="p-4 font-semibold text-slate-200">{reg.regency_name}</td>
-                            <td className="p-4 text-[#94a3b8]">{reg.province_name}</td>
-                            <td className="p-4 text-right">{reg.jumlah_koperasi.toLocaleString()}</td>
-                            <td className="p-4 text-right">Rp {reg.nilai_transaksi.toLocaleString()}</td>
-                            <td className="p-4 text-center">
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                                reg.cluster_label === 0 
-                                  ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' 
-                                  : reg.cluster_label === 1
-                                  ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                                  : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                              }`}>
-                                Klaster {reg.cluster_label}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Pagination */}
-                  <div className="flex items-center justify-between pt-4">
-                    <span className="text-xs text-[#64748b]">
-                      Menampilkan halaman {regencyPage} dari {regencyPagination.total_pages} ({regencyPagination.total} Kabupaten/Kota)
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setRegencyPage(p => Math.max(1, p - 1))}
-                        disabled={regencyPage === 1}
-                        className="p-2 border border-[#334155] hover:border-slate-500/40 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] disabled:opacity-50 transition-colors"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => setRegencyPage(p => Math.min(regencyPagination.total_pages, p + 1))}
-                        disabled={regencyPage === regencyPagination.total_pages}
-                        className="p-2 border border-[#334155] hover:border-slate-500/40 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] disabled:opacity-50 transition-colors"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 4: AI Analysis */}
-              {activeTab === 'ai' && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Left panel: Executive report */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6">
-                      <div className="flex items-center gap-2 mb-4">
-                        <BookOpen className="w-5 h-5 text-indigo-400" />
-                        <h3 className="font-bold text-lg text-slate-100">Laporan Analisis Eksekutif</h3>
-                      </div>
-                      <div className="prose prose-invert prose-sm max-w-none text-[#94a3b8] leading-relaxed space-y-4 whitespace-pre-wrap font-sans">
-                        {aiReport?.report_text || 'Laporan analisis interpretatif AI tidak ditemukan.'}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right panel: Cluster definition labels */}
-                  <div className="space-y-6">
-                    <div className="bg-[#1e293b]/40 border border-[#334155]/60 rounded-2xl p-6">
-                      <h3 className="font-bold text-lg text-slate-100 mb-4">Definisi Nama Klaster Profesional</h3>
-                      <p className="text-xs text-[#94a3b8] mb-6">
-                        Nama klaster representatif hasil ekstraksi interpretasi model oleh LLM.
-                      </p>
-                      
-                      <div className="space-y-4">
-                        {aiReport && Object.keys(aiReport.labels).map((key) => {
-                          const clusterLabel = parseInt(key)
-                          const item = aiReport.labels[key]
-                          return (
-                            <div key={key} className="p-4 rounded-xl bg-[#0f172a] border border-[#334155]/60 space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                                  clusterLabel === 0 
-                                    ? 'bg-blue-500/10 text-blue-400' 
-                                    : clusterLabel === 1
-                                    ? 'bg-purple-500/10 text-purple-400'
-                                    : 'bg-amber-500/10 text-amber-400'
-                                }`}>
-                                  Klaster {key}
-                                </span>
-                              </div>
-                              <h4 className="font-bold text-sm text-slate-200">{item.label_name}</h4>
-                              <p className="text-xs text-[#64748b] leading-relaxed">{item.description}</p>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </main>
-      </div>
+              {/* Top Regencies */}
+              <Card className="shadow-none border-border">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-bold text-foreground">Top 5 Kabupaten/Kota (Transaksi Usaha)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider pl-0">Kabupaten/Kota</TableHead>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Transaksi</TableHead>
+                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right pr-0">Klaster</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody className="text-xs text-muted-foreground">
+                      {topRegencies.map((reg, idx) => (
+                        <TableRow key={reg.id || idx}>
+                          <TableCell className="font-medium text-foreground pl-0">
+                            {reg.regency_name} 
+                            <span className="text-[9px] text-muted-foreground block">{reg.province_name}</span>
+                          </TableCell>
+                          <TableCell className="text-right font-medium text-foreground">Rp {(reg.nilai_transaksi / 1e9).toFixed(1)} M</TableCell>
+                          <TableCell className="text-right pr-0">
+                            <Badge variant={reg.cluster_label === 0 ? "default" : reg.cluster_label === 1 ? "secondary" : "outline"} className="text-[8px] py-0 px-1.5 font-bold">
+                              {reg.cluster_label}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        )}
+      </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#334155] bg-[#0f172a]/90 text-[#64748b] text-center py-4 text-xs">
-        &copy; 2026 SIMKOPDES. Dibuat dengan Cloudflare Workers, Hono, dan React + Shadcn.
+      <footer className="border-t border-border bg-muted/20 text-muted-foreground text-center py-4 text-[10px]">
+        &copy; 2026 SIMKOPDES. Dibuat dengan Cloudflare Workers, Hono, dan React.
       </footer>
     </div>
   )

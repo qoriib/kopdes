@@ -41,6 +41,14 @@ jobs:
         with:
           commit-message: "auto: update scrape stage artifacts [skip ci]"
 
+      - name: Upload Scrape Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: scrape-files
+          path: |
+            data/raw/scraped_provinces.csv
+            data/raw/scraped_regencies.csv
+
   # ──────────────────────────────────────────────
   # Stage 2: Data Transformation
   # ──────────────────────────────────────────────
@@ -63,6 +71,14 @@ jobs:
         uses: ./.github/actions/push-pipeline
         with:
           commit-message: "auto: update transform stage artifacts [skip ci]"
+
+      - name: Upload Transform Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: transform-files
+          path: |
+            data/transform/transformed_provinces.csv
+            data/transform/transformed_regencies.csv
 
   # ──────────────────────────────────────────────
   # Stage 3a: Exploratory Data Analysis
@@ -98,11 +114,15 @@ jobs:
           cml comment create reports/cml_eda.md
           cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload EDA Report
-        uses: actions/upload-artifact@v4
+      - name: Upload EDA Files
+        uses: actions/upload-artifact@v7
         with:
-          name: eda-report
-          path: reports/eda_summary.md
+          name: eda-files
+          path: |
+            reports/eda_metrics.json
+            reports/eda_summary.md
+            reports/figures/eda_top_provinces.png
+            reports/figures/eda_top_regencies_transaksi.png
 
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
@@ -138,11 +158,15 @@ jobs:
           cml comment create reports/cml_preprocess.md
           cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload Preprocess Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Preprocess Files
+        uses: actions/upload-artifact@v7
         with:
-          name: preprocess-report
-          path: reports/preprocess_report.md
+          name: preprocess-files
+          path: |
+            data/preprocess/scaled_features.csv
+            data/preprocess/preprocess_meta.json
+            reports/preprocess_report.md
+            reports/figures/preprocess_elbow_curve.png
 
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
@@ -166,6 +190,14 @@ jobs:
         uses: ./.github/actions/push-pipeline
         with:
           commit-message: "auto: update model stage artifacts [skip ci]"
+
+      - name: Upload Model Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: model-files
+          path: |
+            models/kmeans_model.pkl
+            data/model/clustered_regencies.csv
 
   # ──────────────────────────────────────────────
   # Stage 5: Model Evaluation
@@ -201,11 +233,16 @@ jobs:
           cml comment create reports/cml_evaluate.md
           cat reports/cml_evaluate.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload Evaluation Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Evaluate Files
+        uses: actions/upload-artifact@v7
         with:
-          name: evaluate-report
-          path: reports/evaluate_report.md
+          name: evaluate-files
+          path: |
+            reports/evaluate_report.md
+            reports/evaluate_metrics.json
+            reports/figures/eval_pca_projection.png
+            reports/figures/eval_cluster_distribution.png
+            reports/figures/eval_avg_transaction.png
 
   interpret:
     name: AI Interpretation
@@ -241,11 +278,13 @@ jobs:
           cml comment create reports/cml_interpret.md
           cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload AI Interpretation Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Interpret Files
+        uses: actions/upload-artifact@v7
         with:
-          name: interpret-report
-          path: reports/interpret_report.md
+          name: interpret-files
+          path: |
+            reports/interpret_report.md
+            reports/interpret_labels.json
 
   store:
     name: Store Data
@@ -278,6 +317,13 @@ jobs:
           cd web/backend
           npx wrangler d1 execute simkopdes_db --remote --file=../../data/seed.sql
 
+      - name: Upload Store Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: store-files
+          path: |
+            data/seed.sql
+
 
 
   deploy_backend:
@@ -288,9 +334,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 23
 
       - name: Install dependencies
         run: |
@@ -313,9 +359,9 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 23
 
       - name: Install dependencies
         run: |
@@ -333,5 +379,4 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
           cd web/frontend
-          npx wrangler pages project create simkopdes --production-branch main || true
-          npx wrangler pages deploy dist --project-name=simkopdes --branch=main
+          npx wrangler pages deploy
