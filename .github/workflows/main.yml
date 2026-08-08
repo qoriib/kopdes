@@ -335,3 +335,64 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
+  deploy_backend:
+    name: Deploy Backend
+    needs: store_db
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'web/backend/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd web/backend
+          npm ci
+
+      - name: Deploy Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          cd web/backend
+          npx wrangler deploy --minify
+
+  deploy_frontend:
+    name: Deploy Frontend
+    needs: store_db
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'web/frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd web/frontend
+          npm ci
+
+      - name: Build Frontend
+        run: |
+          cd web/frontend
+          npm run build
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          cd web/frontend
+          npx wrangler pages project create simkopdes --production-branch main || true
+          npx wrangler pages deploy dist --project-name=simkopdes --branch=main
+
