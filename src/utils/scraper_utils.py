@@ -91,7 +91,7 @@ def scrape_table_with_pagination(page: Page, target_url: str, target_table_index
     
     # Handling Timeout & Navigasi
     try:
-        page.goto(target_url, wait_until='domcontentloaded', timeout=60000)
+        page.goto(target_url, wait_until='networkidle', timeout=60000)
     except PlaywrightTimeoutError:
         logger.warning("Batas waktu navigasi utama habis (Timeout 60s). Mencoba melanjutkan pemrosesan...")
 
