@@ -96,6 +96,13 @@ def transform_regencies():
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
     geo_map = {(int(r['province_id']), int(r['regency_no'])): (r.get('latitude', 0.0), r.get('longitude', 0.0)) for r in geo_data if 'province_id' in r and 'regency_no' in r}
 
+    # Map sequential scraped Province_ID to actual province_id from scraped_provinces/province.json
+    PROV_ID_MAP = {
+        1: 1,   # Aceh -> Aceh (1)
+        2: 38,  # Sumatera Utara -> Sumatera Utara (38)
+        3: 36   # Sumatera Barat -> Sumatera Barat (36)
+    }
+
     transformed_rows = []
     headers = [
         'province_id', 'regency_no', 'regency_name', 'jumlah_koperasi', 
@@ -122,10 +129,14 @@ def transform_regencies():
             vol = parse_num(row[9])
             nilai = parse_num(row[10])
 
+            # Coordinate lookup uses the original prov_id (1, 2, 3) mapped inside regency.json
             lat, lon = geo_map.get((prov_id, reg_no), (0.0, 0.0))
 
+            # Database and transformed output use the actual province_id (1, 38, 36)
+            actual_prov_id = PROV_ID_MAP.get(prov_id, prov_id)
+
             transformed_rows.append([
-                prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
+                actual_prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
                 wajib, vol, nilai, lat, lon
             ])
 

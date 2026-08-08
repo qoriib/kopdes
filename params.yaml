@@ -2,9 +2,9 @@ scrape:
   target_url: "https://simkopdes.go.id/pers/dashboard"
   base_url_template: "https://simkopdes.go.id/pers/dashboard/district/{id}"
   table_index: 2
-  max_workers: 3
+  max_workers: 5
   start_province_id: 1
-  end_province_id: 3
+  end_province_id: 38
   playwright:
     headless: true
     width: 1280
