@@ -107,12 +107,12 @@ stages:
     deps:
     - path: data/preprocess/preprocess_meta.json
       hash: md5
-      md5: 0029c61255320d3fbdb2af32482e0ef5
-      size: 329
+      md5: d9c6c33c9ae41592507f0c8a886a8cf6
+      size: 313
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 006cce52d8ca1d60c82025b6e941474e
-      size: 11386
+      md5: 012549fb95205192de495e28d17e2d50
+      size: 11329
     - path: data/transform/transformed_regencies.csv
       hash: md5
       md5: 7644629378aff8ed37a00166e4fb4f4c
