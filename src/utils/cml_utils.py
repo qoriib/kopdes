@@ -47,7 +47,7 @@ def cml_publish_image(filepath):
     # 1. Try to publish image using CML to get an external URL
     try:
         res = subprocess.run(
-            ["cml", "image", "publish", filepath],
+            ["cml", "publish", filepath],
             capture_output=True,
             text=True,
             check=True
@@ -59,7 +59,7 @@ def cml_publish_image(filepath):
             logger.info(f"Published image to CML: {url}")
             return f'<img src="{url}" alt="{alt_text}" width="300">'
     except Exception as e:
-        logger.warning(f"CML image publish failed or not available, falling back to base64: {e}")
+        logger.warning(f"cml publish failed or not available, falling back to base64: {e}")
 
     # 2. Fallback to base64
     try:
