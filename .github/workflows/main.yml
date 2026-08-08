@@ -93,11 +93,16 @@ jobs:
         run: |
           python src/utils/cml_utils.py \
             --report reports/eda_summary.md \
-            --figures reports/figures/eda_top_provinces.png reports/figures/eda_top_regencies_transaksi.png \
             --output reports/cml_eda.md \
             --title "CML: Laporan EDA SIMKOPDES"
           cml comment create reports/cml_eda.md
           cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload EDA Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: eda-report
+          path: reports/eda_summary.md
 
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
@@ -128,11 +133,16 @@ jobs:
         run: |
           python src/utils/cml_utils.py \
             --report reports/preprocess_report.md \
-            --figures reports/figures/preprocess_elbow_curve.png \
             --output reports/cml_preprocess.md \
             --title "CML: Laporan Preprocessing SIMKOPDES"
           cml comment create reports/cml_preprocess.md
           cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Preprocess Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: preprocess-report
+          path: reports/preprocess_report.md
 
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
@@ -186,11 +196,16 @@ jobs:
         run: |
           python src/utils/cml_utils.py \
             --report reports/evaluate_report.md \
-            --figures reports/figures/eval_pca_projection.png reports/figures/eval_cluster_distribution.png reports/figures/eval_avg_transaction.png \
             --output reports/cml_evaluate.md \
             --title "CML: Laporan Evaluasi Clustering SIMKOPDES"
           cml comment create reports/cml_evaluate.md
           cat reports/cml_evaluate.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Evaluation Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluate-report
+          path: reports/evaluate_report.md
 
   interpret:
     name: AI Interpretation
@@ -226,6 +241,12 @@ jobs:
           cml comment create reports/cml_interpret.md
           cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
 
+      - name: Upload AI Interpretation Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: interpret-report
+          path: reports/interpret_report.md
+
   store:
     name: Store Data
     needs: interpret
@@ -257,46 +278,7 @@ jobs:
           cd web/backend
           npx wrangler d1 execute simkopdes_db --remote --file=../../data/seed.sql
 
-  artifact:
-    name: Upload Artifacts
-    needs: interpret
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Upload EDA Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: eda-report
-          path: reports/eda_summary.md
-
-      - name: Upload Preprocess Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: preprocess-report
-          path: reports/preprocess_report.md
-
-      - name: Upload Evaluation Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: evaluate-report
-          path: reports/evaluate_report.md
-
-      - name: Upload AI Interpretation Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: interpret-report
-          path: reports/interpret_report.md
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update DVC tracking files and AI reports [skip ci]"
 
   deploy_backend:
     name: Deploy Backend
