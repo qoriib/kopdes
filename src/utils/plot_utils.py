@@ -3,6 +3,15 @@ import io
 import base64
 import matplotlib.pyplot as plt
 
+def file_to_base64(filepath):
+    """
+    Convert any file to a base64 encoded string.
+    """
+    if not os.path.exists(filepath):
+        return ""
+    with open(filepath, "rb") as f:
+        return base64.b64encode(f.read()).decode('utf-8')
+
 def generate_base64_plot(fig, dpi=120):
     """
     Save a matplotlib figure to base64 string.

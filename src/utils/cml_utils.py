@@ -17,8 +17,7 @@ import re
 import subprocess
 import argparse
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+from utils.plot_utils import file_to_base64
 
 
 def cml_publish_image(filepath):
@@ -36,10 +35,9 @@ def cml_publish_image(filepath):
         return ""
 
     try:
-        import base64
-        with open(filepath, "rb") as f:
-            data = f.read()
-        encoded = base64.b64encode(data).decode('utf-8')
+        encoded = file_to_base64(filepath)
+        if not encoded:
+            return ""
         basename = os.path.basename(filepath)
         alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
         return f'<img src="data:image/png;base64,{encoded}" alt="{alt_text}" width="300">'

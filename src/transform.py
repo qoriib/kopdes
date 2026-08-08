@@ -12,6 +12,7 @@ from config import (
     TRANSFORMED_PROVINCES_CSV,
     TRANSFORMED_REGENCIES_CSV
 )
+from utils.scraper_utils import save_to_csv
 
 def parse_num(val):
     if val is None:
@@ -84,7 +85,7 @@ def transform_provinces():
                 vol, nilai, lahan, lahan_pct, gerai_pct, lat, lon
             ])
 
-    save_csv(TRANSFORMED_PROVINCES_CSV, headers, transformed_rows)
+    save_to_csv(TRANSFORMED_PROVINCES_CSV, headers, transformed_rows)
     print(f"[OK] Transformed {len(transformed_rows)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
 
 def transform_regencies():
@@ -125,15 +126,8 @@ def transform_regencies():
                 wajib, vol, nilai, lat, lon
             ])
 
-    save_csv(TRANSFORMED_REGENCIES_CSV, headers, transformed_rows)
+    save_to_csv(TRANSFORMED_REGENCIES_CSV, headers, transformed_rows)
     print(f"[OK] Transformed {len(transformed_rows)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
-
-def save_csv(filename, headers, rows):
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    with open(filename, "w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.writer(f)
-        writer.writerow(headers)
-        writer.writerows(rows)
 
 def main():
     print("[+] Memulai Stage Data Transformation...")
