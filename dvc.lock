@@ -181,8 +181,8 @@ stages:
       size: 1683
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: ab1cf03ae5b9110d259f8fb5b71fa214
-      size: 3642
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.playwright.headless: true
@@ -195,7 +195,7 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: e96c0d0ff177fd39ac9993e4d2c187c4
+      md5: 620dd9ac351ecff38b937d2dbc42d23d
       size: 3519
   scrape_regencies:
     cmd: python src/scrape_regencies.py
@@ -206,14 +206,14 @@ stages:
       size: 3351
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: 80599f01318f2b775ffb82346569eac4
-      size: 7147
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.base_url_template: 
           https://simkopdes.go.id/pers/dashboard/district/{id}
-        scrape.end_province_id: 38
-        scrape.max_workers: 4
+        scrape.end_province_id: 3
+        scrape.max_workers: 3
         scrape.playwright.headless: true
         scrape.playwright.height: 800
         scrape.playwright.user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
@@ -224,8 +224,8 @@ stages:
     outs:
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 0c27a6913952be65c47e563b7062bb14
-      size: 35122
+      md5: 13e20b77665dc9fa4f80d841fb3e8f0b
+      size: 5347
   transform:
     cmd: python src/transform.py
     deps:
