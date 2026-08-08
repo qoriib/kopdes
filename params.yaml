@@ -3,14 +3,10 @@ scrape:
   base_url_template: "https://simkopdes.go.id/pers/dashboard/district/{id}"
   table_index: 2
   max_workers: 5
-  playwright:
-    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 eda:
   top_provinces_limit: 10
   top_regencies_limit: 5
-  plot_dpi: 120
-  plot_style: "seaborn-v0_8-whitegrid"
 
 preprocess:
   min_k: 2

@@ -48,8 +48,6 @@ stages:
     params:
       - eda.top_provinces_limit
       - eda.top_regencies_limit
-      - eda.plot_dpi
-      - eda.plot_style
     outs:
       - reports/eda_summary.md
       - reports/eda_metrics.json
