@@ -4,7 +4,7 @@ inputs:
   python-version:
     description: 'Python version to set up'
     required: false
-    default: '3.11'
+    default: '3.12'
   install-playwright:
     description: 'Whether to install Playwright chromium and dependencies'
     required: false
