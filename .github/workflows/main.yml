@@ -65,7 +65,7 @@ jobs:
   # ──────────────────────────────────────────────
   eda:
     name: Exploratory Data Analysis
-    needs: transform
+    needs: [scrape, transform]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -100,7 +100,7 @@ jobs:
   # ──────────────────────────────────────────────
   preprocess:
     name: ML Preprocessing
-    needs: transform
+    needs: [scrape, transform]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
