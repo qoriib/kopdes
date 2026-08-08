@@ -29,13 +29,3 @@ runs:
       shell: bash
       run: dvc pull --run-cache
 
-    - name: Restore DVC Lock & Cache
-      uses: actions/cache@v6
-      with:
-        path: |
-          dvc.lock
-          .dvc/cache
-        key: dvc-cache-${{ github.sha }}-${{ github.run_id }}
-        restore-keys: |
-          dvc-cache-${{ github.sha }}-
-          dvc-cache-
