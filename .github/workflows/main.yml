@@ -36,6 +36,7 @@ jobs:
 
   scrape_regencies:
     name: Scrape Regencies
+    needs: scrape_provinces
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -46,6 +47,9 @@ jobs:
         uses: ./.github/actions/setup-pipeline
         with:
           install-playwright: 'true'
+
+      - name: DVC Pull
+        run: dvc pull --run-cache
 
       - name: Scrape Regency Data
         run: dvc repro scrape_regencies
@@ -68,7 +72,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Raw Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run Transform
@@ -92,7 +96,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Transformed Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run EDA
@@ -130,7 +134,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Transformed Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run Preprocessing
@@ -168,7 +172,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Preprocessed & Transformed Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run Model Training
@@ -192,7 +196,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull All Upstream Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run Evaluation
@@ -227,7 +231,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Upstream Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Run AI Interpretation
@@ -264,7 +268,7 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull Upstream Data
+      - name: DVC Pull
         run: dvc pull --run-cache
 
       - name: Apply Remote Database Migrations
@@ -298,8 +302,8 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull All Reports
-        run: dvc pull
+      - name: DVC Pull
+        run: dvc pull --run-cache
 
       - name: Upload EDA Report
         uses: actions/upload-artifact@v4
