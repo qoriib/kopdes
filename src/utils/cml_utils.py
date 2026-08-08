@@ -17,7 +17,13 @@ import re
 import subprocess
 import argparse
 
-from plot_utils import file_to_base64
+# Ensure src/ is in sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from utils.plot_utils import file_to_base64
+from utils.log_utils import get_logger
+
+logger = get_logger("cml_utils")
 
 
 def cml_publish_image(filepath):
@@ -31,7 +37,7 @@ def cml_publish_image(filepath):
         An HTML img tag string with base64 source and width 300.
     """
     if not os.path.exists(filepath):
-        print(f"[WARN] Image not found: {filepath}")
+        logger.warning(f"Image not found: {filepath}")
         return ""
 
     try:
@@ -42,7 +48,7 @@ def cml_publish_image(filepath):
         alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
         return f'<img src="data:image/png;base64,{encoded}" alt="{alt_text}" width="300">'
     except Exception as e:
-        print(f"[WARN] Failed to convert {filepath} to base64: {e}")
+        logger.warning(f"Failed to convert {filepath} to base64: {e}")
         basename = os.path.basename(filepath)
         return f"![{basename}](figures/{basename})"
 
@@ -85,7 +91,7 @@ def build_cml_report(report_md_path, figure_paths, title=None):
     """
     # Read source report
     if not os.path.exists(report_md_path):
-        print(f"[ERROR] Report not found: {report_md_path}")
+        logger.error(f"Report not found: {report_md_path}")
         return ""
 
     with open(report_md_path, "r", encoding="utf-8") as f:
@@ -143,16 +149,16 @@ def main():
 
     args = parser.parse_args()
 
-    print(f"[+] Generating CML report from: {args.report}")
+    logger.info(f"Generating CML report from: {args.report}")
     report = build_cml_report(args.report, args.figures, args.title)
 
     if report:
         os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
         with open(args.output, "w", encoding="utf-8") as f:
             f.write(report)
-        print(f"[SAVED] CML Report -> {args.output}")
+        logger.info(f"CML Report -> {args.output}")
     else:
-        print("[ERROR] Failed to generate CML report.")
+        logger.error("Failed to generate CML report.")
         sys.exit(1)
 
 

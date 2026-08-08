@@ -1,7 +1,15 @@
 import os
+import sys
 import io
 import base64
 import matplotlib.pyplot as plt
+
+# Ensure src/ is in sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from utils.log_utils import get_logger
+
+logger = get_logger("plot_utils")
 
 def file_to_base64(filepath):
     """
@@ -30,4 +38,5 @@ def save_plot_to_file(fig, filepath, dpi=120):
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     fig.savefig(filepath, format='png', dpi=dpi, bbox_inches='tight')
     plt.close(fig)
-    print(f"[SAVED] Plot -> {filepath}")
+    logger.info(f"Plot saved to: {filepath}")
+

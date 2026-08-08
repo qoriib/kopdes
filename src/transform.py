@@ -13,6 +13,9 @@ from config import (
     TRANSFORMED_REGENCIES_CSV
 )
 from utils.scraper_utils import save_to_csv
+from utils.log_utils import get_logger
+
+logger = get_logger("transform")
 
 def parse_num(val):
     if val is None:
@@ -45,7 +48,7 @@ def load_geo_json(filepath):
     return []
 
 def transform_provinces():
-    print(f"[*] Transforming Data Provinsi dari {RAW_PROVINCES_CSV}...")
+    logger.info(f"Transforming Data Provinsi dari {RAW_PROVINCES_CSV}...")
     geo_data = load_geo_json(GEO_PROVINCES_JSON)
     geo_map = {int(p['province_id']): (p.get('latitude', 0.0), p.get('longitude', 0.0)) for p in geo_data if 'province_id' in p}
 
@@ -86,10 +89,10 @@ def transform_provinces():
             ])
 
     save_to_csv(TRANSFORMED_PROVINCES_CSV, headers, transformed_rows)
-    print(f"[OK] Transformed {len(transformed_rows)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
+    logger.info(f"Transformed {len(transformed_rows)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
 
 def transform_regencies():
-    print(f"[*] Transforming Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
+    logger.info(f"Transforming Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
     geo_map = {(int(r['province_id']), int(r['regency_no'])): (r.get('latitude', 0.0), r.get('longitude', 0.0)) for r in geo_data if 'province_id' in r and 'regency_no' in r}
 
@@ -127,13 +130,13 @@ def transform_regencies():
             ])
 
     save_to_csv(TRANSFORMED_REGENCIES_CSV, headers, transformed_rows)
-    print(f"[OK] Transformed {len(transformed_rows)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
+    logger.info(f"Transformed {len(transformed_rows)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
 
 def main():
-    print("[+] Memulai Stage Data Transformation...")
+    logger.info("Memulai Stage Data Transformation...")
     transform_provinces()
     transform_regencies()
-    print("[DONE] Transformation selesai.")
+    logger.info("Transformation selesai.")
 
 if __name__ == "__main__":
     main()

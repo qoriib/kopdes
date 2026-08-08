@@ -7,7 +7,9 @@ from playwright.sync_api import sync_playwright
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from config import RAW_REGENCIES_CSV, get_params
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
+from utils.log_utils import get_logger
 
+logger = get_logger("scrape_regencies")
 params = get_params('scrape')
 
 MAX_WORKERS = params.get('max_workers', 4)
@@ -15,7 +17,6 @@ START_PROVINCE_ID = params.get('start_province_id', 1)
 END_PROVINCE_ID = params.get('end_province_id', 38)
 TABLE_INDEX = params.get('table_index', 2)
 BASE_URL_TEMPLATE = params.get('base_url_template', "https://simkopdes.go.id/pers/dashboard/district/{id}")
-OUTPUT_CSV = RAW_REGENCIES_CSV
 
 def scrape_single_province(prov_id):
     target_url = BASE_URL_TEMPLATE.format(id=prov_id)
@@ -40,8 +41,8 @@ def scrape_single_province(prov_id):
             raise e
 
 def main():
-    print(f"[+] Memulai Scraping Data Kabupaten/Kota ID {START_PROVINCE_ID}-{END_PROVINCE_ID} Parallel ({MAX_WORKERS} Workers)...")
-    print(f"[*] Output CSV : {OUTPUT_CSV}")
+    logger.info(f"Memulai Scraping Data Kabupaten/Kota ID {START_PROVINCE_ID}-{END_PROVINCE_ID} Parallel ({MAX_WORKERS} Workers)...")
+    logger.info(f"Output CSV : {RAW_REGENCIES_CSV}")
     start_time = time.time()
 
     global_headers = []
@@ -60,9 +61,9 @@ def main():
                 if not global_headers and headers:
                     global_headers = ['Province_ID'] + headers
                 prov_results[p_id] = rows
-                print(f"[*] [{p_id}/{END_PROVINCE_ID}] Selesai -> ({len(rows)} baris).")
+                logger.info(f"[{p_id}/{END_PROVINCE_ID}] Selesai -> ({len(rows)} baris).")
             except Exception as e:
-                print(f"[*] [{prov_id}/{END_PROVINCE_ID}] Error: {str(e)}")
+                logger.error(f"[{prov_id}/{END_PROVINCE_ID}] Error: {str(e)}")
 
     combined_rows = []
     seen_combined = set()
@@ -75,11 +76,11 @@ def main():
                 seen_combined.add(t)
                 combined_rows.append(row_with_id)
 
-    save_to_csv(OUTPUT_CSV, global_headers, combined_rows)
+    save_to_csv(RAW_REGENCIES_CSV, global_headers, combined_rows)
 
     elapsed = time.time() - start_time
-    print(f"\n[DONE] Parallel Scraping selesai! Total {len(combined_rows)} baris kabupaten/kota dalam {elapsed:.2f} detik.")
-    print(f"[SAVED] File CSV akhir -> {OUTPUT_CSV}")
+    logger.info(f"Parallel Scraping selesai! Total {len(combined_rows)} baris kabupaten/kota dalam {elapsed:.2f} detik.")
+    logger.info(f"File CSV akhir -> {RAW_REGENCIES_CSV}")
 
 if __name__ == "__main__":
     main()

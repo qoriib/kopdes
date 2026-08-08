@@ -15,7 +15,9 @@ from config import (
     DATA_MODEL_DIR,
     get_params
 )
+from utils.log_utils import get_logger
 
+logger = get_logger("model")
 params = get_params('model')
 
 RANDOM_STATE = params.get('random_state', 42)
@@ -23,7 +25,7 @@ N_INIT = params.get('n_init', 10)
 OVERRIDE_K = params.get('override_k', None)
 
 def main():
-    print("[+] Memulai Stage Modelling KMeans Clustering...")
+    logger.info("Memulai Stage Modelling KMeans Clustering...")
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(DATA_MODEL_DIR, exist_ok=True)
 
@@ -33,10 +35,10 @@ def main():
     # 1. Menentukan K (baik dari optimal_k hasil preprocess atau override_k dari params)
     if OVERRIDE_K is not None:
         n_clusters = int(OVERRIDE_K)
-        print(f"[*] Menggunakan K = {n_clusters} (OVERRIDE dari params.yaml) untuk KMeans Clustering...")
+        logger.info(f"Menggunakan K = {n_clusters} (OVERRIDE dari params.yaml) untuk KMeans Clustering...")
     else:
         n_clusters = meta.get("optimal_k", 3)
-        print(f"[*] Menggunakan K = {n_clusters} (Optimal K hasil deteksi) untuk KMeans Clustering...")
+        logger.info(f"Menggunakan K = {n_clusters} (Optimal K hasil deteksi) untuk KMeans Clustering...")
 
     X_scaled = pd.read_csv(SCALED_FEATURES_CSV).values
 
@@ -47,15 +49,15 @@ def main():
     # 3. Menyimpan Artifact Model Trained PKL
     with open(MODEL_PKL, "wb") as f:
         pickle.dump(kmeans, f)
-    print(f"[SAVED] Trained Model PKL -> {MODEL_PKL}")
+    logger.info(f"Trained Model PKL -> {MODEL_PKL}")
 
     # 4. Penggabungan Label Klaster ke Dataset Kabupaten/Kota
     df_raw = pd.read_csv(TRANSFORMED_REGENCIES_CSV)
     df_raw['cluster_label'] = cluster_labels
     df_raw.to_csv(CLUSTERED_REGENCIES_CSV, index=False)
-    print(f"[SAVED] Clustered Regencies Dataset -> {CLUSTERED_REGENCIES_CSV}")
+    logger.info(f"Clustered Regencies Dataset -> {CLUSTERED_REGENCIES_CSV}")
 
-    print("[DONE] Stage ML Modelling selesai.")
+    logger.info("Stage ML Modelling selesai.")
 
 if __name__ == "__main__":
     main()

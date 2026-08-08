@@ -14,7 +14,9 @@ from config import (
     get_params
 )
 from utils.env_utils import load_env
+from utils.log_utils import get_logger
 
+logger = get_logger("interpret")
 params = get_params('interpret')
 
 MODEL_NAME = params.get('model', "@cf/openai/gpt-oss-120b")
@@ -41,28 +43,23 @@ def sanitize_json_string(s):
     return "".join(chars)
 
 def main():
-    print(f"[+] Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI ({MODEL_NAME})...")
+    logger.info(f"Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI ({MODEL_NAME})...")
     load_env()
     
     account_id = os.environ.get("CF_ACCOUNT_ID")
     api_token = os.environ.get("CF_API_TOKEN")
     
     if not account_id or not api_token:
-        print("[!] Error: CF_ACCOUNT_ID atau CF_API_TOKEN tidak ditemukan di environment.")
+        logger.error("CF_ACCOUNT_ID atau CF_API_TOKEN tidak ditemukan di environment.")
         sys.exit(1)
         
-    data_path = CLUSTERED_REGENCIES_CSV
-    metrics_path = MODEL_METRICS_JSON
-    output_path = AI_REPORT_MD
-    labels_output_path = AI_LABELS_JSON
-    
-    if not os.path.exists(data_path) or not os.path.exists(metrics_path):
-        print("[!] Error: Data atau metrik evaluasi tidak ditemukan.")
+    if not os.path.exists(CLUSTERED_REGENCIES_CSV) or not os.path.exists(MODEL_METRICS_JSON):
+        logger.error("Data atau metrik evaluasi tidak ditemukan.")
         sys.exit(1)
         
     # Read files
-    df = pd.read_csv(data_path)
-    with open(metrics_path, encoding='utf-8') as f:
+    df = pd.read_csv(CLUSTERED_REGENCIES_CSV)
+    with open(MODEL_METRICS_JSON, encoding='utf-8') as f:
         metrics = json.load(f)
         
     # Group by cluster and aggregate
@@ -108,7 +105,7 @@ Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
     }}
     // Dan seterusnya untuk semua klaster yang ada
   }},
-  "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 3-4 paragraf. Jelaskan interpretasi mendalam karakteristik unik dari masing-masing klaster (kekuatan, kelemahan, pola) serta rekomendasi kebijakan pembangunan daerah yang spesifik untuk setiap klaster. Gunakan format Markdown untuk isi laporan ini.]"
+  "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 2 paragraf singkat. Jelaskan karakteristik unik dari klaster-klaster tersebut dan rekomendasi kebijakan pembangunan daerah. Gunakan format Markdown untuk isi laporan ini.]"
 }}
 
 Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'. DILARANG KERAS menggunakan emoji, simbol grafis sejenis, maupun separator garis horizontal (seperti `---`) di dalam nama klaster, deskripsi, maupun laporan markdown yang Anda hasilkan.
@@ -149,8 +146,8 @@ Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti 
                     ai_text = result_obj.get("response") or result_obj.get("text")
                     
                 if not ai_text:
-                    print("[!] Error: response/text/content tidak ditemukan dalam result:")
-                    print(res_data)
+                    logger.error("response/text/content tidak ditemukan dalam result:")
+                    logger.error(str(res_data))
                     sys.exit(1)
                 
                 # Clean up any potential markdown code block formatting
@@ -166,27 +163,27 @@ Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti 
                     report_text = result_json.get("report", "")
                     labels_dict = result_json.get("labels", {})
                     
-                    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-                    with open(output_path, "w", encoding="utf-8") as f:
+                    os.makedirs(os.path.dirname(AI_REPORT_MD), exist_ok=True)
+                    with open(AI_REPORT_MD, "w", encoding="utf-8") as f:
                         f.write(report_text)
-                    print(f"[SAVED] Laporan Interpretasi AI -> {output_path}")
+                    logger.info(f"Laporan Interpretasi AI -> {AI_REPORT_MD}")
                     
-                    with open(labels_output_path, "w", encoding="utf-8") as f:
+                    with open(AI_LABELS_JSON, "w", encoding="utf-8") as f:
                         json.dump(labels_dict, f, indent=2, ensure_ascii=False)
-                    print(f"[SAVED] Cluster Labels JSON -> {labels_output_path}")
+                    logger.info(f"Cluster Labels JSON -> {AI_LABELS_JSON}")
                 except Exception as parse_err:
-                    print(f"[!] Gagal mem-parse output AI ke JSON: {parse_err}")
-                    print("Output raw dari AI:")
-                    print(ai_text)
+                    logger.error(f"Gagal mem-parse output AI ke JSON: {parse_err}")
+                    logger.error("Output raw dari AI:")
+                    logger.error(ai_text)
                     sys.exit(1)
             else:
-                print(f"[!] Gagal: {res_data.get('errors')}")
+                logger.error(f"Gagal: {res_data.get('errors')}")
                 sys.exit(1)
     except urllib.error.HTTPError as e:
-        print(f"[!] HTTP Error: {e.code} - {e.read().decode('utf-8')}")
+        logger.error(f"HTTP Error: {e.code} - {e.read().decode('utf-8')}")
         sys.exit(1)
     except Exception as e:
-        print(f"[!] Error: {str(e)}")
+        logger.error(f"Error: {str(e)}")
         sys.exit(1)
 
 if __name__ == "__main__":

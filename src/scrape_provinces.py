@@ -6,18 +6,19 @@ from playwright.sync_api import sync_playwright
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from config import RAW_PROVINCES_CSV, get_params
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
+from utils.log_utils import get_logger
 
+logger = get_logger("scrape_provinces")
 params = get_params('scrape')
 
 TARGET_URL = params.get('target_url', "https://simkopdes.go.id/pers/dashboard")
 TABLE_INDEX = params.get('table_index', 2)
-OUTPUT_CSV = RAW_PROVINCES_CSV
 
 def main():
-    print("[+] Memulai Scraping Data Provinsi via Playwright...")
-    print(f"[*] Target URL : {TARGET_URL}")
-    print(f"[*] Tabel Ke   : {TABLE_INDEX}")
-    print(f"[*] Output CSV : {OUTPUT_CSV}")
+    logger.info("Memulai Scraping Data Provinsi via Playwright...")
+    logger.info(f"Target URL : {TARGET_URL}")
+    logger.info(f"Tabel Ke   : {TABLE_INDEX}")
+    logger.info(f"Output CSV : {RAW_PROVINCES_CSV}")
 
     start_time = time.time()
 
@@ -38,10 +39,10 @@ def main():
         browser.close()
 
     elapsed = time.time() - start_time
-    print(f"[OK] Berhasil mengekstrak {len(clean_rows)} baris provinsi dalam {elapsed:.2f} detik.")
+    logger.info(f"Berhasil mengekstrak {len(clean_rows)} baris provinsi dalam {elapsed:.2f} detik.")
 
-    save_to_csv(OUTPUT_CSV, headers, clean_rows)
-    print("[DONE] Scraping provinsi selesai.")
+    save_to_csv(RAW_PROVINCES_CSV, headers, clean_rows)
+    logger.info("Scraping provinsi selesai.")
 
 if __name__ == "__main__":
     main()

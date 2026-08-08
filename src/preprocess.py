@@ -20,8 +20,9 @@ from config import (
     get_params
 )
 from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.log_utils import get_logger
 
-INPUT_REGENCIES_CSV = TRANSFORMED_REGENCIES_CSV
+logger = get_logger("preprocess")
 
 FEATURE_COLUMNS = [
     'jumlah_koperasi', 'koperasi_nib', 'koperasi_npwp', 'koperasi_rat',
@@ -44,7 +45,7 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     k_range = list(range(min_k, max_k + 1))
     inertias = []
     
-    print(f"[*] Menghitung inertia untuk K dari {min_k} sampai {max_k}...")
+    logger.info(f"Menghitung inertia untuk K dari {min_k} sampai {max_k}...")
     for k in k_range:
         km = KMeans(n_clusters=k, random_state=RANDOM_STATE, n_init=N_INIT)
         km.fit(X_scaled)
@@ -59,10 +60,10 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     
     optimal_k = kneedle.knee
     if optimal_k is None:
-        print(f"[*] KneeLocator tidak mendeteksi elbow point. Menggunakan K = {FALLBACK_K} sebagai fallback.")
+        logger.warning(f"KneeLocator tidak mendeteksi elbow point. Menggunakan K = {FALLBACK_K} sebagai fallback.")
         optimal_k = FALLBACK_K
     else:
-        print(f"[*] KneeLocator mendeteksi elbow point pada K = {optimal_k}")
+        logger.info(f"KneeLocator mendeteksi elbow point pada K = {optimal_k}")
 
     # Generate Elbow Curve plot using standard seaborn lineplot
     sns.set_theme()
@@ -78,16 +79,16 @@ def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
     return int(optimal_k), k_range, inertias, img_elbow_b64
 
 def main():
-    print("[+] Memulai Stage Preprocessing Machine Learning...")
+    logger.info("Memulai Stage Preprocessing Machine Learning...")
     os.makedirs(PREPROCESS_DIR, exist_ok=True)
     os.makedirs(REPORTS_DIR, exist_ok=True)
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
-    if not os.path.exists(INPUT_REGENCIES_CSV):
-        raise FileNotFoundError(f"Berkas input {INPUT_REGENCIES_CSV} tidak ditemukan.")
+    if not os.path.exists(TRANSFORMED_REGENCIES_CSV):
+        raise FileNotFoundError(f"Berkas input {TRANSFORMED_REGENCIES_CSV} tidak ditemukan.")
 
-    df = pd.read_csv(INPUT_REGENCIES_CSV)
-    print(f"[*] Berhasil memuat {len(df)} baris data kabupaten/kota.")
+    df = pd.read_csv(TRANSFORMED_REGENCIES_CSV)
+    logger.info(f"Berhasil memuat {len(df)} baris data kabupaten/kota.")
 
     # 1. Seleksi Fitur Numerik
     X = df[FEATURE_COLUMNS].fillna(0).values
@@ -97,14 +98,14 @@ def main():
     X_scaled = scaler.fit_transform(X)
 
     # 3. Penentuan K Terbaik Menggunakan KneeLocator
-    print("[*] Menentukan nilai K terbaik dengan KneeLocator...")
+    logger.info("Menentukan nilai K terbaik dengan KneeLocator...")
     optimal_k, k_range, inertias, img_elbow_b64 = find_optimal_k_and_plot(X_scaled, min_k=MIN_K, max_k=MAX_K)
-    print(f"[OK] K Terbaik yang terdeteksi: K = {optimal_k}")
+    logger.info(f"K Terbaik yang terdeteksi: K = {optimal_k}")
 
     # 4. Simpan Scaled Features ke CSV
     scaled_df = pd.DataFrame(X_scaled, columns=[f"scaled_{col}" for col in FEATURE_COLUMNS])
     scaled_df.to_csv(SCALED_FEATURES_CSV, index=False)
-    print(f"[SAVED] Scaled Features -> {SCALED_FEATURES_CSV}")
+    logger.info(f"Scaled Features -> {SCALED_FEATURES_CSV}")
 
     # 5. Simpan Meta Config & Optimal K ke JSON
     meta = {
@@ -115,7 +116,7 @@ def main():
     }
     with open(PREPROCESS_META_JSON, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)
-    print(f"[SAVED] Preprocess Meta -> {PREPROCESS_META_JSON}")
+    logger.info(f"Preprocess Meta -> {PREPROCESS_META_JSON}")
 
     # 6. Generate Preprocess & K Selection Markdown Report
     md_content = f"""# Laporan Preprocessing & Penentuan K Optimal SIMKOPDES
@@ -142,9 +143,9 @@ Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster opti
 <img src="data:image/png;base64,{img_elbow_b64}" alt="Kurva Elbow" width="300">"""
     with open(PREPROCESS_REPORT_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
-    print(f"[SAVED] Laporan Markdown Preprocessing -> {PREPROCESS_REPORT_MD}")
+    logger.info(f"Laporan Markdown Preprocessing -> {PREPROCESS_REPORT_MD}")
 
-    print("[DONE] Stage ML Preprocessing selesai.")
+    logger.info("Stage ML Preprocessing selesai.")
 
 if __name__ == "__main__":
     main()

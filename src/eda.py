@@ -16,7 +16,9 @@ from config import (
     get_params
 )
 from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.log_utils import get_logger
 
+logger = get_logger("eda")
 params = get_params('eda')
 
 TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
@@ -25,12 +27,12 @@ PLOT_DPI = params.get('plot_dpi', 120)
 PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
 
 def main():
-    print("[+] Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
+    logger.info("Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
     if not os.path.exists(TRANSFORMED_PROVINCES_CSV) or not os.path.exists(TRANSFORMED_REGENCIES_CSV):
-        print("[-] Data transform tidak ditemukan. Silakan jalankan transform terlebih dahulu.")
+        logger.error("Data transform tidak ditemukan. Silakan jalankan transform terlebih dahulu.")
         sys.exit(1)
 
     # Load data with Pandas
@@ -134,7 +136,7 @@ def main():
 
     with open(METRICS_JSON, "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2, ensure_ascii=False)
-    print(f"[SAVED] DVC Metrics -> {METRICS_JSON}")
+    logger.info(f"DVC Metrics -> {METRICS_JSON}")
 
     # Generate Markdown Report
     md_content = f"""# Laporan Analisis Eksplorasi Data SIMKOPDES
@@ -188,9 +190,9 @@ Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat
 
     with open(EDA_SUMMARY_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
-    print(f"[SAVED] Laporan Markdown EDA -> {EDA_SUMMARY_MD}")
+    logger.info(f"Laporan Markdown EDA -> {EDA_SUMMARY_MD}")
 
-    print("[DONE] Tahap EDA selesai.")
+    logger.info("Tahap EDA selesai.")
 
 if __name__ == "__main__":
     main()

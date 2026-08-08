@@ -17,14 +17,17 @@ from config import (
     FIGURES_DIR
 )
 from utils.plot_utils import generate_base64_plot, save_plot_to_file
+from utils.log_utils import get_logger
+
+logger = get_logger("evaluate")
 
 def main():
-    print("[+] Memulai Stage Evaluasi Model Clustering yang Dikembangkan...")
+    logger.info("Memulai Stage Evaluasi Model Clustering yang Dikembangkan...")
     os.makedirs(REPORTS_DIR, exist_ok=True)
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
     if not os.path.exists(CLUSTERED_REGENCIES_CSV) or not os.path.exists(SCALED_FEATURES_CSV):
-        print("[-] File model clustering atau scaled features tidak ditemukan. Jalankan pipeline model terlebih dahulu.")
+        logger.error("File model clustering atau scaled features tidak ditemukan. Jalankan pipeline model terlebih dahulu.")
         sys.exit(1)
 
     df_clustered = pd.read_csv(CLUSTERED_REGENCIES_CSV)
@@ -37,9 +40,9 @@ def main():
     ch_score = round(float(calinski_harabasz_score(X_scaled, labels)), 2)
     db_score = round(float(davies_bouldin_score(X_scaled, labels)), 4)
 
-    print(f"[*] Silhouette Score        : {sil_score}")
-    print(f"[*] Calinski-Harabasz Index : {ch_score}")
-    print(f"[*] Davies-Bouldin Index    : {db_score}")
+    logger.info(f"Silhouette Score        : {sil_score}")
+    logger.info(f"Calinski-Harabasz Index : {ch_score}")
+    logger.info(f"Davies-Bouldin Index    : {db_score}")
 
     # 2. Simpan DVC Metrics JSON
     metrics = {
@@ -52,7 +55,7 @@ def main():
     }
     with open(MODEL_METRICS_JSON, "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2, ensure_ascii=False)
-    print(f"[SAVED] DVC Model Metrics -> {MODEL_METRICS_JSON}")
+    logger.info(f"DVC Model Metrics -> {MODEL_METRICS_JSON}")
 
     # 3. Profiling Klaster (Rata-rata per klaster)
     cluster_profile = df_clustered.groupby('cluster_label').agg({
@@ -141,9 +144,9 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
 
     with open(CLUSTERING_REPORT_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
-    print(f"[SAVED] Laporan Markdown Clustering -> {CLUSTERING_REPORT_MD}")
+    logger.info(f"Laporan Markdown Clustering -> {CLUSTERING_REPORT_MD}")
 
-    print("[DONE] Stage Evaluasi selesai.")
+    logger.info("Stage Evaluasi selesai.")
 
 if __name__ == "__main__":
     main()
