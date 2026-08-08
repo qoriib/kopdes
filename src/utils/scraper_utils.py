@@ -53,7 +53,7 @@ def scrape_table_with_pagination(page, target_url, target_table_index=2):
     """
     Mengekstrak tabel dengan dukungan penuh paginasi Ant Design di Playwright
     """
-    page.goto(target_url, wait_until='networkidle', timeout=40000)
+    page.goto(target_url, wait_until='domcontentloaded', timeout=40000)
     page.wait_for_selector('table', timeout=15000)
 
     try:
