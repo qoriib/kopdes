@@ -144,8 +144,8 @@ stages:
       size: 4300
     - path: src/preprocess.py
       hash: md5
-      md5: d3aa4ecfeb4de1a2ba329491ab64aedc
-      size: 5397
+      md5: 77cdf54d1751651ecca000dfe47e0d8a
+      size: 5246
     params:
       params.yaml:
         preprocess.fallback_k: 3
@@ -158,20 +158,20 @@ stages:
     outs:
     - path: data/preprocess/preprocess_meta.json
       hash: md5
-      md5: 0029c61255320d3fbdb2af32482e0ef5
-      size: 329
+      md5: d9c6c33c9ae41592507f0c8a886a8cf6
+      size: 313
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 006cce52d8ca1d60c82025b6e941474e
-      size: 11386
+      md5: 012549fb95205192de495e28d17e2d50
+      size: 11329
     - path: reports/figures/preprocess_elbow_curve.png
       hash: md5
-      md5: 7a6ce4f7458a3e95056059bc53e08241
-      size: 37593
+      md5: d27ae6b7bf540ad342925431598b4025
+      size: 40348
     - path: reports/preprocess_report.md
       hash: md5
-      md5: a212f30fb5c447087d19aa9bd14ce06a
-      size: 50866
+      md5: a3e7866d5b87426af099bfb048f20bf5
+      size: 54518
   scrape_provinces:
     cmd: python src/scrape_provinces.py
     deps:
