@@ -119,8 +119,8 @@ stages:
       size: 4300
     - path: src/model.py
       hash: md5
-      md5: 50f32bb22bc938d8249bcbf3d5e41cbc
-      size: 2045
+      md5: 664da2083cdc193aee0a39fbbdb64540
+      size: 1982
     params:
       params.yaml:
         model.n_init: 10
@@ -129,12 +129,12 @@ stages:
     outs:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: e297464e45cfdb354dc4af9d5f8a3168
-      size: 4423
+      md5: 45e1d8827e1dc6b7fe9b22982d069c32
+      size: 4366
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: d50f264583fa536a82a516787c8a676e
-      size: 1219
+      md5: ff73c61cb042e3eaffdff336de8d847a
+      size: 1225
   preprocess:
     cmd: python src/preprocess.py
     deps:
