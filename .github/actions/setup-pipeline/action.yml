@@ -29,6 +29,10 @@ runs:
     - name: Setup DVC
       uses: treeverse/setup-dvc@v3
 
+    - name: DVC Pull
+      shell: bash
+      run: dvc pull --run-cache
+
     - name: Install Playwright
       if: ${{ inputs.install-playwright == 'true' }}
       shell: bash

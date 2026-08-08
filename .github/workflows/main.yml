@@ -48,9 +48,6 @@ jobs:
         with:
           install-playwright: 'true'
 
-      - name: DVC Pull
-        run: dvc pull --run-cache
-
       - name: Scrape Regency Data
         run: dvc repro scrape_regencies
 
@@ -72,9 +69,6 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull
-        run: dvc pull --run-cache
-
       - name: Run Transform
         run: dvc repro transform
 
@@ -95,9 +89,6 @@ jobs:
 
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
-
-      - name: DVC Pull
-        run: dvc pull --run-cache
 
       - name: Run EDA
         run: dvc repro eda
@@ -134,9 +125,6 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull
-        run: dvc pull --run-cache
-
       - name: Run Preprocessing
         run: dvc repro preprocess
 
@@ -172,9 +160,6 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull
-        run: dvc pull --run-cache
-
       - name: Run Model Training
         run: dvc repro model
 
@@ -195,9 +180,6 @@ jobs:
 
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
-
-      - name: DVC Pull
-        run: dvc pull --run-cache
 
       - name: Run Evaluation
         run: dvc repro evaluate
@@ -230,9 +212,6 @@ jobs:
 
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
-
-      - name: DVC Pull
-        run: dvc pull --run-cache
 
       - name: Run AI Interpretation
         env:
@@ -268,9 +247,6 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: DVC Pull
-        run: dvc pull --run-cache
-
       - name: Apply Remote Database Migrations
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -301,9 +277,6 @@ jobs:
 
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
-
-      - name: DVC Pull
-        run: dvc pull --run-cache
 
       - name: Upload EDA Report
         uses: actions/upload-artifact@v4
