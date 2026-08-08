@@ -239,12 +239,12 @@ stages:
       size: 71671
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: ec92e2a50a741044b45893b0dd7077e8
-      size: 256
+      md5: eaa3e1654e55abe8e097a3c61af37fda
+      size: 3994
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 753900c3b338142c56d4315e0b173cbd
-      size: 4039
+      md5: 13e20b77665dc9fa4f80d841fb3e8f0b
+      size: 5347
     - path: src/transform.py
       hash: md5
       md5: 93cc04ea5f071b1ba1e50847ba62b332
@@ -252,12 +252,12 @@ stages:
     outs:
     - path: data/transform/transformed_provinces.csv
       hash: md5
-      md5: 61f9f0cd3b643b0d438f3ae3cc7a28c1
-      size: 228
+      md5: 55ef92aee10e618bb77065d2ab6278b7
+      size: 4029
     - path: data/transform/transformed_regencies.csv
       hash: md5
-      md5: 7644629378aff8ed37a00166e4fb4f4c
-      size: 4300
+      md5: 7d506a93daeb684fd30274dde8f422f2
+      size: 5743
   store:
     cmd: python src/store.py
     deps:
