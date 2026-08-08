@@ -65,7 +65,7 @@ jobs:
   # ──────────────────────────────────────────────
   eda:
     name: Exploratory Data Analysis
-    needs: [scrape, transform]
+    needs: transform
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -100,7 +100,7 @@ jobs:
   # ──────────────────────────────────────────────
   preprocess:
     name: ML Preprocessing
-    needs: [scrape, transform]
+    needs: transform
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -156,7 +156,7 @@ jobs:
   # ──────────────────────────────────────────────
   evaluate:
     name: Model Evaluation
-    needs: [eda, model]
+    needs: model
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -220,7 +220,7 @@ jobs:
             --title "CML: Laporan Interpretasi AI SIMKOPDES"
           cml comment create reports/cml_interpret.md
 
-  store_db:
+  store:
     name: Store Data
     needs: interpret
     runs-on: ubuntu-latest
@@ -300,7 +300,7 @@ jobs:
 
   deploy_backend:
     name: Deploy Backend
-    needs: store_db
+    needs: store
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -327,7 +327,7 @@ jobs:
 
   deploy_frontend:
     name: Deploy Frontend
-    needs: store_db
+    needs: store
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
