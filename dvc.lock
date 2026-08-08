@@ -13,8 +13,8 @@ stages:
       size: 4300
     - path: src/eda.py
       hash: md5
-      md5: aac81051a777b83e92c8f41a03e073bc
-      size: 8878
+      md5: f0f81f0376af7f61fdbf67bde3419aca
+      size: 8680
     params:
       params.yaml:
         eda.plot_dpi: 120
@@ -24,20 +24,20 @@ stages:
     outs:
     - path: reports/eda_metrics.json
       hash: md5
-      md5: 3d8cbaccff6578f45bf46d9d96a01af6
-      size: 523
+      md5: 7b270d2b78d8afb5a6a9d1584d4eb28c
+      size: 500
     - path: reports/eda_summary.md
       hash: md5
-      md5: e3a9769c387820cd8d75be9d4e12e42d
-      size: 94239
+      md5: d2c9e27381c85215349494c7bb3b44e1
+      size: 111494
     - path: reports/figures/eda_top_provinces.png
       hash: md5
-      md5: 06f172c28230576feb2a3df05043e57b
-      size: 20134
+      md5: 8148a4020338bd7b10c83682aa69d518
+      size: 24586
     - path: reports/figures/eda_top_regencies_transaksi.png
       hash: md5
-      md5: 45277f65e4ab7402140371fdee376939
-      size: 47350
+      md5: eb4158512bfb843af0f783d86451f1ae
+      size: 55895
   evaluate:
     cmd: python src/evaluate.py
     deps:
