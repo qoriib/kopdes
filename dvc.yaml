@@ -121,6 +121,18 @@ stages:
       - reports/interpret_labels.json
       - reports/interpret_report.md
 
+  store:
+    cmd: python src/store.py
+    deps:
+      - src/store.py
+      - data/transform/transformed_provinces.csv
+      - data/model/clustered_regencies.csv
+      - reports/evaluate_metrics.json
+      - reports/interpret_report.md
+      - reports/interpret_labels.json
+    outs:
+      - data/seed.sql
+
 artifacts:
   kmeans-model:
     path: models/kmeans_model.pkl

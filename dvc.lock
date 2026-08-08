@@ -258,3 +258,35 @@ stages:
       hash: md5
       md5: 38295bed27fdb8defed84d3a161ed73b
       size: 37763
+  store:
+    cmd: python src/store.py
+    deps:
+    - path: data/model/clustered_regencies.csv
+      hash: md5
+      md5: fe09701599118049f62602f2d57ec198
+      size: 39742
+    - path: data/transform/transformed_provinces.csv
+      hash: md5
+      md5: 753aa816880d68789551faecd1f6fd75
+      size: 4029
+    - path: reports/evaluate_metrics.json
+      hash: md5
+      md5: 49c934ca6c2eb6db37efc0f1d85ca08e
+      size: 175
+    - path: reports/interpret_labels.json
+      hash: md5
+      md5: 1f275a5e844bd8d35415d5a42d405c1e
+      size: 1325
+    - path: reports/interpret_report.md
+      hash: md5
+      md5: 2e7bc9c4120fffca5f350df1bef85134
+      size: 3004
+    - path: src/store.py
+      hash: md5
+      md5: 0a7af3120055aea16e64b5481e0dc0be
+      size: 4980
+    outs:
+    - path: data/seed.sql
+      hash: md5
+      md5: 0b4a5ed512e46f94a11eff5e13671c3e
+      size: 122761
