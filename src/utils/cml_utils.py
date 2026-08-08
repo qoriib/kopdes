@@ -28,14 +28,13 @@ logger = get_logger("cml_utils")
 
 def cml_publish_image(filepath):
     """
-    Convert a PNG image file to a CML published external URL or base64 fallback
-    and return an HTML <img> tag with width 300.
+    Publish a PNG image file using CML and return the markdown image tag directly.
 
     Args:
         filepath: Path to the PNG image file.
 
     Returns:
-        An HTML img tag string with the published URL or base64 source and width 300.
+        The markdown image tag output by CML publish, or a local fallback markdown link.
     """
     if not os.path.exists(filepath):
         logger.warning(f"Image not found: {filepath}")
@@ -44,7 +43,6 @@ def cml_publish_image(filepath):
     basename = os.path.basename(filepath)
     alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
 
-    # 1. Try to publish image using CML to get an external URL
     try:
         res = subprocess.run(
             ["cml", "publish", filepath],
@@ -52,24 +50,15 @@ def cml_publish_image(filepath):
             text=True,
             check=True
         )
-        stdout_val = res.stdout.strip()
-        match = re.search(r'\((https?://[^\)]+)\)', stdout_val)
-        if match:
-            url = match.group(1)
-            logger.info(f"Published image to CML: {url}")
-            return f'<img src="{url}" alt="{alt_text}" width="300">'
+        output = res.stdout.strip()
+        if output:
+            logger.info(f"Published image to CML: {output}")
+            return output
     except Exception as e:
-        logger.warning(f"cml publish failed or not available, falling back to base64: {e}")
+        logger.warning(f"cml publish failed: {e}")
 
-    # 2. Fallback to base64
-    try:
-        encoded = file_to_base64(filepath)
-        if not encoded:
-            return ""
-        return f'<img src="data:image/png;base64,{encoded}" alt="{alt_text}" width="300">'
-    except Exception as e:
-        logger.warning(f"Failed to convert {filepath} to base64: {e}")
-        return f"![{basename}](figures/{basename})"
+    # Local fallback
+    return f"![{alt_text}](figures/{basename})"
 
 
 def strip_base64_images(md_content):
