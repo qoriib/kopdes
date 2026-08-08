@@ -144,13 +144,13 @@ Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster ka
 ## 2. Visualisasi Pengelompokan dan Kinerja
 
 ### A. Proyeksi 2D Klaster (PCA)
-![Proyeksi PCA 2D](data:image/png;base64,{img_pca_b64})
+<img src="data:image/png;base64,{img_pca_b64}" alt="Proyeksi PCA 2D" width="300">
 
 ### B. Distribusi Anggota Klaster
-![Distribusi Anggota](data:image/png;base64,{img_dist_b64})
+<img src="data:image/png;base64,{img_dist_b64}" alt="Distribusi Anggota" width="300">
 
 ### C. Rata-Rata Nilai Transaksi Keuangan per Klaster
-![Rata-rata Nilai Transaksi](data:image/png;base64,{img_trans_b64})
+<img src="data:image/png;base64,{img_trans_b64}" alt="Rata-rata Nilai Transaksi" width="300">
 
 ## 3. Profil Rata-Rata per Klaster
 

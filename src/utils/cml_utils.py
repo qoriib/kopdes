@@ -23,48 +23,38 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 def cml_publish_image(filepath):
     """
-    Publish a PNG image via `cml image` and return a markdown image tag.
-    Falls back to a relative path if cml CLI is unavailable.
+    Convert a PNG image file to base64 and return an HTML <img> tag with width 300.
 
     Args:
         filepath: Path to the PNG image file.
 
     Returns:
-        A markdown image string, e.g. `![alt](https://...)`.
+        An HTML img tag string with base64 source and width 300.
     """
     if not os.path.exists(filepath):
         print(f"[WARN] Image not found: {filepath}")
         return ""
 
     try:
-        result = subprocess.run(
-            ["cml", "image", filepath],
-            capture_output=True,
-            text=True,
-            timeout=60,
-        )
-        if result.returncode == 0 and result.stdout.strip():
-            tag = result.stdout.strip()
-            print(f"[CML] Published: {filepath}")
-            return tag
-        else:
-            print(f"[WARN] cml image failed for {filepath}: {result.stderr.strip()}")
-    except FileNotFoundError:
-        print("[WARN] cml CLI not found, using relative path fallback")
-    except subprocess.TimeoutExpired:
-        print(f"[WARN] cml image timed out for {filepath}")
-
-    # Fallback: relative path reference
-    basename = os.path.basename(filepath)
-    return f"![{basename}](figures/{basename})"
+        import base64
+        with open(filepath, "rb") as f:
+            data = f.read()
+        encoded = base64.b64encode(data).decode('utf-8')
+        basename = os.path.basename(filepath)
+        alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
+        return f'<img src="data:image/png;base64,{encoded}" alt="{alt_text}" width="300">'
+    except Exception as e:
+        print(f"[WARN] Failed to convert {filepath} to base64: {e}")
+        basename = os.path.basename(filepath)
+        return f"![{basename}](figures/{basename})"
 
 
 def strip_base64_images(md_content):
     """
     Remove base64-encoded image lines from markdown content.
 
-    Lines matching `![...](data:image/png;base64,...)` are replaced with
-    an empty placeholder so the text structure is preserved.
+    Lines matching `![...](data:image/png;base64,...)` or `<img src="data:image/png;base64,...">`
+    are replaced with an empty placeholder so the text structure is preserved.
 
     Args:
         md_content: Raw markdown string.
@@ -73,8 +63,11 @@ def strip_base64_images(md_content):
         Cleaned markdown string without base64 images.
     """
     # Match markdown image syntax with base64 data URI
-    pattern = r'!\[[^\]]*\]\(data:image/[^)]+\)'
-    return re.sub(pattern, '', md_content)
+    pattern_md = r'!\[[^\]]*\]\(data:image/[^)]+\)'
+    content = re.sub(pattern_md, '', md_content)
+    # Match HTML image syntax with base64 data URI
+    pattern_html = r'<img src="data:image/[^"]+"[^>]*>'
+    return re.sub(pattern_html, '', content)
 
 
 def build_cml_report(report_md_path, figure_paths, title=None):

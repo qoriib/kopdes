@@ -13,8 +13,8 @@ stages:
       size: 37763
     - path: src/eda.py
       hash: md5
-      md5: cd8403a9f7541c4c7923171bc27661d6
-      size: 9720
+      md5: a04aac54002a084600ee8ddf48545547
+      size: 9772
     params:
       params.yaml:
         eda.plot_dpi: 120
@@ -28,8 +28,8 @@ stages:
       size: 598
     - path: reports/eda_summary.md
       hash: md5
-      md5: 70af6a546a599a9eb8f816b9a1611d85
-      size: 124813
+      md5: 94e7da918f4b24696b8db14246a4ab24
+      size: 124865
     - path: reports/figures/eda_top_provinces.png
       hash: md5
       md5: e80321c62d40c0030dd9345fb4a13aa6
@@ -51,8 +51,8 @@ stages:
       size: 98854
     - path: src/evaluate.py
       hash: md5
-      md5: 5fc1e5cda8170f038174a20408e19dc5
-      size: 7509
+      md5: cdcd361010ca3e6864555c6276ebda16
+      size: 7587
     outs:
     - path: reports/evaluate_metrics.json
       hash: md5
@@ -60,8 +60,8 @@ stages:
       size: 175
     - path: reports/evaluate_report.md
       hash: md5
-      md5: 64a3d9eba1ce267fda406171e8c451a4
-      size: 184290
+      md5: 3b6eca562f0780674a70bfc67fe1b9e0
+      size: 184368
     - path: reports/figures/eval_avg_transaction.png
       hash: md5
       md5: 802d6adcde0e0d7422fe01b412c07276
@@ -144,8 +144,8 @@ stages:
       size: 37763
     - path: src/preprocess.py
       hash: md5
-      md5: ff906baaeb0c817c799f730f56efaca3
-      size: 6389
+      md5: 610a7c39eb765acf777b09bce6671c2f
+      size: 6415
     params:
       params.yaml:
         preprocess.fallback_k: 3
@@ -170,8 +170,8 @@ stages:
       size: 43323
     - path: reports/preprocess_report.md
       hash: md5
-      md5: 62dc949622e84ccfb5875bd1dd928659
-      size: 58494
+      md5: ce604a1246d7a97c8a8a4e9222f6729a
+      size: 58520
   scrape_provinces:
     cmd: python src/scrape_provinces.py
     deps:

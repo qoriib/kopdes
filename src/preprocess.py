@@ -167,7 +167,7 @@ Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster opti
     md_content += f"""
 
 ## 3. Kurva Elbow Visualisasi
-![Kurva Elbow](data:image/png;base64,{img_elbow_b64})"""
+<img src="data:image/png;base64,{img_elbow_b64}" alt="Kurva Elbow" width="300">"""
     with open(PREPROCESS_REPORT_MD, "w", encoding="utf-8") as f:
         f.write(md_content)
     print(f"[SAVED] Laporan Markdown Preprocessing -> {PREPROCESS_REPORT_MD}")

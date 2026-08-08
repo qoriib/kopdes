@@ -189,10 +189,10 @@ Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES ber
 ## Visualisasi Analisis Eksplorasi Data
 
 ### 1. Distribusi Koperasi di Tingkat Provinsi
-![10 Provinsi dengan Koperasi Terbanyak](data:image/png;base64,{img_prov_b64})
+<img src="data:image/png;base64,{img_prov_b64}" alt="10 Provinsi dengan Koperasi Terbanyak" width="300">
 
 ### 2. Nilai Transaksi di Tingkat Kabupaten/Kota
-![10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi](data:image/png;base64,{img_reg_b64})
+<img src="data:image/png;base64,{img_reg_b64}" alt="10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi" width="300">
 
 ## Statistik Deskriptif Tingkat Provinsi
 Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Provinsi:
