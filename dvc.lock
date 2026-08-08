@@ -83,12 +83,12 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: e297464e45cfdb354dc4af9d5f8a3168
-      size: 4423
+      md5: 45e1d8827e1dc6b7fe9b22982d069c32
+      size: 4366
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 7e3c685526de7a4a07c4fd7611fdb85c
-      size: 174
+      md5: 88b0add3d8d87fb8a04c40dc3db35997
+      size: 167
     - path: src/interpret.py
       hash: md5
       md5: d779acf9c4aa538184bb6b25f23d652f
@@ -100,12 +100,12 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: acc2e917e7e709ec770eb49da4817c47
-      size: 1910
+      md5: 56c25f8c8462636c63b1854bb87afc44
+      size: 1659
     - path: reports/interpret_report.md
       hash: md5
-      md5: df22dd8f7901c2ad9d4f70307fe2aa1c
-      size: 1822
+      md5: 949cdd11106c62bccf169a99e7f3fdc2
+      size: 1988
   model:
     cmd: python src/model.py
     deps:
