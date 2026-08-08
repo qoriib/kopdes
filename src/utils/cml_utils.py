@@ -16,7 +16,6 @@ import sys
 import re
 import subprocess
 import argparse
-
 from utils.plot_utils import file_to_base64
 from utils.log_utils import get_logger
 
@@ -56,28 +55,6 @@ def cml_publish_image(filepath):
 
     # Local fallback
     return f"![{alt_text}](figures/{basename})"
-
-
-def strip_base64_images(md_content):
-    """
-    Remove base64-encoded image lines from markdown content.
-
-    Lines matching `![...](data:image/png;base64,...)` or `<img src="data:image/png;base64,...">`
-    are replaced with an empty placeholder so the text structure is preserved.
-
-    Args:
-        md_content: Raw markdown string.
-
-    Returns:
-        Cleaned markdown string without base64 images.
-    """
-    # Match markdown image syntax with base64 data URI
-    pattern_md = r'!\[[^\]]*\]\(data:image/[^)]+\)'
-    content = re.sub(pattern_md, '', md_content)
-    # Match HTML image syntax with base64 data URI
-    pattern_html = r'<img src="data:image/[^"]+"[^>]*>'
-    return re.sub(pattern_html, '', content)
-
 
 def build_cml_report(report_md_path, figure_paths=None, title=None):
     """

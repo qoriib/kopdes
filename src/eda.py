@@ -1,12 +1,13 @@
 import os
 import sys
 import json
+import dvc.api
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-import dvc.api
+from utils.plot_utils import save_plot_to_file
+from utils.log_utils import get_logger
 from config import (
     TRANSFORMED_PROVINCES_CSV,
     TRANSFORMED_REGENCIES_CSV,
@@ -15,8 +16,6 @@ from config import (
     REPORTS_DIR,
     FIGURES_DIR
 )
-from utils.plot_utils import save_plot_to_file
-from utils.log_utils import get_logger
 
 logger = get_logger("eda")
 params = dvc.api.params_show().get('eda', {})

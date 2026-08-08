@@ -1,11 +1,10 @@
 import os
-import sys
 import json
 import pickle
 import pandas as pd
-from sklearn.cluster import KMeans
-
 import dvc.api
+from sklearn.cluster import KMeans
+from utils.log_utils import get_logger
 from config import (
     SCALED_FEATURES_CSV,
     PREPROCESS_META_JSON,
@@ -15,7 +14,6 @@ from config import (
     MODEL_DIR,
     DATA_MODEL_DIR
 )
-from utils.log_utils import get_logger
 
 logger = get_logger("model")
 params = dvc.api.params_show().get('model', {})

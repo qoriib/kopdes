@@ -4,9 +4,9 @@ import csv
 import dvc.api
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
-from config import RAW_REGENCIES_CSV, RAW_PROVINCES_CSV
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 from utils.log_utils import get_logger
+from config import RAW_REGENCIES_CSV, RAW_PROVINCES_CSV
 
 logger = get_logger("scrape_regencies")
 params = dvc.api.params_show().get('scrape', {})

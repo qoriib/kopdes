@@ -2,19 +2,18 @@ import os
 import sys
 import json
 import re
+import dvc.api
 import urllib.request
 import urllib.error
 import pandas as pd
-
-import dvc.api
+from utils.env_utils import load_env
+from utils.log_utils import get_logger
 from config import (
     CLUSTERED_REGENCIES_CSV,
     MODEL_METRICS_JSON,
     AI_REPORT_MD,
     AI_LABELS_JSON
 )
-from utils.env_utils import load_env
-from utils.log_utils import get_logger
 
 logger = get_logger("interpret")
 params = dvc.api.params_show().get('interpret', {})

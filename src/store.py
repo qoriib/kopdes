@@ -1,7 +1,7 @@
 import os
 import json
 import pandas as pd
-
+from utils.log_utils import get_logger
 from config import (
     TRANSFORMED_PROVINCES_CSV,
     CLUSTERED_REGENCIES_CSV,
@@ -10,7 +10,6 @@ from config import (
     AI_LABELS_JSON,
     SEED_SQL
 )
-from utils.log_utils import get_logger
 
 logger = get_logger("store")
 

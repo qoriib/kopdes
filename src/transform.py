@@ -1,7 +1,8 @@
 import os
 import csv
 import json
-import time
+from utils.scraper_utils import save_to_csv
+from utils.log_utils import get_logger
 from config import (
     RAW_PROVINCES_CSV,
     RAW_REGENCIES_CSV,
@@ -10,8 +11,6 @@ from config import (
     GEO_PROVINCES_JSON,
     GEO_REGENCIES_JSON
 )
-from utils.scraper_utils import save_to_csv
-from utils.log_utils import get_logger
 
 logger = get_logger("transform")
 

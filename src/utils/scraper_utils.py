@@ -1,14 +1,9 @@
-import csv
 import os
 import sys
+import csv
 from bs4 import BeautifulSoup
 from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
-
 from utils.log_utils import get_logger
-
-# Konfigurasi UTF-8 untuk output terminal
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
 
 logger = get_logger("scraper_utils")
 
