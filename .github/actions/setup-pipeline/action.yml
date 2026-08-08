@@ -35,7 +35,3 @@ runs:
         restore-keys: |
           dvc-cache-${{ github.sha }}-
           dvc-cache-
-
-    - name: DVC Pull
-      shell: bash
-      run: dvc pull --run-cache

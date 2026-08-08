@@ -17,7 +17,7 @@ import re
 import subprocess
 import argparse
 
-from utils.plot_utils import file_to_base64
+from plot_utils import file_to_base64
 
 
 def cml_publish_image(filepath):

@@ -4,7 +4,7 @@ scrape:
   table_index: 2
   max_workers: 3
   start_province_id: 1
-  end_province_id: 5
+  end_province_id: 3
   playwright:
     headless: true
     width: 1280
