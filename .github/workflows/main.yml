@@ -36,8 +36,10 @@ jobs:
       - name: Scrape Regency Data
         run: dvc repro -s scrape_regencies
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update scrape stage artifacts [skip ci]"
 
   # ──────────────────────────────────────────────
   # Stage 2: Data Transformation
@@ -57,8 +59,10 @@ jobs:
       - name: Run Transform
         run: dvc repro -s transform
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update transform stage artifacts [skip ci]"
 
   # ──────────────────────────────────────────────
   # Stage 3a: Exploratory Data Analysis
@@ -78,8 +82,10 @@ jobs:
       - name: Run EDA
         run: dvc repro -s eda
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update eda stage artifacts [skip ci]"
 
       - name: Post EDA Report to Step Summary
         run: cat reports/eda_summary.md >> $GITHUB_STEP_SUMMARY
@@ -113,8 +119,10 @@ jobs:
       - name: Run Preprocessing
         run: dvc repro -s preprocess
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update preprocess stage artifacts [skip ci]"
 
       - name: Post Preprocess Report to Step Summary
         run: cat reports/preprocess_report.md >> $GITHUB_STEP_SUMMARY
@@ -148,8 +156,10 @@ jobs:
       - name: Run Model Training
         run: dvc repro -s model
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update model stage artifacts [skip ci]"
 
   # ──────────────────────────────────────────────
   # Stage 5: Model Evaluation
@@ -169,8 +179,10 @@ jobs:
       - name: Run Evaluation
         run: dvc repro -s evaluate
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update evaluate stage artifacts [skip ci]"
 
       - name: Post Evaluation Report to Step Summary
         run: cat reports/evaluate_report.md >> $GITHUB_STEP_SUMMARY
@@ -204,8 +216,10 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: dvc repro -s interpret
 
-      - name: DVC Push
-        run: dvc push
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update interpret stage artifacts [skip ci]"
 
       - name: Post AI Interpretation Report to Step Summary
         run: cat reports/interpret_report.md >> $GITHUB_STEP_SUMMARY
@@ -287,16 +301,10 @@ jobs:
           name: interpret-report
           path: reports/interpret_report.md
 
-      - name: Commit & Push to GitHub
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if ! git diff --cached --quiet; then
-            git commit -m "auto: update DVC tracking files and AI reports [skip ci]"
-            git pull --rebase origin main
-            git push
-          fi
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update DVC tracking files and AI reports [skip ci]"
 
   deploy_backend:
     name: Deploy Backend

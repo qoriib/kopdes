@@ -1,0 +1,35 @@
+name: 'Push Pipeline Artifacts & State'
+description: 'Pushes updated data cache to DVC remote and commits/pushes all working tree changes to GitHub.'
+
+inputs:
+  commit-message:
+    description: 'Custom commit message for Git push'
+    required: false
+    default: 'auto: update dvc tracking files and pipeline artifacts [skip ci]'
+
+runs:
+  using: 'composite'
+  steps:
+    # 1. Push data ke DVC Remote (AWS S3 / Cloudflare R2 / dll.)
+    - name: DVC Push
+      shell: bash
+      run: dvc push
+
+    # 2. Stage seluruh perubahan (git add -A) dan Push ke GitHub
+    - name: Commit and Push All Changes
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        # Staging seluruh perubahan di workspace
+        git add -A
+        
+        if ! git diff --cached --quiet; then
+          echo "=== Changes detected. Committing and pushing to remote... ==="
+          git commit -m "${{ inputs.commit-message }}"
+          git pull --rebase origin main
+          git push
+        else
+          echo "=== No changes detected in working tree. Skipping commit. ==="
+        fi
