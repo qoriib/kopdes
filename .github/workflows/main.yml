@@ -221,7 +221,7 @@ jobs:
           cml comment create reports/cml_interpret.md
 
   store_db:
-    name: Store Data to Database
+    name: Store Data
     needs: interpret
     runs-on: ubuntu-latest
     steps:
