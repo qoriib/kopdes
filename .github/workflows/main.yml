@@ -31,10 +31,10 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Scrape Province Data
-        run: dvc repro -s scrape_provinces
+        run: dvc repro scrape_provinces
 
       - name: Scrape Regency Data
-        run: dvc repro -s scrape_regencies
+        run: dvc repro scrape_regencies
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run Transform
-        run: dvc repro -s transform
+        run: dvc repro transform
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -80,7 +80,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run EDA
-        run: dvc repro -s eda
+        run: dvc repro eda
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -117,7 +117,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run Preprocessing
-        run: dvc repro -s preprocess
+        run: dvc repro preprocess
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -154,7 +154,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run Model Training
-        run: dvc repro -s model
+        run: dvc repro model
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -177,7 +177,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run Evaluation
-        run: dvc repro -s evaluate
+        run: dvc repro evaluate
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -214,7 +214,7 @@ jobs:
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc repro -s interpret
+        run: dvc repro interpret
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -255,7 +255,7 @@ jobs:
           npx wrangler d1 migrations apply simkopdes_db --remote
 
       - name: Run DVC Store Stage
-        run: dvc repro -s store
+        run: dvc repro store
 
       - name: Seed Remote Database
         env:
