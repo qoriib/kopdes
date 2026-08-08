@@ -26,10 +26,6 @@ runs:
     - name: Setup CML
       uses: iterative/setup-cml@v2
 
-    - name: Prepare CML CI
-      shell: bash
-      run: cml ci
-
     - name: Setup DVC
       uses: treeverse/setup-dvc@v3
 
