@@ -181,8 +181,8 @@ stages:
       size: 1683
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: fbcc50b6a54f3b09436024476718eaeb
-      size: 7133
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.playwright.headless: true
@@ -195,7 +195,7 @@ stages:
     outs:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: c8313d236cc806be9a236e31c2ecc69b
+      md5: f58082d510b209e3fcb760a83dd97336
       size: 3993
   scrape_regencies:
     cmd: python src/scrape_regencies.py
@@ -206,8 +206,8 @@ stages:
       size: 3351
     - path: src/utils/scraper_utils.py
       hash: md5
-      md5: fbcc50b6a54f3b09436024476718eaeb
-      size: 7133
+      md5: 43317df24f7b211caffb9d7907fb9586
+      size: 6937
     params:
       params.yaml:
         scrape.base_url_template: 
