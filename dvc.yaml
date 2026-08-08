@@ -36,6 +36,7 @@ stages:
 
   transform:
     cmd: python src/transform.py
+    always_changed: true
     deps:
       - src/transform.py
       - data/raw/scraped_provinces.csv
@@ -48,6 +49,7 @@ stages:
 
   eda:
     cmd: python src/eda.py
+    always_changed: true
     deps:
       - src/eda.py
       - data/transform/transformed_provinces.csv
@@ -65,6 +67,7 @@ stages:
 
   preprocess:
     cmd: python src/preprocess.py
+    always_changed: true
     deps:
       - src/preprocess.py
       - data/transform/transformed_regencies.csv
@@ -84,6 +87,7 @@ stages:
 
   model:
     cmd: python src/model.py
+    always_changed: true
     deps:
       - src/model.py
       - data/preprocess/scaled_features.csv
@@ -99,6 +103,7 @@ stages:
 
   evaluate:
     cmd: python src/evaluate.py
+    always_changed: true
     deps:
       - src/evaluate.py
       - data/preprocess/scaled_features.csv
@@ -113,6 +118,7 @@ stages:
 
   interpret:
     cmd: python src/interpret.py
+    always_changed: true
     deps:
       - src/interpret.py
       - reports/evaluate_metrics.json
@@ -126,6 +132,7 @@ stages:
 
   store:
     cmd: python src/store.py
+    always_changed: true
     deps:
       - src/store.py
       - data/transform/transformed_provinces.csv

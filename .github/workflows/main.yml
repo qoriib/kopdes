@@ -87,9 +87,6 @@ jobs:
         with:
           commit-message: "auto: update eda stage artifacts [skip ci]"
 
-      - name: Post EDA Report to Step Summary
-        run: cat reports/eda_summary.md >> $GITHUB_STEP_SUMMARY
-
       - name: Generate & Post CML EDA Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -100,6 +97,7 @@ jobs:
             --output reports/cml_eda.md \
             --title "CML: Laporan EDA SIMKOPDES"
           cml comment create reports/cml_eda.md
+          cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
 
   # ──────────────────────────────────────────────
   # Stage 3b: ML Preprocessing
@@ -124,9 +122,6 @@ jobs:
         with:
           commit-message: "auto: update preprocess stage artifacts [skip ci]"
 
-      - name: Post Preprocess Report to Step Summary
-        run: cat reports/preprocess_report.md >> $GITHUB_STEP_SUMMARY
-
       - name: Generate & Post CML Preprocess Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -137,6 +132,7 @@ jobs:
             --output reports/cml_preprocess.md \
             --title "CML: Laporan Preprocessing SIMKOPDES"
           cml comment create reports/cml_preprocess.md
+          cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
 
   # ──────────────────────────────────────────────
   # Stage 4: KMeans Clustering
@@ -184,9 +180,6 @@ jobs:
         with:
           commit-message: "auto: update evaluate stage artifacts [skip ci]"
 
-      - name: Post Evaluation Report to Step Summary
-        run: cat reports/evaluate_report.md >> $GITHUB_STEP_SUMMARY
-
       - name: Generate & Post CML Evaluate Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -197,6 +190,7 @@ jobs:
             --output reports/cml_evaluate.md \
             --title "CML: Laporan Evaluasi Clustering SIMKOPDES"
           cml comment create reports/cml_evaluate.md
+          cat reports/cml_evaluate.md >> $GITHUB_STEP_SUMMARY
 
   interpret:
     name: AI Interpretation
@@ -221,9 +215,6 @@ jobs:
         with:
           commit-message: "auto: update interpret stage artifacts [skip ci]"
 
-      - name: Post AI Interpretation Report to Step Summary
-        run: cat reports/interpret_report.md >> $GITHUB_STEP_SUMMARY
-
       - name: Generate & Post CML Interpret Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -233,6 +224,7 @@ jobs:
             --output reports/cml_interpret.md \
             --title "CML: Laporan Interpretasi AI SIMKOPDES"
           cml comment create reports/cml_interpret.md
+          cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
 
   store:
     name: Store Data

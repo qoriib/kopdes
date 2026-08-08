@@ -28,28 +28,47 @@ logger = get_logger("cml_utils")
 
 def cml_publish_image(filepath):
     """
-    Convert a PNG image file to base64 and return an HTML <img> tag with width 300.
+    Convert a PNG image file to a CML published external URL or base64 fallback
+    and return an HTML <img> tag with width 300.
 
     Args:
         filepath: Path to the PNG image file.
 
     Returns:
-        An HTML img tag string with base64 source and width 300.
+        An HTML img tag string with the published URL or base64 source and width 300.
     """
     if not os.path.exists(filepath):
         logger.warning(f"Image not found: {filepath}")
         return ""
 
+    basename = os.path.basename(filepath)
+    alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
+
+    # 1. Try to publish image using CML to get an external URL
+    try:
+        res = subprocess.run(
+            ["cml", "image", "publish", filepath],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        stdout_val = res.stdout.strip()
+        match = re.search(r'\((https?://[^\)]+)\)', stdout_val)
+        if match:
+            url = match.group(1)
+            logger.info(f"Published image to CML: {url}")
+            return f'<img src="{url}" alt="{alt_text}" width="300">'
+    except Exception as e:
+        logger.warning(f"CML image publish failed or not available, falling back to base64: {e}")
+
+    # 2. Fallback to base64
     try:
         encoded = file_to_base64(filepath)
         if not encoded:
             return ""
-        basename = os.path.basename(filepath)
-        alt_text = os.path.splitext(basename)[0].replace('_', ' ').replace('-', ' ').title()
         return f'<img src="data:image/png;base64,{encoded}" alt="{alt_text}" width="300">'
     except Exception as e:
         logger.warning(f"Failed to convert {filepath} to base64: {e}")
-        basename = os.path.basename(filepath)
         return f"![{basename}](figures/{basename})"
 
 
