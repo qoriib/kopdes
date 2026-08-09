@@ -18,9 +18,8 @@ model:
   override_k: null
   selected_features:
     - jumlah_koperasi
-    - koperasi_nib
-    - koperasi_rat
     - simpanan_pokok
+    - simpanan_wajib
     - volume_transaksi
     - nilai_transaksi
 
