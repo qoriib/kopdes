@@ -184,3 +184,39 @@ def save_to_csv(filename: str, headers: list, rows: list) -> bool:
         logger.error(f"Gagal menyimpan file CSV: {e}")
 
     return False
+
+
+def load_scraped_province_ids() -> list:
+    """Memuat daftar province_id yang sudah berhasil discrape."""
+    prov_ids = []
+    from config import GEO_PROVINCES_JSON, RAW_PROVINCES_CSV
+    import json
+    
+    geo_id_map = {}
+    if os.path.exists(GEO_PROVINCES_JSON):
+        try:
+            with open(GEO_PROVINCES_JSON, encoding='utf-8') as f:
+                prov_data = json.load(f)
+                geo_id_map = {p['name'].strip().upper(): int(p['province_id']) for p in prov_data if 'name' in p}
+        except Exception as e:
+            logger.error(f"Gagal memuat province.json untuk resolusi ID: {e}")
+
+    if os.path.exists(RAW_PROVINCES_CSV):
+        try:
+            with open(RAW_PROVINCES_CSV, encoding='utf-8-sig') as f:
+                reader = csv.reader(f)
+                header = next(reader, None)
+                for row in reader:
+                    if not row or len(row) < 2:
+                        continue
+                    name = row[1].strip().upper()
+                    if name.lower() == "no data":
+                        continue
+                    geo_id = geo_id_map.get(name)
+                    if geo_id is not None:
+                        prov_ids.append(geo_id)
+                    else:
+                        logger.warning(f"Province name '{name}' dari scraped_provinces.csv tidak ditemukan di province.json!")
+        except Exception as e:
+            logger.error(f"Gagal membaca province IDs dari {RAW_PROVINCES_CSV}: {e}")
+    return prov_ids

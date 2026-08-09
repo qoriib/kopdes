@@ -2,17 +2,18 @@ import time
 from playwright.sync_api import sync_playwright
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 from utils.log_utils import get_logger
-from config import RAW_PROVINCES_CSV, SCRAPE_TARGET_URL, SCRAPE_TABLE_INDEX
+from config import (
+    RAW_PROVINCES_CSV,
+    SCRAPE_TARGET_URL,
+    SCRAPE_TABLE_INDEX
+)
 
 logger = get_logger("scrape_provinces")
 
-TARGET_URL = SCRAPE_TARGET_URL
-TABLE_INDEX = SCRAPE_TABLE_INDEX
-
 def main():
     logger.info("Memulai Scraping Data Provinsi via Playwright...")
-    logger.info(f"Target URL : {TARGET_URL}")
-    logger.info(f"Tabel Ke   : {TABLE_INDEX}")
+    logger.info(f"Target URL : {SCRAPE_TARGET_URL}")
+    logger.info(f"Tabel Ke   : {SCRAPE_TABLE_INDEX}")
     logger.info(f"Output CSV : {RAW_PROVINCES_CSV}")
 
     start_time = time.time()
@@ -21,7 +22,7 @@ def main():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
-        headers, clean_rows = scrape_table_with_pagination(page, TARGET_URL, TABLE_INDEX)
+        headers, clean_rows = scrape_table_with_pagination(page, SCRAPE_TARGET_URL, SCRAPE_TABLE_INDEX)
         browser.close()
 
     elapsed = time.time() - start_time
