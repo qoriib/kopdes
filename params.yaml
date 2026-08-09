@@ -19,14 +19,10 @@ model:
   selected_features:
     - jumlah_koperasi
     - koperasi_nib
-    - koperasi_npwp
     - koperasi_rat
     - simpanan_pokok
-    - simpanan_wajib
     - volume_transaksi
     - nilai_transaksi
-    - latitude
-    - longitude
 
 interpret:
   model: "@cf/openai/gpt-oss-120b"
