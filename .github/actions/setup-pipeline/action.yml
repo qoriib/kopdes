@@ -28,9 +28,6 @@ runs:
     - name: Setup CML
       uses: iterative/setup-cml@v2
 
-    - name: Setup DVC
-      uses: treeverse/setup-dvc@v3
-
     - name: DVC Pull
       shell: bash
       run: dvc pull --run-cache

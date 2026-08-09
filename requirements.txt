@@ -6,5 +6,6 @@ pandas
 numpy
 kneed
 dvc
+dvc-s3
 seaborn
 tabulate
