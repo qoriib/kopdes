@@ -45,7 +45,7 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 08a087801c5698258aec933fd9c3b520
+      md5: 6cf2ae265fd885b87e55b7619abb5224
       size: 40382
     - path: data/preprocess/scaled_features.csv
       hash: md5
@@ -53,8 +53,8 @@ stages:
       size: 102343
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: c193fcdedebfd52c9b444cd8a60c13d7
-      size: 2898
+      md5: 5cec3100381f4fb9e6ade1e67f310132
+      size: 2802
     - path: src/evaluate.py
       hash: md5
       md5: 1029d3df20da3c4824b19b7559f49994
@@ -68,45 +68,41 @@ stages:
         model.selected_features:
         - jumlah_koperasi
         - koperasi_nib
-        - koperasi_npwp
         - koperasi_rat
         - simpanan_pokok
-        - simpanan_wajib
         - volume_transaksi
         - nilai_transaksi
-        - latitude
-        - longitude
     outs:
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 0eb978c570a02a64e3f587eefb17713f
+      md5: 673fd641a1a0b6d4fb7f5d9fa0a6e14e
       size: 168
     - path: reports/evaluate_report.md
       hash: md5
-      md5: 15d79c1ba6a01fed447ae3d37cede65c
-      size: 1810
+      md5: 211c2b99a9da9b5e5ee7829a8a62bc18
+      size: 1811
     - path: reports/figures/eval_avg_transaction.png
       hash: md5
-      md5: f609890aafefb24a128f5c84de548144
-      size: 23429
+      md5: 45773a20edbfe365323d1c136f56d0b5
+      size: 23632
     - path: reports/figures/eval_cluster_distribution.png
       hash: md5
-      md5: 7d88bdc601c4f9f11139da88e5ea9fc0
-      size: 26555
+      md5: 9cf5aedc0f1b6238752a6f5bd0a97fc8
+      size: 26455
     - path: reports/figures/eval_pca_projection.png
       hash: md5
-      md5: 7f5072135caaec29498beb33b7f8cb9e
-      size: 81310
+      md5: 38a7d450a6191afa4e87e43257e45db0
+      size: 74640
   interpret:
     cmd: python src/interpret.py
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 08a087801c5698258aec933fd9c3b520
+      md5: 6cf2ae265fd885b87e55b7619abb5224
       size: 40382
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 0eb978c570a02a64e3f587eefb17713f
+      md5: 673fd641a1a0b6d4fb7f5d9fa0a6e14e
       size: 168
     - path: src/interpret.py
       hash: md5
@@ -123,12 +119,12 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 1d3d753e4aab0f9686dad6029e0d27e0
-      size: 1199
+      md5: cb98b9125b317f04ea7b2e56d943368e
+      size: 828
     - path: reports/interpret_report.md
       hash: md5
-      md5: f79800cf6f51953a7c76136258576013
-      size: 1984
+      md5: 17d540de23d1b6ff1bbcb72f5e3b3c48
+      size: 1729
   model:
     cmd: python src/model.py
     deps:
@@ -156,23 +152,19 @@ stages:
         model.selected_features:
         - jumlah_koperasi
         - koperasi_nib
-        - koperasi_npwp
         - koperasi_rat
         - simpanan_pokok
-        - simpanan_wajib
         - volume_transaksi
         - nilai_transaksi
-        - latitude
-        - longitude
     outs:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 08a087801c5698258aec933fd9c3b520
+      md5: 6cf2ae265fd885b87e55b7619abb5224
       size: 40382
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: c193fcdedebfd52c9b444cd8a60c13d7
-      size: 2898
+      md5: 5cec3100381f4fb9e6ade1e67f310132
+      size: 2802
   preprocess:
     cmd: python src/preprocess.py
     deps:
@@ -297,7 +289,7 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 08a087801c5698258aec933fd9c3b520
+      md5: 6cf2ae265fd885b87e55b7619abb5224
       size: 40382
     - path: data/transform/transformed_provinces.csv
       hash: md5
@@ -305,16 +297,16 @@ stages:
       size: 4034
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: 0eb978c570a02a64e3f587eefb17713f
+      md5: 673fd641a1a0b6d4fb7f5d9fa0a6e14e
       size: 168
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 1d3d753e4aab0f9686dad6029e0d27e0
-      size: 1199
+      md5: cb98b9125b317f04ea7b2e56d943368e
+      size: 828
     - path: reports/interpret_report.md
       hash: md5
-      md5: f79800cf6f51953a7c76136258576013
-      size: 1984
+      md5: 17d540de23d1b6ff1bbcb72f5e3b3c48
+      size: 1729
     - path: src/store.py
       hash: md5
       md5: 32a3508b7d2d4055575803075f775441
@@ -322,5 +314,5 @@ stages:
     outs:
     - path: data/seed.sql
       hash: md5
-      md5: e969511a726760c50b34ecd7f23a3178
-      size: 144402
+      md5: c402530f2b2d931bcad9146d8081e3ad
+      size: 143776
