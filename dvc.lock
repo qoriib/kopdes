@@ -13,12 +13,12 @@ stages:
       size: 38838
     - path: src/eda.py
       hash: md5
-      md5: ef798483806b98e8fa61ebcea8f749b7
-      size: 7892
+      md5: b3af133551413213233b81beddc348ce
+      size: 7692
     - path: src/reports/eda_summary_template.md
       hash: md5
-      md5: e560d0931c2fff085de21ee425a599b7
-      size: 1725
+      md5: 345c6ef69dcbaa07a4341e0f169249da
+      size: 1698
     params:
       params.yaml:
         eda.top_provinces_limit: 10
@@ -26,43 +26,43 @@ stages:
     outs:
     - path: reports/eda_metrics.json
       hash: md5
-      md5: 5e36880000e515ac07c9c8d3e85d52d7
-      size: 598
+      md5: 2859fbca673387e19bd9260d0c82a7ff
+      size: 575
     - path: reports/eda_summary.md
       hash: md5
-      md5: 749bafd449f0741f01b6befddc9305d3
-      size: 5557
+      md5: 48edb21cbedcc4824b519d00804997f0
+      size: 5448
     - path: reports/figures/eda_top_provinces.png
       hash: md5
-      md5: e80321c62d40c0030dd9345fb4a13aa6
-      size: 42225
+      md5: 33e9905fe8c86bb6a5a0d0d8e4e51fdf
+      size: 44383
     - path: reports/figures/eda_top_regencies_transaksi.png
       hash: md5
-      md5: e26f9ef90c911074b88909a76e2ef760
-      size: 47752
+      md5: c2fd526b1f5efdd0ce5a0ad94413ba74
+      size: 50262
   evaluate:
     cmd: python src/evaluate.py
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 8a076b26c6fb24a09f2314ede27fa38e
-      size: 40897
+      md5: 08a087801c5698258aec933fd9c3b520
+      size: 40382
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 3fa46d9dfb6d263b07fc8d317292b862
-      size: 102858
+      md5: 54c2cab3bfe24b36bd5c26375d817ce0
+      size: 102343
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: d13d1d30c8c1b3d3a8d8ec5da3aff788
-      size: 2892
+      md5: c193fcdedebfd52c9b444cd8a60c13d7
+      size: 2898
     - path: src/evaluate.py
       hash: md5
-      md5: 8261c08ddf3c4847396e6ce3889ebd72
-      size: 5650
+      md5: 1029d3df20da3c4824b19b7559f49994
+      size: 5630
     - path: src/reports/evaluate_report_template.md
       hash: md5
-      md5: 902d74506232b00ce4ec502c670b75d0
-      size: 1603
+      md5: e3190c60e72fb13f05d5c73cc674bcb1
+      size: 1570
     params:
       params.yaml:
         model.selected_features:
@@ -79,39 +79,39 @@ stages:
     outs:
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: adb7ff79ad3876e510f44988398f83b6
-      size: 175
+      md5: 0eb978c570a02a64e3f587eefb17713f
+      size: 168
     - path: reports/evaluate_report.md
       hash: md5
-      md5: 9339bbb5c22b3887c7bf32e2780f970c
-      size: 1882
+      md5: 15d79c1ba6a01fed447ae3d37cede65c
+      size: 1810
     - path: reports/figures/eval_avg_transaction.png
       hash: md5
-      md5: faf9818c5c7f0211fa081927c6c8fc78
-      size: 24499
+      md5: f609890aafefb24a128f5c84de548144
+      size: 23429
     - path: reports/figures/eval_cluster_distribution.png
       hash: md5
-      md5: 248eca3f2b2a8dce86f82db9bc8d7164
-      size: 25663
+      md5: 7d88bdc601c4f9f11139da88e5ea9fc0
+      size: 26555
     - path: reports/figures/eval_pca_projection.png
       hash: md5
-      md5: de04d1884af5c78e378217f57b82f2c2
-      size: 87022
+      md5: 7f5072135caaec29498beb33b7f8cb9e
+      size: 81310
   interpret:
     cmd: python src/interpret.py
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 8a076b26c6fb24a09f2314ede27fa38e
-      size: 40897
+      md5: 08a087801c5698258aec933fd9c3b520
+      size: 40382
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: adb7ff79ad3876e510f44988398f83b6
-      size: 175
+      md5: 0eb978c570a02a64e3f587eefb17713f
+      size: 168
     - path: src/interpret.py
       hash: md5
-      md5: 86c0806dc9d6b29b8c4b1fdf2c7f642e
-      size: 8842
+      md5: 7f7fabb4163be6b106f27f9ddad2c191
+      size: 8813
     - path: src/reports/interpret_report_template.md
       hash: md5
       md5: 97e267b2e68df2f9475e325a149f67ce
@@ -123,23 +123,23 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 61031c041dc326a907ee003a5079a54c
-      size: 1181
+      md5: 41eac5e569de879c330d691fece1cac5
+      size: 1292
     - path: reports/interpret_report.md
       hash: md5
-      md5: fad032a060ff7f406ebd3fc1ebe61c8a
-      size: 1502
+      md5: 651e52e62f4004fbd7b2c2ea75d5234a
+      size: 1685
   model:
     cmd: python src/model.py
     deps:
     - path: data/preprocess/preprocess_meta.json
       hash: md5
-      md5: 3e29ad3da5141f8713210e091a6f9676
-      size: 330
+      md5: 2c26748162f1f537f0f33948cbb032ca
+      size: 314
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 3fa46d9dfb6d263b07fc8d317292b862
-      size: 102858
+      md5: 54c2cab3bfe24b36bd5c26375d817ce0
+      size: 102343
     - path: data/transform/transformed_regencies.csv
       hash: md5
       md5: b4e2699afb3cd99d861a830508142490
@@ -167,12 +167,12 @@ stages:
     outs:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 8a076b26c6fb24a09f2314ede27fa38e
-      size: 40897
+      md5: 08a087801c5698258aec933fd9c3b520
+      size: 40382
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: d13d1d30c8c1b3d3a8d8ec5da3aff788
-      size: 2892
+      md5: c193fcdedebfd52c9b444cd8a60c13d7
+      size: 2898
   preprocess:
     cmd: python src/preprocess.py
     deps:
@@ -186,8 +186,8 @@ stages:
       size: 4621
     - path: src/reports/preprocess_report_template.md
       hash: md5
-      md5: 3a8095280cb3cbca328069c32d4414e2
-      size: 601
+      md5: 61b7f2d9f219a6faf0f2d8b7d860147f
+      size: 569
     params:
       params.yaml:
         preprocess.fallback_k: 3
@@ -200,20 +200,20 @@ stages:
     outs:
     - path: data/preprocess/preprocess_meta.json
       hash: md5
-      md5: 3e29ad3da5141f8713210e091a6f9676
-      size: 330
+      md5: 2c26748162f1f537f0f33948cbb032ca
+      size: 314
     - path: data/preprocess/scaled_features.csv
       hash: md5
-      md5: 3fa46d9dfb6d263b07fc8d317292b862
-      size: 102858
+      md5: 54c2cab3bfe24b36bd5c26375d817ce0
+      size: 102343
     - path: reports/figures/preprocess_elbow_curve.png
       hash: md5
-      md5: 5296d4bdc16f54dfc7520c0cdc62e34f
-      size: 42711
+      md5: 7259381572131878c80036b155c0fc86
+      size: 44772
     - path: reports/preprocess_report.md
       hash: md5
-      md5: 9cb145da0c9ae17d5911b1c39d2e374a
-      size: 770
+      md5: 9a4a23a2cce34899adb1a2666c33aae2
+      size: 713
   scrape_provinces:
     cmd: python src/scrape_provinces.py
     deps:
@@ -297,24 +297,24 @@ stages:
     deps:
     - path: data/model/clustered_regencies.csv
       hash: md5
-      md5: 8a076b26c6fb24a09f2314ede27fa38e
-      size: 40897
+      md5: 08a087801c5698258aec933fd9c3b520
+      size: 40382
     - path: data/transform/transformed_provinces.csv
       hash: md5
       md5: 2d5fb6b486774700371ddae5c06c0ae5
       size: 4034
     - path: reports/evaluate_metrics.json
       hash: md5
-      md5: adb7ff79ad3876e510f44988398f83b6
-      size: 175
+      md5: 0eb978c570a02a64e3f587eefb17713f
+      size: 168
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 61031c041dc326a907ee003a5079a54c
-      size: 1181
+      md5: 41eac5e569de879c330d691fece1cac5
+      size: 1292
     - path: reports/interpret_report.md
       hash: md5
-      md5: fad032a060ff7f406ebd3fc1ebe61c8a
-      size: 1502
+      md5: 651e52e62f4004fbd7b2c2ea75d5234a
+      size: 1685
     - path: src/store.py
       hash: md5
       md5: 32a3508b7d2d4055575803075f775441
@@ -322,5 +322,5 @@ stages:
     outs:
     - path: data/seed.sql
       hash: md5
-      md5: 9f52df2b978277082dd48978a957ab44
-      size: 144466
+      md5: 7adf7e9b52b2d86382d8a61f744b76af
+      size: 144196
