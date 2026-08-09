@@ -317,10 +317,10 @@ stages:
       size: 1502
     - path: src/store.py
       hash: md5
-      md5: ff7ee9ca201eb5c6d1b09b299ce84551
-      size: 4719
+      md5: 32a3508b7d2d4055575803075f775441
+      size: 4920
     outs:
     - path: data/seed.sql
       hash: md5
-      md5: 99602f6d265b5cea9e8516cbc886f43c
-      size: 125625
+      md5: 9f52df2b978277082dd48978a957ab44
+      size: 144466
