@@ -3,36 +3,11 @@
   "name": "backend",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-07",
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
-  // "vars": {
-  //   "MY_VAR": "my-variable"
-  // },
-  // "kv_namespaces": [
-  //   {
-  //     "binding": "MY_KV_NAMESPACE",
-  //     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  //   }
-  // ],
-  // "r2_buckets": [
-  //   {
-  //     "binding": "MY_BUCKET",
-  //     "bucket_name": "my-bucket"
-  //   }
-  // ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "simkopdes_db",
-      "database_id": "f4d32e72-d747-4c6b-8fa2-e57439c2cdf2"
+      "database_id": "3305097b-79a3-499c-840b-6c43386f96d0"
     }
   ]
-  // "ai": {
-  //   "binding": "AI"
-  // },
-  // "observability": {
-  //   "enabled": true,
-  //   "head_sampling_rate": 1
-  // }
 }
