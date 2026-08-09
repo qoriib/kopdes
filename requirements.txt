@@ -8,4 +8,5 @@ kneed
 dvc
 dvc-s3
 seaborn
+matplotlib
 tabulate

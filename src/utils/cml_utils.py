@@ -16,7 +16,6 @@ import sys
 import re
 import subprocess
 import argparse
-from utils.plot_utils import file_to_base64
 from utils.log_utils import get_logger
 
 logger = get_logger("cml_utils")
