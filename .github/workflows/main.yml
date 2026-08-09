@@ -58,9 +58,6 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Show DVC DAG
-        run: dvc dag
-
       - name: Run DVC Pipeline
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
