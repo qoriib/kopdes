@@ -3,16 +3,17 @@ import sys
 import json
 import dvc.api
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
+from utils.report_utils import generate_report_from_template
 from config import (
     TRANSFORMED_PROVINCES_CSV,
     TRANSFORMED_REGENCIES_CSV,
     METRICS_JSON,
     EDA_SUMMARY_MD,
+    EDA_SUMMARY_TEMPLATE_MD,
     REPORTS_DIR,
     FIGURES_DIR
 )
@@ -135,59 +136,39 @@ def main():
         json.dump(metrics, f, indent=2, ensure_ascii=False)
     logger.info(f"DVC Metrics -> {METRICS_JSON}")
 
-    # Generate Markdown Report
-    md_content = f"""# Laporan Analisis Eksplorasi Data SIMKOPDES
-
-Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES berbasis Data Version Control (DVC).
-
-## Ringkasan Statistik Nasional
-
-| Indikator Kinerja | Jumlah | Persentase |
-| :--- | :--- | :--- |
-| Jumlah Provinsi | {total_provinces} | 100% |
-| Jumlah Kabupaten/Kota | {total_regencies} | 100% |
-| Total Koperasi Terdaftar | {total_koperasi:,} | 100% |
-| Koperasi Memiliki NIB | {total_nib:,} | {pct_nib}% |
-| Koperasi Memiliki NPWP | {total_npwp:,} | {pct_npwp}% |
-| Koperasi Telah Melaksanakan RAT (2025) | {total_rat:,} | {pct_rat}% |
-| Total Simpanan Pokok | Rp {simpanan_pokok:,.2f} | - |
-| Total Simpanan Wajib | Rp {simpanan_wajib:,.2f} | - |
-| Total Nilai Transaksi | Rp {total_nilai_transaksi:,.2f} | - |
-
-## Visualisasi Analisis Eksplorasi Data
-
-### 1. Distribusi Koperasi di Tingkat Provinsi
-<img src="figures/eda_top_provinces.png" alt="10 Provinsi dengan Koperasi Terbanyak" width="300">
-
-### 2. Nilai Transaksi di Tingkat Kabupaten/Kota
-<img src="figures/eda_top_regencies_transaksi.png" alt="10 Kabupaten/Kota dengan Nilai Transaksi Tertinggi" width="300">
-
-## Statistik Deskriptif Tingkat Provinsi
-Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Provinsi:
-
-{desc_prov_markdown}
-
-## Statistik Deskriptif Tingkat Kabupaten/Kota
-Laporan statistik deskriptif berikut dihitung untuk seluruh indikator di tingkat Kabupaten/Kota:
-
-{desc_reg_markdown}
-
-## Provinsi Teratas dengan Jumlah Koperasi Terbanyak
-"""
+    top_provinces_list = ""
     for idx, (_, p) in enumerate(top_provinces_koperasi.iterrows(), 1):
-        md_content += f"{idx}. **{p['province_name']}**: {int(p['jumlah_koperasi']):,} Koperasi (NIB: {int(p['koperasi_nib']):,}, RAT: {int(p['koperasi_rat']):,})\n"
+        top_provinces_list += f"{idx}. **{p['province_name']}**: {int(p['jumlah_koperasi']):,} Koperasi (NIB: {int(p['koperasi_nib']):,}, RAT: {int(p['koperasi_rat']):,})\n"
 
-    md_content += "\n\n## Kabupaten/Kota Teratas dengan Jumlah Koperasi Terbanyak\n\n"
+    top_regencies_koperasi_list = ""
     for idx, (_, r) in enumerate(top_regencies_koperasi.iterrows(), 1):
-        md_content += f"{idx}. **{r['regency_name']}**: {int(r['jumlah_koperasi']):,} Koperasi\n"
+        top_regencies_koperasi_list += f"{idx}. **{r['regency_name']}**: {int(r['jumlah_koperasi']):,} Koperasi\n"
 
-    md_content += "\n\n## Kabupaten/Kota Teratas dengan Nilai Transaksi Tertinggi\n\n"
+    top_regencies_transaksi_list = ""
     for idx, (_, r) in enumerate(top_regencies_transaksi.iterrows(), 1):
-        md_content += f"{idx}. **{r['regency_name']}**: Rp {float(r['nilai_transaksi']):,.2f}\n"
+        top_regencies_transaksi_list += f"{idx}. **{r['regency_name']}**: Rp {float(r['nilai_transaksi']):,.2f}\n"
 
-    with open(EDA_SUMMARY_MD, "w", encoding="utf-8") as f:
-        f.write(md_content)
-    logger.info(f"Laporan Markdown EDA -> {EDA_SUMMARY_MD}")
+    replacements = {
+        "{{total_provinces}}": str(total_provinces),
+        "{{total_regencies}}": str(total_regencies),
+        "{{total_koperasi}}": f"{total_koperasi:,}",
+        "{{total_nib}}": f"{total_nib:,}",
+        "{{pct_nib}}": str(pct_nib),
+        "{{total_npwp}}": f"{total_npwp:,}",
+        "{{pct_npwp}}": str(pct_npwp),
+        "{{total_rat}}": f"{total_rat:,}",
+        "{{pct_rat}}": str(pct_rat),
+        "{{simpanan_pokok}}": f"{simpanan_pokok:,.2f}",
+        "{{simpanan_wajib}}": f"{simpanan_wajib:,.2f}",
+        "{{total_nilai_transaksi}}": f"{total_nilai_transaksi:,.2f}",
+        "{{desc_prov_markdown}}": desc_prov_markdown,
+        "{{desc_reg_markdown}}": desc_reg_markdown,
+        "{{top_provinces_list}}": top_provinces_list,
+        "{{top_regencies_koperasi_list}}": top_regencies_koperasi_list,
+        "{{top_regencies_transaksi_list}}": top_regencies_transaksi_list,
+    }
+    
+    generate_report_from_template(EDA_SUMMARY_TEMPLATE_MD, EDA_SUMMARY_MD, replacements)
 
     logger.info("Tahap EDA selesai.")
 

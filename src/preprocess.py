@@ -9,11 +9,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
+from utils.report_utils import generate_report_from_template
 from config import (
     TRANSFORMED_REGENCIES_CSV,
     SCALED_FEATURES_CSV,
     PREPROCESS_META_JSON,
     PREPROCESS_REPORT_MD,
+    PREPROCESS_REPORT_TEMPLATE_MD,
     PREPROCESS_DIR,
     REPORTS_DIR,
     FIGURES_DIR
@@ -114,32 +116,16 @@ def main():
         json.dump(meta, f, indent=2, ensure_ascii=False)
     logger.info(f"Preprocess Meta -> {PREPROCESS_META_JSON}")
 
-    # 6. Generate Preprocess & K Selection Markdown Report
-    md_content = f"""# Laporan Preprocessing & Penentuan K Optimal SIMKOPDES
-
-Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster optimal (K) menggunakan metode Elbow.
-
-## 1. Parameter Penentuan K Optimal (Kneedle Algorithm)
-
-- **K Terbaik Terdeteksi**: **K = {optimal_k}**
-- **Metode Pendeteksian**: KneeLocator (`kneed`)
-- **Jenis Standarisasi**: StandardScaler
-
-## 2. Nilai WCSS (Within-Cluster Sum of Squares)
-
-| Nilai K | Nilai Inertia (WCSS) |
-| :---: | :---: |
-"""
+    wcss_table_rows = ""
     for k, inertia in zip(k_range, inertias):
-        md_content += f"| **K = {k}** | {inertia:,.2f} |\n"
+        wcss_table_rows += f"| **K = {k}** | {inertia:,.2f} |\n"
 
-    md_content += f"""
-
-## 3. Kurva Elbow Visualisasi
-<img src="figures/preprocess_elbow_curve.png" alt="Kurva Elbow" width="300">"""
-    with open(PREPROCESS_REPORT_MD, "w", encoding="utf-8") as f:
-        f.write(md_content)
-    logger.info(f"Laporan Markdown Preprocessing -> {PREPROCESS_REPORT_MD}")
+    replacements = {
+        "{{optimal_k}}": str(optimal_k),
+        "{{wcss_table_rows}}": wcss_table_rows,
+    }
+    
+    generate_report_from_template(PREPROCESS_REPORT_TEMPLATE_MD, PREPROCESS_REPORT_MD, replacements)
 
     logger.info("Stage ML Preprocessing selesai.")
 

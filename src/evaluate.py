@@ -8,11 +8,13 @@ from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bo
 from sklearn.decomposition import PCA
 from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
+from utils.report_utils import generate_report_from_template
 from config import (
     SCALED_FEATURES_CSV,
     CLUSTERED_REGENCIES_CSV,
     MODEL_METRICS_JSON,
     CLUSTERING_REPORT_MD,
+    CLUSTERING_REPORT_TEMPLATE_MD,
     REPORTS_DIR,
     FIGURES_DIR
 )
@@ -114,46 +116,24 @@ def main():
     fig3.tight_layout()
     save_plot_to_file(fig3, os.path.join(FIGURES_DIR, "eval_avg_transaction.png"))
 
-    # 4. Laporan Markdown Evaluasi Formal
-    md_content = f"""# Laporan Evaluasi Pengelompokan (Clustering) KMeans SIMKOPDES
-
-Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster kabupaten/kota berbasis algoritma KMeans.
-
-## 1. Evaluasi Kinerja Pengelompokan
-
-| Metrik Evaluasi | Nilai Kinerja | Keterangan |
-| :--- | :--- | :--- |
-| **Silhouette Score** | **{sil_score}** | Mengukur seberapa serupa objek dengan klasternya sendiri dibandingkan klaster lain (Range: -1 s.d. +1, semakin tinggi semakin baik) |
-| **Calinski-Harabasz Index** | **{ch_score}** | Rasio dispersi antar-klaster terhadap dalam-klaster (semakin tinggi semakin baik) |
-| **Davies-Bouldin Index** | **{db_score}** | Mengukur rata-rata kesamaan tiap klaster dengan klaster paling serupa (semakin rendah semakin baik) |
-| **Jumlah Klaster Terbentuk** | **{len(set(labels))}** | Hasil optimasi dari KElbowVisualizer |
-
-## 2. Visualisasi Pengelompokan dan Kinerja
-
-### A. Proyeksi 2D Klaster (PCA)
-<img src="figures/eval_pca_projection.png" alt="Proyeksi PCA 2D" width="300">
-
-### B. Distribusi Anggota Klaster
-<img src="figures/eval_cluster_distribution.png" alt="Distribusi Anggota" width="300">
-
-### C. Rata-Rata Nilai Transaksi Keuangan per Klaster
-<img src="figures/eval_avg_transaction.png" alt="Rata-rata Nilai Transaksi" width="300">
-
-## 3. Profil Rata-Rata per Klaster
-
-| Klaster | Rata-rata Jumlah Koperasi | Rata-rata Koperasi NIB | Rata-rata Koperasi NPWP | Rata-rata Koperasi RAT | Rata-rata Nilai Transaksi (Rp) |
-| :---: | :---: | :---: | :---: | :---: | :---: |
-"""
+    cluster_profile_rows = ""
     for cluster_id, row in cluster_profile.iterrows():
-        md_content += f"| **Klaster {cluster_id}** | {row['jumlah_koperasi']:,} | {row['koperasi_nib']:,} | {row['koperasi_npwp']:,} | {row['koperasi_rat']:,} | Rp {row['nilai_transaksi']:,} |\n"
+        cluster_profile_rows += f"| **Klaster {cluster_id}** | {row['jumlah_koperasi']:,} | {row['koperasi_nib']:,} | {row['koperasi_npwp']:,} | {row['koperasi_rat']:,} | Rp {row['nilai_transaksi']:,} |\n"
 
-    md_content += "\n\n## 4. Distribusi Anggota Klaster\n\n"
+    cluster_distribution_rows = ""
     for cluster_id, count in cluster_counts.items():
-        md_content += f"- **Klaster {cluster_id}**: {count} Kabupaten/Kota\n"
+        cluster_distribution_rows += f"- **Klaster {cluster_id}**: {count} Kabupaten/Kota\n"
 
-    with open(CLUSTERING_REPORT_MD, "w", encoding="utf-8") as f:
-        f.write(md_content)
-    logger.info(f"Laporan Markdown Clustering -> {CLUSTERING_REPORT_MD}")
+    replacements = {
+        "{{sil_score}}": str(sil_score),
+        "{{ch_score}}": str(ch_score),
+        "{{db_score}}": str(db_score),
+        "{{num_clusters}}": str(len(set(labels))),
+        "{{cluster_profile_rows}}": cluster_profile_rows,
+        "{{cluster_distribution_rows}}": cluster_distribution_rows,
+    }
+    
+    generate_report_from_template(CLUSTERING_REPORT_TEMPLATE_MD, CLUSTERING_REPORT_MD, replacements)
 
     logger.info("Stage Evaluasi selesai.")
 

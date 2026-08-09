@@ -8,11 +8,13 @@ import urllib.error
 import pandas as pd
 from utils.env_utils import load_env
 from utils.log_utils import get_logger
+from utils.report_utils import generate_report_from_template
 from config import (
     CLUSTERED_REGENCIES_CSV,
     MODEL_METRICS_JSON,
     AI_REPORT_MD,
-    AI_LABELS_JSON
+    AI_LABELS_JSON,
+    AI_REPORT_TEMPLATE_MD
 )
 
 logger = get_logger("interpret")
@@ -40,6 +42,32 @@ def sanitize_json_string(s):
         else:
             chars.append(char)
     return "".join(chars)
+
+def extract_json_object(s):
+    start_idx = s.find('{')
+    if start_idx == -1:
+        raise ValueError("No '{' found in string")
+    
+    brace_count = 0
+    in_quote = False
+    escaped = False
+    for i in range(start_idx, len(s)):
+        char = s[i]
+        if char == '"' and not escaped:
+            in_quote = not in_quote
+        if char == '\\' and not escaped:
+            escaped = True
+        else:
+            escaped = False
+            
+        if not in_quote:
+            if char == '{':
+                brace_count += 1
+            elif char == '}':
+                brace_count -= 1
+                if brace_count == 0:
+                    return s[start_idx:i+1]
+    raise ValueError("Unbalanced braces in string")
 
 def main():
     logger.info(f"Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI ({MODEL_NAME})...")
@@ -158,14 +186,15 @@ Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti 
                 clean_text = sanitize_json_string(clean_text)
                 
                 try:
+                    clean_text = extract_json_object(clean_text)
                     result_json = json.loads(clean_text)
                     report_text = result_json.get("report", "")
                     labels_dict = result_json.get("labels", {})
                     
-                    os.makedirs(os.path.dirname(AI_REPORT_MD), exist_ok=True)
-                    with open(AI_REPORT_MD, "w", encoding="utf-8") as f:
-                        f.write(report_text)
-                    logger.info(f"Laporan Interpretasi AI -> {AI_REPORT_MD}")
+                    replacements = {
+                        "{{ai_report}}": report_text
+                    }
+                    generate_report_from_template(AI_REPORT_TEMPLATE_MD, AI_REPORT_MD, replacements)
                     
                     with open(AI_LABELS_JSON, "w", encoding="utf-8") as f:
                         json.dump(labels_dict, f, indent=2, ensure_ascii=False)
@@ -173,7 +202,7 @@ Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti 
                 except Exception as parse_err:
                     logger.error(f"Gagal mem-parse output AI ke JSON: {parse_err}")
                     logger.error("Output raw dari AI:")
-                    logger.error(ai_text)
+                    logger.error(ai_text.encode('ascii', errors='backslashreplace').decode('ascii'))
                     sys.exit(1)
             else:
                 logger.error(f"Gagal: {res_data.get('errors')}")

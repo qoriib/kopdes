@@ -17,6 +17,7 @@ stages:
     always_changed: true
     deps:
       - src/eda.py
+      - src/reports/eda_summary_template.md
       - data/transform/transformed_provinces.csv
       - data/transform/transformed_regencies.csv
     params:
@@ -33,6 +34,7 @@ stages:
     always_changed: true
     deps:
       - src/preprocess.py
+      - src/reports/preprocess_report_template.md
       - data/transform/transformed_regencies.csv
     params:
       - preprocess.min_k
@@ -70,6 +72,7 @@ stages:
     always_changed: true
     deps:
       - src/evaluate.py
+      - src/reports/evaluate_report_template.md
       - data/preprocess/scaled_features.csv
       - data/model/clustered_regencies.csv
       - models/kmeans_model.pkl
@@ -87,6 +90,7 @@ stages:
     always_changed: true
     deps:
       - src/interpret.py
+      - src/reports/interpret_report_template.md
       - reports/evaluate_metrics.json
       - data/model/clustered_regencies.csv
     params:

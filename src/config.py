@@ -8,6 +8,7 @@ TRANSFORM_DIR = os.path.join(DATA_DIR, "transform")
 PREPROCESS_DIR = os.path.join(DATA_DIR, "preprocess")
 DATA_MODEL_DIR = os.path.join(DATA_DIR, "model")
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
+SRC_REPORTS_DIR = os.path.join(BASE_DIR, "src", "reports")
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
 MODEL_DIR = os.path.join(BASE_DIR, "models")
 
@@ -23,18 +24,22 @@ TRANSFORMED_REGENCIES_CSV = os.path.join(TRANSFORM_DIR, "transformed_regencies.c
 SCALED_FEATURES_CSV = os.path.join(PREPROCESS_DIR, "scaled_features.csv")
 PREPROCESS_META_JSON = os.path.join(PREPROCESS_DIR, "preprocess_meta.json")
 PREPROCESS_REPORT_MD = os.path.join(REPORTS_DIR, "preprocess_report.md")
+PREPROCESS_REPORT_TEMPLATE_MD = os.path.join(SRC_REPORTS_DIR, "preprocess_report_template.md")
 
 MODEL_PKL = os.path.join(MODEL_DIR, "kmeans_model.pkl")
 CLUSTERED_REGENCIES_CSV = os.path.join(DATA_MODEL_DIR, "clustered_regencies.csv")
 
 MODEL_METRICS_JSON = os.path.join(REPORTS_DIR, "evaluate_metrics.json")
 CLUSTERING_REPORT_MD = os.path.join(REPORTS_DIR, "evaluate_report.md")
+CLUSTERING_REPORT_TEMPLATE_MD = os.path.join(SRC_REPORTS_DIR, "evaluate_report_template.md")
 
 METRICS_JSON = os.path.join(REPORTS_DIR, "eda_metrics.json")
 EDA_SUMMARY_MD = os.path.join(REPORTS_DIR, "eda_summary.md")
+EDA_SUMMARY_TEMPLATE_MD = os.path.join(SRC_REPORTS_DIR, "eda_summary_template.md")
 
 AI_REPORT_MD = os.path.join(REPORTS_DIR, "interpret_report.md")
 AI_LABELS_JSON = os.path.join(REPORTS_DIR, "interpret_labels.json")
+AI_REPORT_TEMPLATE_MD = os.path.join(SRC_REPORTS_DIR, "interpret_report_template.md")
 
 SEED_SQL = os.path.join(DATA_DIR, "seed.sql")
 
