@@ -57,9 +57,11 @@ def main():
             rat = int(row["koperasi_rat"]) if not pd.isna(row["koperasi_rat"]) else 0
             val = float(row["nilai_transaksi"]) if not pd.isna(row["nilai_transaksi"]) else 0.0
             label = int(row["cluster_label"]) if not pd.isna(row["cluster_label"]) else 0
+            lat = float(row["latitude"]) if not pd.isna(row["latitude"]) else 0.0
+            lon = float(row["longitude"]) if not pd.isna(row["longitude"]) else 0.0
             sql_lines.append(
-                f"INSERT OR REPLACE INTO regencies (id, province_id, regency_name, jumlah_koperasi, koperasi_nib, koperasi_npwp, koperasi_rat, nilai_transaksi, cluster_label) "
-                f"VALUES ({r_id}, {prov_id}, {escape_sql(name)}, {count}, {nib}, {npwp}, {rat}, {val}, {label});"
+                f"INSERT OR REPLACE INTO regencies (id, province_id, regency_name, jumlah_koperasi, koperasi_nib, koperasi_npwp, koperasi_rat, nilai_transaksi, cluster_label, latitude, longitude) "
+                f"VALUES ({r_id}, {prov_id}, {escape_sql(name)}, {count}, {nib}, {npwp}, {rat}, {val}, {label}, {lat}, {lon});"
             )
         sql_lines.append("")
 

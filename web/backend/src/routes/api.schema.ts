@@ -72,6 +72,8 @@ export const RegencyRowSchema = z.object({
   koperasi_rat: z.number(),
   nilai_transaksi: z.number(),
   cluster_label: z.number(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
   province_name: z.string().optional()
 }).openapi('RegencyRow');
 

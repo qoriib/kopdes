@@ -8,7 +8,8 @@ import {
   Award,
   BookOpen,
   Sun,
-  Moon
+  Moon,
+  Map as MapIcon
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table"
@@ -54,6 +55,8 @@ interface Regency {
   koperasi_rat: number
   nilai_transaksi: number
   cluster_label: number
+  latitude?: number
+  longitude?: number
 }
 
 interface AIReport {
@@ -87,7 +90,7 @@ export default function App() {
         const [sumRes, provRes, regRes, aiRes] = await Promise.all([
           fetch(`${API_BASE_URL}/summary`).then(r => r.json()),
           fetch(`${API_BASE_URL}/provinces`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/regencies?limit=5`).then(r => r.json()),
+          fetch(`${API_BASE_URL}/regencies?limit=1000`).then(r => r.json()),
           fetch(`${API_BASE_URL}/ai-report`).then(r => r.json())
         ])
 
@@ -190,6 +193,20 @@ export default function App() {
                 )
               })}
             </div>
+
+            {/* Interactive Cluster Map */}
+            <Card className="shadow-none border-border">
+              <CardHeader className="pb-3 flex flex-row items-center gap-2">
+                <MapIcon className="w-4 h-4 text-primary" />
+                <div>
+                  <CardTitle className="text-sm font-bold text-foreground">Peta Sebaran Klaster Koperasi (Kabupaten/Kota)</CardTitle>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Sebaran spasial wilayah kabupaten/kota di Indonesia berdasarkan kelompok klaster kinerja koperasi.</p>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0 sm:p-6 sm:pt-0">
+                <ClusterMap regencies={regencies} labels={aiReport?.labels} theme={theme} />
+              </CardContent>
+            </Card>
 
             {/* Visual & Analytical Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -344,6 +361,130 @@ export default function App() {
       <footer className="border-t border-border bg-muted/20 text-muted-foreground text-center py-4 text-[10px]">
         &copy; 2026 SIMKOPDES. Dibuat dengan Cloudflare Workers, Hono, dan React.
       </footer>
+    </div>
+  )
+}
+
+function ClusterMap({ regencies, labels, theme }: { regencies: Regency[], labels?: Record<string, { label_name: string }>, theme: 'light' | 'dark' }) {
+  const [leafletLoaded, setLeafletLoaded] = useState(false)
+
+  useEffect(() => {
+    if ((window as any).L) {
+      setLeafletLoaded(true)
+      return
+    }
+
+    // Load Leaflet CSS
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    document.head.appendChild(link)
+
+    // Load Leaflet JS
+    const script = document.createElement("script")
+    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    script.async = true
+    script.onload = () => {
+      setLeafletLoaded(true)
+    }
+    document.body.appendChild(script)
+  }, [])
+
+  useEffect(() => {
+    if (!leafletLoaded || regencies.length === 0) return
+
+    const L = (window as any).L
+    if (!L) return
+
+    // Setup map
+    const map = L.map("leaflet-cluster-map").setView([-2.5489, 118.0149], 5)
+
+    // Choose map tiles based on theme
+    const tileUrl = theme === 'dark'
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+
+    L.tileLayer(tileUrl, {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map)
+
+    // Colors corresponding to cluster labels
+    const colors = ["#4f46e5", "#10b981", "#ef4444", "#f59e0b", "#3b82f6", "#8b5cf6"]
+
+    regencies.forEach(reg => {
+      if (reg.latitude && reg.longitude && reg.latitude !== 0 && reg.longitude !== 0) {
+        const labelName = labels?.[reg.cluster_label.toString()]?.label_name || `Klaster ${reg.cluster_label}`
+        const color = colors[reg.cluster_label % colors.length]
+
+        const marker = L.circleMarker([reg.latitude, reg.longitude], {
+          radius: 6,
+          fillColor: color,
+          color: "#ffffff",
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.8
+        }).addTo(map)
+
+        const popupContent = `
+          <div style="font-family: system-ui, sans-serif; font-size: 11px; line-height: 1.4; color: #1f2937;">
+            <h4 style="margin: 0 0 2px 0; font-size: 12px; font-weight: 700; color: #111827;">${reg.regency_name}</h4>
+            <span style="font-size: 9px; color: #6b7280; display: block; margin-bottom: 6px;">${reg.province_name}</span>
+            <div style="margin-bottom: 6px;">
+              <span style="display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: bold; color: white; background-color: ${color}; border-radius: 4px;">
+                ${labelName}
+              </span>
+            </div>
+            <div style="display: grid; grid-template-columns: auto auto; gap: 2px 8px; border-top: 1px solid #e5e7eb; padding-top: 6px;">
+              <span style="color: #4b5563;">Koperasi:</span><strong style="text-align: right;">${reg.jumlah_koperasi.toLocaleString()}</strong>
+              <span style="color: #4b5563;">NIB:</span><strong style="text-align: right;">${reg.koperasi_nib.toLocaleString()}</strong>
+              <span style="color: #4b5563;">NPWP:</span><strong style="text-align: right;">${reg.koperasi_npwp.toLocaleString()}</strong>
+              <span style="color: #4b5563;">RAT:</span><strong style="text-align: right;">${reg.koperasi_rat.toLocaleString()}</strong>
+              <span style="color: #4b5563; grid-column: span 2; margin-top: 4px; border-top: 1px dashed #e5e7eb; padding-top: 4px;">Nilai Transaksi:</span>
+              <strong style="grid-column: span 2; text-align: left; font-size: 11px; color: #111827;">Rp ${(reg.nilai_transaksi).toLocaleString('id-ID')}</strong>
+            </div>
+          </div>
+        `
+        marker.bindPopup(popupContent)
+      }
+    })
+
+    return () => {
+      map.remove()
+    }
+  }, [leafletLoaded, regencies, labels, theme])
+
+  if (!leafletLoaded) {
+    return (
+      <div className="h-[400px] w-full flex items-center justify-center bg-muted/20 border border-dashed rounded-lg">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-6 h-6 rounded-full border-2 border-muted border-t-primary animate-spin"></div>
+          <p className="text-xs text-muted-foreground">Memuat peta interaktif...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative rounded-lg overflow-hidden border border-border shadow-sm">
+      <div id="leaflet-cluster-map" className="h-[400px] w-full z-0" />
+      {/* Legend inside map */}
+      <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-sm p-3 rounded-lg border border-border text-[10px] space-y-1.5 z-[1000] shadow-md max-w-[200px]">
+        <h5 className="font-bold text-foreground">Legenda Klaster</h5>
+        <div className="space-y-1">
+          {labels && Object.keys(labels).map((key) => {
+            const colors = ["#4f46e5", "#10b981", "#ef4444", "#f59e0b", "#3b82f6", "#8b5cf6"]
+            const color = colors[parseInt(key) % colors.length]
+            return (
+              <div key={key} className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                <span className="text-muted-foreground truncate" title={labels[key].label_name}>{labels[key].label_name}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

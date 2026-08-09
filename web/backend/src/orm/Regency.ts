@@ -10,6 +10,8 @@ export interface RegencyRow {
   koperasi_rat: number;
   nilai_transaksi: number;
   cluster_label: number;
+  latitude: number;
+  longitude: number;
   province_name?: string; // from join
 }
 

@@ -17,7 +17,9 @@ CREATE TABLE IF NOT EXISTS regencies (
     koperasi_npwp INTEGER DEFAULT 0,
     koperasi_rat INTEGER DEFAULT 0,
     nilai_transaksi REAL DEFAULT 0.0,
-    cluster_label INTEGER DEFAULT 0
+    cluster_label INTEGER DEFAULT 0,
+    latitude REAL DEFAULT 0.0,
+    longitude REAL DEFAULT 0.0
 );
 
 CREATE TABLE IF NOT EXISTS metrics (
