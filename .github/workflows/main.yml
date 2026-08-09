@@ -62,6 +62,9 @@ jobs:
         run: dvc dag
 
       - name: Run DVC Pipeline
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: dvc repro
 
       - name: Push Pipeline Data & Git State
