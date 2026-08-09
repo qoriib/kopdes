@@ -132,7 +132,7 @@ Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
     }}
     // Dan seterusnya untuk semua klaster yang ada
   }},
-  "report": "# Laporan Interpretasi AI untuk Klasterisasi SIMKOPDES\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 2 paragraf singkat. Jelaskan karakteristik unik dari klaster-klaster tersebut dan rekomendasi kebijakan pembangunan daerah. Gunakan format Markdown untuk isi laporan ini.]"
+  "report": "# Laporan Interpretasi AI\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 2 paragraf singkat. Jelaskan karakteristik unik dari klaster-klaster tersebut dan rekomendasi kebijakan pembangunan daerah. Gunakan format Markdown untuk isi laporan ini.]"
 }}
 
 Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'. DILARANG KERAS menggunakan emoji, simbol grafis sejenis, maupun separator garis horizontal (seperti `---`) di dalam nama klaster, deskripsi, maupun laporan markdown yang Anda hasilkan.

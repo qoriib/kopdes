@@ -1,4 +1,4 @@
-# Laporan Evaluasi Pengelompokan (Clustering) KMeans SIMKOPDES
+# Laporan Evaluasi Clustering
 
 Laporan ini menyajikan hasil evaluasi kuantitatif dan analisis profil klaster kabupaten/kota berbasis algoritma KMeans.
 

@@ -107,16 +107,6 @@ export default function App() {
     fetchInitialData()
   }, [])
 
-  // Sort and pick top 5 provinces
-  const topProvinces = [...provinces]
-    .sort((a, b) => b.jumlah_koperasi - a.jumlah_koperasi)
-    .slice(0, 5)
-
-  // Pick top 5 regencies by nilai transaksi
-  const topRegencies = [...regencies]
-    .sort((a, b) => b.nilai_transaksi - a.nilai_transaksi)
-    .slice(0, 5)
-
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-300">
       {/* Content Area */}
@@ -290,69 +280,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Top Lists Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Top Provinces */}
-              <Card className="shadow-none border-border">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-bold text-foreground">Top 5 Provinsi (Populasi Koperasi)</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider pl-0">Provinsi</TableHead>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Koperasi</TableHead>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right pr-0">RAT</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody className="text-xs text-muted-foreground">
-                      {topProvinces.map((prov, idx) => (
-                        <TableRow key={prov.id || idx}>
-                          <TableCell className="font-medium text-foreground pl-0">{prov.province_name}</TableCell>
-                          <TableCell className="text-right">{prov.jumlah_koperasi.toLocaleString()}</TableCell>
-                          <TableCell className="text-right pr-0">{prov.koperasi_rat.toLocaleString()}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              {/* Top Regencies */}
-              <Card className="shadow-none border-border">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-bold text-foreground">Top 5 Kabupaten/Kota (Transaksi Usaha)</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider pl-0">Kabupaten/Kota</TableHead>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right">Transaksi</TableHead>
-                        <TableHead className="text-[10px] font-bold uppercase tracking-wider text-right pr-0">Klaster</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody className="text-xs text-muted-foreground">
-                      {topRegencies.map((reg, idx) => (
-                        <TableRow key={reg.id || idx}>
-                          <TableCell className="font-medium text-foreground pl-0">
-                            {reg.regency_name} 
-                            <span className="text-[9px] text-muted-foreground block">{reg.province_name}</span>
-                          </TableCell>
-                          <TableCell className="text-right font-medium text-foreground">Rp {(reg.nilai_transaksi / 1e9).toFixed(1)} M</TableCell>
-                          <TableCell className="text-right pr-0">
-                            <Badge variant={reg.cluster_label === 0 ? "default" : reg.cluster_label === 1 ? "secondary" : "outline"} className="text-[8px] py-0 px-1.5 font-bold">
-                              {reg.cluster_label}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </div>
           </>
         )}
       </main>

@@ -1,4 +1,4 @@
-# Laporan Preprocessing & Penentuan K Optimal SIMKOPDES
+# Laporan Preprocessing
 
 Laporan ini menyajikan hasil standarisasi fitur dan pencarian nilai klaster optimal (K) menggunakan metode Elbow.
 

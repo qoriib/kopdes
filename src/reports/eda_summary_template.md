@@ -1,4 +1,4 @@
-# Laporan Analisis Eksplorasi Data SIMKOPDES
+# Exploratory Data Analysis
 
 Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES berbasis Data Version Control (DVC).
 

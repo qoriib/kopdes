@@ -76,7 +76,7 @@ jobs:
           python src/utils/cml_utils.py \
             --report reports/eda_summary.md \
             --output reports/cml_eda.md \
-            --title "CML: Laporan EDA SIMKOPDES"
+            --title "Exploratory Data Analysis"
           cml comment create reports/cml_eda.md
           cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
 
@@ -87,7 +87,7 @@ jobs:
           python src/utils/cml_utils.py \
             --report reports/preprocess_report.md \
             --output reports/cml_preprocess.md \
-            --title "CML: Laporan Preprocessing SIMKOPDES"
+            --title "Laporan Preprocessing"
           cml comment create reports/cml_preprocess.md
           cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
 
@@ -98,7 +98,7 @@ jobs:
           python src/utils/cml_utils.py \
             --report reports/evaluate_report.md \
             --output reports/cml_evaluate.md \
-            --title "CML: Laporan Evaluasi Clustering SIMKOPDES"
+            --title "Laporan Evaluasi Clustering"
           cml comment create reports/cml_evaluate.md
           cat reports/cml_evaluate.md >> $GITHUB_STEP_SUMMARY
 
@@ -111,7 +111,7 @@ jobs:
           python src/utils/cml_utils.py \
             --report reports/interpret_report.md \
             --output reports/cml_interpret.md \
-            --title "CML: Laporan Interpretasi AI SIMKOPDES"
+            --title "Laporan Interpretasi AI"
           cml comment create reports/cml_interpret.md
           cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
 
