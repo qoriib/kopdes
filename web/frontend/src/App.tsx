@@ -12,7 +12,6 @@ import {
   Map as MapIcon
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
@@ -66,7 +65,7 @@ interface AIReport {
 
 export default function App() {
   const [summary, setSummary] = useState<SummaryData | null>(null)
-  const [provinces, setProvinces] = useState<Province[]>([])
+  const [_provinces, setProvinces] = useState<Province[]>([])
   const [regencies, setRegencies] = useState<Regency[]>([])
   const [aiReport, setAiReport] = useState<AIReport | null>(null)
   const [loading, setLoading] = useState(true)
