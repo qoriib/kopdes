@@ -23,8 +23,26 @@ params = dvc.api.params_show().get('eda', {})
 
 TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
 TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 5)
-PLOT_DPI = params.get('plot_dpi', 120)
-PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
+NUM_COLS_PROV = [
+    'jumlah_koperasi',
+    'koperasi_nib',
+    'koperasi_npwp',
+    'koperasi_rat',
+    'simpanan_pokok',
+    'simpanan_wajib',
+    'volume_transaksi',
+    'nilai_transaksi'
+]
+NUM_COLS_REG = [
+    'jumlah_koperasi',
+    'koperasi_nib',
+    'koperasi_npwp',
+    'koperasi_rat',
+    'simpanan_pokok',
+    'simpanan_wajib',
+    'volume_transaksi',
+    'nilai_transaksi'
+]
 
 def main():
     logger.info("Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
@@ -39,20 +57,12 @@ def main():
     df_prov = pd.read_csv(TRANSFORMED_PROVINCES_CSV)
     df_reg = pd.read_csv(TRANSFORMED_REGENCIES_CSV)
 
-    # Clean data (convert numeric columns)
-    num_cols_prov = [
-        'jumlah_koperasi', 'koperasi_nib', 'koperasi_npwp', 'koperasi_rat',
-        'simpanan_pokok', 'simpanan_wajib', 'volume_transaksi', 'nilai_transaksi'
-    ]
-    for col in num_cols_prov:
+    # Clean data
+    for col in NUM_COLS_PROV:
         if col in df_prov.columns:
             df_prov[col] = pd.to_numeric(df_prov[col], errors='coerce').fillna(0)
 
-    num_cols_reg = [
-        'jumlah_koperasi', 'koperasi_nib', 'koperasi_npwp', 'koperasi_rat',
-        'simpanan_pokok', 'simpanan_wajib', 'volume_transaksi', 'nilai_transaksi'
-    ]
-    for col in num_cols_reg:
+    for col in NUM_COLS_REG:
         if col in df_reg.columns:
             df_reg[col] = pd.to_numeric(df_reg[col], errors='coerce').fillna(0)
 
@@ -77,14 +87,13 @@ def main():
     top_regencies_transaksi = df_reg.sort_values(by='nilai_transaksi', ascending=False).head(TOP_REGENCIES_LIMIT)
 
     # Descriptive Stats
-    desc_prov = df_prov[num_cols_prov].describe().T
+    desc_prov = df_prov[NUM_COLS_PROV].describe().T
     desc_prov.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', 'Median', '75%', 'Max']
     desc_prov_markdown = desc_prov.to_markdown(floatfmt=",.2f")
 
-    desc_reg = df_reg[num_cols_reg].describe().T
+    desc_reg = df_reg[NUM_COLS_REG].describe().T
     desc_reg.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', 'Median', '75%', 'Max']
     desc_reg_markdown = desc_reg.to_markdown(floatfmt=",.2f")
-    sns.set_theme() # Gunakan styling default dari seaborn
 
     # Chart 1: Top Provinces by Total Koperasi
     fig1, ax1 = plt.subplots(figsize=(10, 5))
@@ -94,7 +103,7 @@ def main():
     ax1.set_xlabel('Jumlah Koperasi')
     ax1.set_ylabel('')
     fig1.tight_layout()
-    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"), dpi=PLOT_DPI)
+    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
 
     # Chart 2: Top Regencies by Nilai Transaksi
     fig2, ax2 = plt.subplots(figsize=(10, 5))
@@ -104,7 +113,7 @@ def main():
     ax2.set_xlabel('Nilai Transaksi (Juta Rp)')
     ax2.set_ylabel('')
     fig2.tight_layout()
-    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"), dpi=PLOT_DPI)
+    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
 
     # Save metrics
     metrics = {

@@ -12,4 +12,3 @@ def save_plot_to_file(fig, filepath, dpi=120):
     fig.savefig(filepath, format='png', dpi=dpi, bbox_inches='tight')
     plt.close(fig)
     logger.info(f"Plot saved to: {filepath}")
-

@@ -1,5 +1,4 @@
 import os
-import sys
 import csv
 from bs4 import BeautifulSoup
 from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
@@ -14,7 +13,6 @@ def is_header_row(row: list) -> bool:
     c0 = str(row[0]).strip().lower()
     c1 = str(row[1]).strip().lower() if len(row) > 1 else ""
     return c0 == 'no' or c1 in ('provinsi', 'kabupaten/kota', 'kabupaten', 'kota') or 'provinsi' in c0
-
 
 def parse_table_from_html(html: str, target_index: int = 2) -> tuple[list, list]:
     """Parsir tabel HTML berdasarkan indeks target menggunakan BeautifulSoup."""
@@ -53,7 +51,6 @@ def parse_table_from_html(html: str, target_index: int = 2) -> tuple[list, list]
         logger.error(f"Gagal memparsing HTML tabel: {e}")
         return [], []
 
-
 def change_page_size(page: Page) -> None:
     """Mencoba mengubah jumlah item per halaman (Ant Design Pagination)."""
     try:
@@ -72,7 +69,6 @@ def change_page_size(page: Page) -> None:
                 logger.info("Berhasil mengubah jumlah baris per halaman.")
     except Exception as e:
         logger.warning(f"Gagal mengubah page size (melanjutkan dengan default): {e}")
-
 
 def scrape_table_with_pagination(page: Page, target_url: str, target_table_index: int = 2) -> tuple[list, list]:
     """Mengekstrak tabel dengan dukungan penuh paginasi Ant Design di Playwright."""
@@ -184,7 +180,6 @@ def save_to_csv(filename: str, headers: list, rows: list) -> bool:
         logger.error(f"Gagal menyimpan file CSV: {e}")
 
     return False
-
 
 def load_scraped_province_ids() -> list:
     """Memuat daftar province_id yang sudah berhasil discrape."""

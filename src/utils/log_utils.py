@@ -1,5 +1,5 @@
-import logging
 import sys
+import logging
 
 _root_configured = False
 

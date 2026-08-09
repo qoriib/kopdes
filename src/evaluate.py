@@ -81,7 +81,6 @@ def main():
     }).round(2)
 
     # Generate Visualizations using standard seaborn defaults
-    sns.set_theme()
 
     # Plot 1: 2D PCA Projection
     pca = PCA(n_components=2)

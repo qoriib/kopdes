@@ -9,7 +9,7 @@ CLI Usage:
         --report reports/eda_summary.md \\
         --figures reports/figures/eda_top_provinces.png reports/figures/eda_top_regencies_transaksi.png \\
         --output reports/cml_eda.md \\
-        --title "📊 Laporan EDA SIMKOPDES"
+        --title "Laporan EDA SIMKOPDES"
 """
 import os
 import sys
@@ -19,7 +19,6 @@ import argparse
 from utils.log_utils import get_logger
 
 logger = get_logger("cml_utils")
-
 
 def cml_publish_image(filepath):
     """
@@ -113,7 +112,6 @@ def build_cml_report(report_md_path, figure_paths=None, title=None):
         content = re.sub(r'^#\s+.+$', f'# {title}', content, count=1, flags=re.MULTILINE)
 
     return content
-
 
 def main():
     parser = argparse.ArgumentParser(

@@ -1,4 +1,4 @@
-name: SIMKOPDES End-to-End Data & ML Pipeline
+name: End-to-End Data & ML Pipeline
 
 on:
   workflow_dispatch:

@@ -117,7 +117,7 @@ artifacts:
   kmeans-model:
     path: models/kmeans_model.pkl
     type: model
-    desc: "K-Means clustering model trained on SIMKOPDES regency data."
+    desc: "K-Means clustering model trained on regency data."
     labels:
       - kmeans
       - model

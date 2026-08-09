@@ -1,6 +1,6 @@
 # Exploratory Data Analysis
 
-Laporan ini dihasilkan secara otomatis oleh pipeline analisis data SIMKOPDES berbasis Data Version Control (DVC).
+Laporan ini dihasilkan secara otomatis oleh pipeline analisis data berbasis Data Version Control (DVC).
 
 ## Ringkasan Statistik Nasional
 

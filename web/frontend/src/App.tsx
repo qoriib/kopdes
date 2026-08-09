@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { 
-  Building2, 
+import {
+  Building2,
   CheckCircle,
-  TrendingUp, 
+  TrendingUp,
   FileSpreadsheet,
   Award,
   BookOpen,
@@ -122,9 +122,9 @@ export default function App() {
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5 animate-pulse"></span>
               Live D1
             </Badge>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="h-8 w-8 rounded-lg"
               onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             >
@@ -143,29 +143,29 @@ export default function App() {
             {/* Metric Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { 
-                  title: 'Total Koperasi', 
-                  value: summary?.total_koperasi.toLocaleString(), 
-                  sub: `${summary?.total_provinces} Provinsi / ${summary?.total_regencies} Kota`, 
-                  icon: Building2 
+                {
+                  title: 'Total Koperasi',
+                  value: summary?.total_koperasi.toLocaleString(),
+                  sub: `${summary?.total_provinces} Provinsi / ${summary?.total_regencies} Kota`,
+                  icon: Building2
                 },
-                { 
-                  title: 'Koperasi NIB', 
-                  value: summary ? `${((summary.total_nib / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
-                  sub: `${summary?.total_nib.toLocaleString()} Bersertifikat`, 
-                  icon: CheckCircle 
+                {
+                  title: 'Koperasi NIB',
+                  value: summary ? `${((summary.total_nib / summary.total_koperasi) * 100).toFixed(1)}%` : '0%',
+                  sub: `${summary?.total_nib.toLocaleString()} Bersertifikat`,
+                  icon: CheckCircle
                 },
-                { 
-                  title: 'Koperasi RAT', 
-                  value: summary ? `${((summary.total_rat / summary.total_koperasi) * 100).toFixed(1)}%` : '0%', 
-                  sub: `${summary?.total_rat.toLocaleString()} Aktif RAT`, 
-                  icon: TrendingUp 
+                {
+                  title: 'Koperasi RAT',
+                  value: summary ? `${((summary.total_rat / summary.total_koperasi) * 100).toFixed(1)}%` : '0%',
+                  sub: `${summary?.total_rat.toLocaleString()} Aktif RAT`,
+                  icon: TrendingUp
                 },
-                { 
-                  title: 'Total Transaksi', 
-                  value: summary ? `Rp ${(summary.total_nilai_transaksi / 1e12).toFixed(2)} T` : 'Rp 0', 
-                  sub: 'Volume usaha teragregasi', 
-                  icon: FileSpreadsheet 
+                {
+                  title: 'Total Transaksi',
+                  value: summary ? `Rp ${(summary.total_nilai_transaksi / 1e12).toFixed(2)} T` : 'Rp 0',
+                  sub: 'Volume usaha teragregasi',
+                  icon: FileSpreadsheet
                 }
               ].map((card, idx) => {
                 const Icon = card.icon
@@ -208,14 +208,14 @@ export default function App() {
                 </CardHeader>
                 <CardContent className="text-muted-foreground text-xs leading-relaxed font-sans">
                   {aiReport?.report_text ? (
-                    <ReactMarkdown 
+                    <ReactMarkdown
                       components={{
-                        h1: ({node, ...props}) => <h1 className="text-sm font-bold text-foreground mt-4 mb-2 first:mt-0" {...props} />,
-                        h2: ({node, ...props}) => <h2 className="text-xs font-bold text-foreground mt-3 mb-1" {...props} />,
-                        p: ({node, ...props}) => <p className="mb-3 last:mb-0" {...props} />,
-                        ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 mb-3" {...props} />,
-                        ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 mb-3" {...props} />,
-                        li: ({node, ...props}) => <li className="pl-1" {...props} />,
+                        h1: ({ node, ...props }) => <h1 className="text-sm font-bold text-foreground mt-4 mb-2 first:mt-0" {...props} />,
+                        h2: ({ node, ...props }) => <h2 className="text-xs font-bold text-foreground mt-3 mb-1" {...props} />,
+                        p: ({ node, ...props }) => <p className="mb-3 last:mb-0" {...props} />,
+                        ul: ({ node, ...props }) => <ul className="list-disc list-inside space-y-1 mb-3" {...props} />,
+                        ol: ({ node, ...props }) => <ol className="list-decimal list-inside space-y-1 mb-3" {...props} />,
+                        li: ({ node, ...props }) => <li className="pl-1" {...props} />,
                       }}
                     >
                       {aiReport.report_text.replace(/\\n/g, '\n')}
