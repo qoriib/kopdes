@@ -30,7 +30,21 @@ def main():
 
     df_clustered = pd.read_csv(CLUSTERED_REGENCIES_CSV)
     df_scaled = pd.read_csv(SCALED_FEATURES_CSV)
-    X_scaled = df_scaled.values
+    
+    # Load feature selection from model params
+    import dvc.api
+    model_params = dvc.api.params_show().get('model', {})
+    selected_features = model_params.get('selected_features', [])
+    if selected_features:
+        scaled_cols = [f"scaled_{col}" for col in selected_features if f"scaled_{col}" in df_scaled.columns]
+        if not scaled_cols:
+            logger.warning("Fitur terpilih tidak ditemukan. Menggunakan seluruh fitur untuk evaluasi.")
+            X_scaled = df_scaled.values
+        else:
+            X_scaled = df_scaled[scaled_cols].values
+    else:
+        X_scaled = df_scaled.values
+
     labels = df_clustered['cluster_label'].values
 
     # 1. Menghitung Evaluasi Performa Klaster

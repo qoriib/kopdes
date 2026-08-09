@@ -39,3 +39,9 @@ AI_LABELS_JSON = os.path.join(REPORTS_DIR, "interpret_labels.json")
 SEED_SQL = os.path.join(DATA_DIR, "seed.sql")
 
 PARAMS_FILE = os.path.join(BASE_DIR, "params.yaml")
+
+# Scraper Configuration
+SCRAPE_TARGET_URL = "https://simkopdes.go.id/pers/dashboard"
+SCRAPE_BASE_URL_TEMPLATE = "https://simkopdes.go.id/pers/dashboard/district/{id}"
+SCRAPE_TABLE_INDEX = 2
+SCRAPE_MAX_WORKERS = 5

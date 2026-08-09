@@ -12,9 +12,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  # ──────────────────────────────────────────────
-  # Stage 1: Scraping
-  # ──────────────────────────────────────────────
   scrape:
     name: Scrape Data
     runs-on: ubuntu-latest
@@ -31,10 +28,10 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Scrape Province Data
-        run: dvc repro -s scrape_provinces
+        run: python src/scrape_provinces.py
 
       - name: Scrape Regency Data
-        run: dvc repro -s scrape_regencies
+        run: python src/scrape_regencies.py
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -49,11 +46,8 @@ jobs:
             data/raw/scraped_provinces.csv
             data/raw/scraped_regencies.csv
 
-  # ──────────────────────────────────────────────
-  # Stage 2: Data Transformation
-  # ──────────────────────────────────────────────
-  transform:
-    name: Data Transformation
+  pipeline:
+    name: Run DVC Pipeline
     needs: scrape
     runs-on: ubuntu-latest
     steps:
@@ -64,44 +58,16 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Run Transform
-        run: dvc repro -s transform
+      - name: Show DVC DAG
+        run: dvc dag
+
+      - name: Run DVC Pipeline
+        run: dvc repro
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
         with:
-          commit-message: "auto: update transform stage artifacts [skip ci]"
-
-      - name: Upload Transform Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: transform-files
-          path: |
-            data/transform/transformed_provinces.csv
-            data/transform/transformed_regencies.csv
-
-  # ──────────────────────────────────────────────
-  # Stage 3a: Exploratory Data Analysis
-  # ──────────────────────────────────────────────
-  eda:
-    name: Exploratory Data Analysis
-    needs: transform
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Run EDA
-        run: dvc repro -s eda
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update eda stage artifacts [skip ci]"
+          commit-message: "auto: update pipeline artifacts [skip ci]"
 
       - name: Generate & Post CML EDA Report
         env:
@@ -114,39 +80,6 @@ jobs:
           cml comment create reports/cml_eda.md
           cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload EDA Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: eda-files
-          path: |
-            reports/eda_metrics.json
-            reports/eda_summary.md
-            reports/figures/eda_top_provinces.png
-            reports/figures/eda_top_regencies_transaksi.png
-
-  # ──────────────────────────────────────────────
-  # Stage 3b: ML Preprocessing
-  # ──────────────────────────────────────────────
-  preprocess:
-    name: ML Preprocessing
-    needs: transform
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Run Preprocessing
-        run: dvc repro -s preprocess
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update preprocess stage artifacts [skip ci]"
-
       - name: Generate & Post CML Preprocess Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -157,70 +90,6 @@ jobs:
             --title "CML: Laporan Preprocessing SIMKOPDES"
           cml comment create reports/cml_preprocess.md
           cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload Preprocess Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: preprocess-files
-          path: |
-            data/preprocess/scaled_features.csv
-            data/preprocess/preprocess_meta.json
-            reports/preprocess_report.md
-            reports/figures/preprocess_elbow_curve.png
-
-  # ──────────────────────────────────────────────
-  # Stage 4: KMeans Clustering
-  # ──────────────────────────────────────────────
-  model:
-    name: KMeans Clustering
-    needs: preprocess
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Run Model Training
-        run: dvc repro -s model
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update model stage artifacts [skip ci]"
-
-      - name: Upload Model Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: model-files
-          path: |
-            models/kmeans_model.pkl
-            data/model/clustered_regencies.csv
-
-  # ──────────────────────────────────────────────
-  # Stage 5: Model Evaluation
-  # ──────────────────────────────────────────────
-  evaluate:
-    name: Model Evaluation
-    needs: model
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Run Evaluation
-        run: dvc repro -s evaluate
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update evaluate stage artifacts [skip ci]"
 
       - name: Generate & Post CML Evaluate Report
         env:
@@ -233,6 +102,71 @@ jobs:
           cml comment create reports/cml_evaluate.md
           cat reports/cml_evaluate.md >> $GITHUB_STEP_SUMMARY
 
+      - name: Generate & Post CML Interpret Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          python src/utils/cml_utils.py \
+            --report reports/interpret_report.md \
+            --output reports/cml_interpret.md \
+            --title "CML: Laporan Interpretasi AI SIMKOPDES"
+          cml comment create reports/cml_interpret.md
+          cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Apply Remote Database Migrations
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          cd web/backend
+          npx wrangler d1 migrations apply simkopdes_db --remote
+
+      - name: Seed Remote Database
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          cd web/backend
+          npx wrangler d1 execute simkopdes_db --remote --file=../../data/seed.sql
+
+      - name: Upload Transform Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: transform-files
+          path: |
+            data/transform/transformed_provinces.csv
+            data/transform/transformed_regencies.csv
+
+      - name: Upload EDA Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: eda-files
+          path: |
+            reports/eda_metrics.json
+            reports/eda_summary.md
+            reports/figures/eda_top_provinces.png
+            reports/figures/eda_top_regencies_transaksi.png
+
+      - name: Upload Preprocess Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: preprocess-files
+          path: |
+            data/preprocess/scaled_features.csv
+            data/preprocess/preprocess_meta.json
+            reports/preprocess_report.md
+            reports/figures/preprocess_elbow_curve.png
+
+      - name: Upload Model Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: model-files
+          path: |
+            models/kmeans_model.pkl
+            data/model/clustered_regencies.csv
+
       - name: Upload Evaluate Files
         uses: actions/upload-artifact@v7
         with:
@@ -244,40 +178,6 @@ jobs:
             reports/figures/eval_cluster_distribution.png
             reports/figures/eval_avg_transaction.png
 
-  interpret:
-    name: AI Interpretation
-    needs: evaluate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Run AI Interpretation
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc repro -s interpret
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update interpret stage artifacts [skip ci]"
-
-      - name: Generate & Post CML Interpret Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python src/utils/cml_utils.py \
-            --report reports/interpret_report.md \
-            --output reports/cml_interpret.md \
-            --title "CML: Laporan Interpretasi AI SIMKOPDES"
-          cml comment create reports/cml_interpret.md
-          cat reports/cml_interpret.md >> $GITHUB_STEP_SUMMARY
-
       - name: Upload Interpret Files
         uses: actions/upload-artifact@v7
         with:
@@ -286,37 +186,6 @@ jobs:
             reports/interpret_report.md
             reports/interpret_labels.json
 
-  store:
-    name: Store Data
-    needs: interpret
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pipeline Environment
-        uses: ./.github/actions/setup-pipeline
-
-      - name: Apply Remote Database Migrations
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/backend
-          npx wrangler d1 migrations apply simkopdes_db --remote
-
-      - name: Run DVC Store Stage
-        run: dvc repro -s store
-
-      - name: Seed Remote Database
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/backend
-          npx wrangler d1 execute simkopdes_db --remote --file=../../data/seed.sql
-
       - name: Upload Store Files
         uses: actions/upload-artifact@v7
         with:
@@ -324,11 +193,9 @@ jobs:
           path: |
             data/seed.sql
 
-
-
   deploy_backend:
     name: Deploy Backend
-    needs: store
+    needs: pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -353,7 +220,7 @@ jobs:
 
   deploy_frontend:
     name: Deploy Frontend
-    needs: store
+    needs: pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

@@ -8,6 +8,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Configure Git Bot
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
     - name: Setup Python
       uses: actions/setup-python@v6
       with:
@@ -28,4 +34,3 @@ runs:
     - name: DVC Pull
       shell: bash
       run: dvc pull --run-cache
-

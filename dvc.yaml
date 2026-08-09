@@ -1,30 +1,4 @@
 stages:
-  scrape_provinces:
-    cmd: python src/scrape_provinces.py
-    always_changed: true
-    deps:
-      - src/scrape_provinces.py
-      - src/utils/scraper_utils.py
-    params:
-      - scrape.target_url
-      - scrape.table_index
-    outs:
-      - data/raw/scraped_provinces.csv
-
-  scrape_regencies:
-    cmd: python src/scrape_regencies.py
-    always_changed: true
-    deps:
-      - src/scrape_regencies.py
-      - src/utils/scraper_utils.py
-      - data/raw/scraped_provinces.csv
-    params:
-      - scrape.base_url_template
-      - scrape.table_index
-      - scrape.max_workers
-    outs:
-      - data/raw/scraped_regencies.csv
-
   transform:
     cmd: python src/transform.py
     always_changed: true
@@ -86,6 +60,7 @@ stages:
       - model.random_state
       - model.n_init
       - model.override_k
+      - model.selected_features
     outs:
       - models/kmeans_model.pkl
       - data/model/clustered_regencies.csv
@@ -98,6 +73,8 @@ stages:
       - data/preprocess/scaled_features.csv
       - data/model/clustered_regencies.csv
       - models/kmeans_model.pkl
+    params:
+      - model.selected_features
     outs:
       - reports/evaluate_report.md
       - reports/evaluate_metrics.json

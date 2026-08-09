@@ -36,9 +36,21 @@ def main():
         logger.info(f"Menggunakan K = {n_clusters} (OVERRIDE dari params.yaml) untuk KMeans Clustering...")
     else:
         n_clusters = meta.get("optimal_k", 3)
-        logger.info(f"Menggunakan K = {n_clusters} (Optimal K hasil deteksi) untuk KMeans Clustering...")
+    df_scaled = pd.read_csv(SCALED_FEATURES_CSV)
 
-    X_scaled = pd.read_csv(SCALED_FEATURES_CSV).values
+    # 1.5. Seleksi Fitur Terpilih
+    selected_features = params.get('selected_features', [])
+    if selected_features:
+        logger.info(f"Fitur terpilih untuk modelling: {selected_features}")
+        scaled_cols = [f"scaled_{col}" for col in selected_features if f"scaled_{col}" in df_scaled.columns]
+        if not scaled_cols:
+            logger.warning("Fitur terpilih tidak valid. Menggunakan seluruh fitur yang tersedia.")
+            X_scaled = df_scaled.values
+        else:
+            X_scaled = df_scaled[scaled_cols].values
+    else:
+        logger.info("Tidak ada spesifikasi fitur terpilih. Menggunakan seluruh fitur yang tersedia.")
+        X_scaled = df_scaled.values
 
     # 2. Melatih Model KMeans
     kmeans = KMeans(n_clusters=n_clusters, random_state=RANDOM_STATE, n_init=N_INIT)

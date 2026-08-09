@@ -1,19 +1,23 @@
 import os
 import time
 import csv
-import dvc.api
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 from utils.log_utils import get_logger
-from config import RAW_REGENCIES_CSV, RAW_PROVINCES_CSV
+from config import (
+    RAW_REGENCIES_CSV,
+    RAW_PROVINCES_CSV,
+    SCRAPE_TABLE_INDEX,
+    SCRAPE_MAX_WORKERS,
+    SCRAPE_BASE_URL_TEMPLATE
+)
 
 logger = get_logger("scrape_regencies")
-params = dvc.api.params_show().get('scrape', {})
 
-MAX_WORKERS = params.get('max_workers', 4)
-TABLE_INDEX = params.get('table_index', 2)
-BASE_URL_TEMPLATE = params.get('base_url_template', "https://simkopdes.go.id/pers/dashboard/district/{id}")
+MAX_WORKERS = SCRAPE_MAX_WORKERS
+TABLE_INDEX = SCRAPE_TABLE_INDEX
+BASE_URL_TEMPLATE = SCRAPE_BASE_URL_TEMPLATE
 
 def load_scraped_province_ids():
     prov_ids = []

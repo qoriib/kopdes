@@ -1,15 +1,13 @@
 import time
-import dvc.api
 from playwright.sync_api import sync_playwright
 from utils.scraper_utils import scrape_table_with_pagination, save_to_csv
 from utils.log_utils import get_logger
-from config import RAW_PROVINCES_CSV
+from config import RAW_PROVINCES_CSV, SCRAPE_TARGET_URL, SCRAPE_TABLE_INDEX
 
 logger = get_logger("scrape_provinces")
-params = dvc.api.params_show().get('scrape', {})
 
-TARGET_URL = params.get('target_url', "https://simkopdes.go.id/pers/dashboard")
-TABLE_INDEX = params.get('table_index', 2)
+TARGET_URL = SCRAPE_TARGET_URL
+TABLE_INDEX = SCRAPE_TABLE_INDEX
 
 def main():
     logger.info("Memulai Scraping Data Provinsi via Playwright...")
