@@ -29,11 +29,9 @@ jobs:
         shell: bash
         run: playwright install chromium --with-deps
 
-      - name: Run Scraper Notebook
+      - name: Run Scraper Script
         shell: bash
-        run: |
-          mkdir -p notebooks/outs
-          papermill notebooks/0_scrape.ipynb notebooks/outs/0_scrape.ipynb
+        run: python notebooks/0_scrape.py
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -47,7 +45,6 @@ jobs:
           path: |
             data/0_scrape/scraped_provinces.csv
             data/0_scrape/scraped_regencies.csv
-            notebooks/outs/0_scrape.ipynb
 
   pipeline:
     name: Run CRISP-DM DVC Pipeline
