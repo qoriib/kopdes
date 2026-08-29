@@ -1,77 +1,67 @@
 stages:
   understanding:
-    cmd: >-
-      papermill notebooks/1_understanding.ipynb notebooks/outs/1_understanding.ipynb
+    cmd: papermill src/1_understanding.ipynb src/outs/1_understanding.ipynb
     deps:
-      - notebooks/1_understanding.ipynb
-      - data/0_scrape/scraped_provinces.csv
+      - src/1_understanding.ipynb
+      - src/config.py
       - data/0_scrape/scraped_regencies.csv
-      - notebooks/config.py
+      - data/0_scrape/scraped_provinces.csv
     outs:
-      - notebooks/outs/1_understanding.ipynb
+      - src/outs/1_understanding.ipynb
 
   preparation:
-    cmd: >-
-      papermill notebooks/2_preparation.ipynb notebooks/outs/2_preparation.ipynb
+    cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb
     deps:
-      - notebooks/2_preparation.ipynb
+      - src/2_preparation.ipynb
+      - src/config.py
       - data/0_scrape/scraped_provinces.csv
       - data/0_scrape/scraped_regencies.csv
       - data/0_scrape/province.json
       - data/0_scrape/regency.json
-      - notebooks/config.py
     outs:
-      - notebooks/outs/2_preparation.ipynb
+      - src/outs/2_preparation.ipynb
       - data/2_preparation/cleaned_provinces.csv
       - data/2_preparation/cleaned_regencies.csv
       - data/2_preparation/scaled_features.csv
 
   modeling:
-    cmd: >-
-      papermill notebooks/3_modeling.ipynb notebooks/outs/3_modeling.ipynb
-      -p K_MIN ${modeling.k_min}
-      -p K_MAX ${modeling.k_max}
-      -p RANDOM_STATE ${modeling.random_state}
+    cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN ${modeling.k_min} -p K_MAX ${modeling.k_max} -p RANDOM_STATE ${modeling.random_state}
     deps:
-      - notebooks/3_modeling.ipynb
+      - src/3_modeling.ipynb
+      - src/config.py
       - data/2_preparation/cleaned_regencies.csv
       - data/2_preparation/scaled_features.csv
-      - notebooks/config.py
     params:
       - modeling.k_min
       - modeling.k_max
       - modeling.random_state
     outs:
-      - notebooks/outs/3_modeling.ipynb
+      - src/outs/3_modeling.ipynb
       - models/kmeans_model.pkl
       - data/3_modeling/clustered_regencies.csv
 
   evaluation:
-    cmd: >-
-      papermill notebooks/4_evaluation.ipynb notebooks/outs/4_evaluation.ipynb
-      -p TARGET_SILHOUETTE_MIN ${evaluation.target_silhouette_min}
-      -p MODEL "${evaluation.model}"
-      -p MAX_TOKENS ${evaluation.max_tokens}
+    cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb -p TARGET_SILHOUETTE_MIN ${evaluation.target_silhouette_min}
     deps:
-      - notebooks/4_evaluation.ipynb
+      - src/4_evaluation.ipynb
+      - src/config.py
       - data/3_modeling/clustered_regencies.csv
       - data/2_preparation/scaled_features.csv
-      - notebooks/config.py
     params:
       - evaluation.target_silhouette_min
-      - evaluation.model
-      - evaluation.max_tokens
     outs:
-      - notebooks/outs/4_evaluation.ipynb
+      - src/outs/4_evaluation.ipynb
 
   deployment:
-    cmd: >-
-      papermill notebooks/5_deployment.ipynb notebooks/outs/5_deployment.ipynb
+    cmd: papermill src/5_deployment.ipynb src/outs/5_deployment.ipynb -p MODEL "${deployment.model}" -p MAX_TOKENS ${deployment.max_tokens}
     deps:
-      - notebooks/5_deployment.ipynb
+      - src/5_deployment.ipynb
+      - src/config.py
       - data/2_preparation/cleaned_provinces.csv
       - data/3_modeling/clustered_regencies.csv
-      - notebooks/config.py
+    params:
+      - deployment.model
+      - deployment.max_tokens
     outs:
-      - notebooks/outs/5_deployment.ipynb
+      - src/outs/5_deployment.ipynb
       - data/5_deployment/seed.sql

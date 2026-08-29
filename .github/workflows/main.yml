@@ -31,7 +31,7 @@ jobs:
 
       - name: Run Scraper Script
         shell: bash
-        run: python notebooks/0_scrape.py
+        run: python src/0_scrape.py
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -73,25 +73,25 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to markdown --no-input notebooks/outs/1_understanding.ipynb --output-dir notebooks/outs
-          cml comment create notebooks/outs/1_understanding.md
-          cat notebooks/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/1_understanding.ipynb --output-dir src/outs
+          cml comment create src/outs/1_understanding.md
+          cat src/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
 
       - name: Generate & Post CML Modeling Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to markdown --no-input notebooks/outs/3_modeling.ipynb --output-dir notebooks/outs
-          cml comment create notebooks/outs/3_modeling.md
-          cat notebooks/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/3_modeling.ipynb --output-dir src/outs
+          cml comment create src/outs/3_modeling.md
+          cat src/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
 
       - name: Generate & Post CML Evaluation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to markdown --no-input notebooks/outs/4_evaluation.ipynb --output-dir notebooks/outs
-          cml comment create notebooks/outs/4_evaluation.md
-          cat notebooks/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/4_evaluation.ipynb --output-dir src/outs
+          cml comment create src/outs/4_evaluation.md
+          cat src/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
 
       - name: Apply Remote Database Migrations
         env:
@@ -114,7 +114,7 @@ jobs:
         with:
           name: notebook-outputs
           path: |
-            notebooks/outs/*
+            src/outs/*
 
       - name: Upload Prepared Files
         uses: actions/upload-artifact@v7

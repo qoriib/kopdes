@@ -1,8 +1,8 @@
 import os
 
 # Base & Data Directories (relative to project root)
-NOTEBOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(NOTEBOOKS_DIR)
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SRC_DIR)
 
 DATA_DIR = os.path.join(BASE_DIR, "data")
 SCRAPE_DIR = os.path.join(DATA_DIR, "0_scrape")

@@ -10,4 +10,4 @@ authors = [{ name = "Qoriib" }]
 requires-python = ">=3.10"
 
 [tool.setuptools.packages.find]
-where = ["notebooks"]
+where = ["src"]
