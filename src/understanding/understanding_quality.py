@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 from utils.log_utils import get_logger
-from utils.data_utils import clean_number_col
 from utils.report_utils import generate_report_from_template
 from config import (
     RAW_REGENCIES_CSV,
@@ -52,7 +51,7 @@ def run_quality():
     outlier_metrics = {}
 
     for col in num_cols:
-        series_clean = clean_number_col(df_raw[col])
+        series_clean = pd.to_numeric(df_raw[col], errors='coerce').fillna(0)
         q1 = float(series_clean.quantile(0.25))
         q3 = float(series_clean.quantile(0.75))
         iqr = q3 - q1

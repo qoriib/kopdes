@@ -1,5 +1,5 @@
 outs:
-- md5: 54c8be08955209abb330ac7d5a26560e
-  size: 35880
+- md5: 1f42c6e8a1f9c018d09aef395c5e585a
+  size: 32816
   hash: md5
   path: scraped_regencies.csv

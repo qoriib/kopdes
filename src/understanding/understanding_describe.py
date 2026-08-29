@@ -3,7 +3,6 @@ import json
 import pandas as pd
 
 from utils.log_utils import get_logger
-from utils.data_utils import clean_number_col
 from utils.report_utils import generate_report_from_template
 from config import (
     RAW_REGENCIES_CSV,
@@ -25,14 +24,8 @@ def run_describe():
     total_rows = len(df_raw)
     total_cols = len(df_raw.columns)
 
-    # Bersihkan kolom numerik
-    df_clean = df_raw.copy()
-    for col in NUMERIC_COLUMNS:
-        if col in df_clean.columns:
-            df_clean[col] = clean_number_col(df_clean[col])
-
     # 1. Statistik Deskriptif Menggunakan pandas.describe()
-    desc_df = df_clean[NUMERIC_COLUMNS].describe(percentiles=[0.5]).T
+    desc_df = df_raw[NUMERIC_COLUMNS].describe(percentiles=[0.5]).T
     desc_df = desc_df.rename(columns={'50%': 'median', 'std': 'std_dev'})
 
     # 2. Pembuatan Markdown Table

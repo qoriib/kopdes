@@ -1,6 +1,7 @@
 import os
 import csv
 import json
+import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright, Page, TimeoutError as PlaywrightTimeoutError
@@ -11,7 +12,8 @@ from config import (
     PROVINCE_COLUMN_MAPPING,
     REGENCY_COLUMN_MAPPING,
     GEO_PROVINCES_JSON,
-    RAW_PROVINCES_CSV
+    RAW_PROVINCES_CSV,
+    NUMERIC_COLUMNS
 )
 
 logger = get_logger("scraper_utils")
@@ -146,42 +148,29 @@ def scrape_table_with_pagination(page: Page, target_url: str, target_table_index
 
     return all_headers, all_rows
 
-def save_to_csv(filename: str, headers: list, rows: list) -> bool:
-    """Menyimpan data ke berkas CSV (utf-8 dengan BOM)."""
-    if not headers and not rows:
-        logger.warning("Tidak ada data untuk disimpan ke CSV.")
-        return False
+def clean_and_save_dataframe(df: pd.DataFrame, output_csv: str) -> None:
+    """Membersihkan seluruh kolom numerik dan menyimpan ke CSV berstandar numerik."""
+    for col in df.columns:
+        if col in NUMERIC_COLUMNS or any(k in col.lower() for k in ['total', 'simpanan', 'volume', 'nilai', 'koperasi', 'pct', 'lahan', 'gerai']):
+            if col not in ['province_name', 'regency_name', 'no', 'regency_no', 'province_id']:
+                df[col] = clean_number_col(df[col])
 
-    try:
-        parent_dir = os.path.dirname(filename)
-        if parent_dir:
-            os.makedirs(parent_dir, exist_ok=True)
-
-        with open(filename, "w", newline="", encoding="utf-8-sig") as f:
-            writer = csv.writer(f)
-            if headers:
-                writer.writerow(headers)
-            if rows:
-                writer.writerows(rows)
-
-        logger.info(f"[BERHASIL] Data ({len(rows)} baris) disimpan ke: {filename}")
-        return True
-
-    except Exception as e:
-        logger.error(f"Gagal menyimpan file CSV {filename}: {e}")
-        return False
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+    df.to_csv(output_csv, index=False, encoding='utf-8')
+    logger.info(f"[BERHASIL] Dataset terstandardisasi numerik ({len(df)} baris) disimpan ke: {output_csv}")
 
 def scrape_provinces_data(target_url: str, output_csv: str, table_index: int = 2):
-    """Mengekstrak data provinsi dan menyimpan ke CSV dengan mapping header config.py."""
+    """Mengekstrak data provinsi, memetakan header, membersihkan angka, dan menyimpan ke CSV."""
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         headers, rows = scrape_table_with_pagination(page, target_url, target_table_index=table_index)
         browser.close()
 
-    if headers:
+    if headers and rows:
         mapped_headers = map_column_headers(headers, PROVINCE_COLUMN_MAPPING)
-        save_to_csv(output_csv, mapped_headers, rows)
+        df = pd.DataFrame(rows, columns=mapped_headers)
+        clean_and_save_dataframe(df, output_csv)
 
 def scrape_single_regency(prov_id: int, url_template: str, table_index: int = 2) -> tuple[list, list]:
     url = url_template.format(id=prov_id)
@@ -225,7 +214,7 @@ def load_scraped_province_ids() -> list:
     return prov_ids
 
 def scrape_all_regencies(base_url_template: str, output_filename: str, target_table_index: int = 2, max_workers: int = 5):
-    """Mengekstrak data kabupaten/kota secara paralel dan menyimpan dengan header terstandardisasi."""
+    """Mengekstrak data kabupaten/kota secara paralel, membersihkan angka, dan menyimpan ke CSV."""
     prov_ids = load_scraped_province_ids()
     if not prov_ids:
         logger.error("Tidak ada province IDs yang ditemukan untuk discrape.")
@@ -247,5 +236,6 @@ def scrape_all_regencies(base_url_template: str, output_filename: str, target_ta
             except Exception as e:
                 logger.error(f"Provinsi ID {pid} gagal diekstrak: {e}")
 
-    if final_headers:
-        save_to_csv(output_filename, final_headers, all_rows)
+    if final_headers and all_rows:
+        df = pd.DataFrame(all_rows, columns=final_headers)
+        clean_and_save_dataframe(df, output_filename)

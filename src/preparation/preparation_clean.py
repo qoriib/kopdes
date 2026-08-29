@@ -4,14 +4,14 @@ import pandas as pd
 import numpy as np
 
 from utils.log_utils import get_logger
-from utils.data_utils import clean_number_col
 from config import (
     RAW_PROVINCES_CSV,
     RAW_REGENCIES_CSV,
     GEO_PROVINCES_JSON,
     GEO_REGENCIES_JSON,
     CLEANED_PROVINCES_CSV,
-    CLEANED_REGENCIES_CSV
+    CLEANED_REGENCIES_CSV,
+    NUMERIC_COLUMNS
 )
 
 logger = get_logger("preparation.clean")
@@ -27,10 +27,6 @@ def clean_provinces_data():
     """Pembersihan dan standardisasi data level provinsi."""
     logger.info(f"Membersihkan data provinsi dari {RAW_PROVINCES_CSV}...")
     df = pd.read_csv(RAW_PROVINCES_CSV)
-
-    num_cols = [c for c in df.columns if c not in ['no', 'province_name', 'province_id', 'latitude', 'longitude']]
-    for col in num_cols:
-        df[col] = clean_number_col(df[col])
 
     df['province_name'] = df['province_name'].astype(str).str.strip().str.upper()
 
@@ -59,15 +55,12 @@ def clean_regencies_data():
     logger.info(f"Membersihkan data kabupaten/kota dari {RAW_REGENCIES_CSV}...")
     df = pd.read_csv(RAW_REGENCIES_CSV)
 
-    num_cols = [c for c in df.columns if c not in ['province_id', 'regency_no', 'regency_name', 'latitude', 'longitude']]
-    for col in num_cols:
-        df[col] = clean_number_col(df[col])
-
     df['regency_name'] = df['regency_name'].astype(str).str.strip().str.upper()
 
-    for col in num_cols:
-        df[col] = df.groupby('province_id')[col].transform(lambda s: s.fillna(s.median() if not s.dropna().empty else 0))
-        df[col] = df[col].fillna(0)
+    for col in NUMERIC_COLUMNS:
+        if col in df.columns:
+            df[col] = df.groupby('province_id')[col].transform(lambda s: s.fillna(s.median() if not s.dropna().empty else 0))
+            df[col] = df[col].fillna(0)
 
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
     geo_df = pd.DataFrame(geo_data)

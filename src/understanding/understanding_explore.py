@@ -6,7 +6,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from utils.log_utils import get_logger
-from utils.data_utils import clean_number_col
 from utils.config_utils import get_params
 from utils.report_utils import generate_report_from_template
 from config import (
@@ -33,12 +32,6 @@ def run_explore():
 
     df_prov = pd.read_csv(RAW_PROVINCES_CSV)
     df_reg = pd.read_csv(RAW_REGENCIES_CSV)
-
-    for col in NUMERIC_COLUMNS:
-        if col in df_prov.columns:
-            df_prov[col] = clean_number_col(df_prov[col])
-        if col in df_reg.columns:
-            df_reg[col] = clean_number_col(df_reg[col])
 
     # Agregat Nasional
     total_regencies = len(df_reg)

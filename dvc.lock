@@ -546,12 +546,12 @@ stages:
     outs:
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 8984f1f39c79c67f13bf9ed8ab6385d2
-      size: 2244
+      md5: c960ff5719b49c8986c97ad1e4efbc36
+      size: 1868
     - path: reports/interpret_report.md
       hash: md5
-      md5: 1eebb3c22c7757d7310a576b6e6367e9
-      size: 2753
+      md5: cf0b06140cbe969aba80f61ff842a844
+      size: 2177
   deployment_seed:
     cmd: python src/deployment/deployment_seed.py
     deps:
@@ -569,12 +569,12 @@ stages:
       size: 216
     - path: reports/interpret_labels.json
       hash: md5
-      md5: 8984f1f39c79c67f13bf9ed8ab6385d2
-      size: 2244
+      md5: c960ff5719b49c8986c97ad1e4efbc36
+      size: 1868
     - path: reports/interpret_report.md
       hash: md5
-      md5: 1eebb3c22c7757d7310a576b6e6367e9
-      size: 2753
+      md5: cf0b06140cbe969aba80f61ff842a844
+      size: 2177
     - path: src/deployment/deployment_seed.py
       hash: md5
       md5: c7c345cf29e743729b6d55b9c1ba23bb
@@ -582,8 +582,8 @@ stages:
     outs:
     - path: data/seed.sql
       hash: md5
-      md5: 6943a3cf16d852633f45f140ac6a611d
-      size: 222894
+      md5: 22c1eeb665f2f0f7c93530ac3036c4ba
+      size: 221942
   data_understanding_collect:
     cmd: python src/data_understanding/collect_initial_data.py
     deps:
@@ -713,16 +713,16 @@ stages:
     deps:
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 54c8be08955209abb330ac7d5a26560e
-      size: 35880
+      md5: 1f42c6e8a1f9c018d09aef395c5e585a
+      size: 32816
     - path: src/reports/data_description_template.md
       hash: md5
       md5: 1ac24aa79a8fbf220abcd86f922174a0
       size: 2256
     - path: src/understanding/understanding_describe.py
       hash: md5
-      md5: 6f293531cc92106493061b7b81c3966d
-      size: 3308
+      md5: 13e9e2283d52295840275b1b6ff58920
+      size: 3072
     outs:
     - path: reports/data_description_metrics.json
       hash: md5
@@ -737,20 +737,20 @@ stages:
     deps:
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: 40cd239b2f83ee680e05c30c6f45cb9d
-      size: 4077
+      md5: b4a3aa4e5b3d290510dece33ff328d68
+      size: 3518
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 54c8be08955209abb330ac7d5a26560e
-      size: 35880
+      md5: 1f42c6e8a1f9c018d09aef395c5e585a
+      size: 32816
     - path: src/reports/data_exploration_template.md
       hash: md5
       md5: 353df41422240c285bf62e33efbb2500
       size: 2499
     - path: src/understanding/understanding_explore.py
       hash: md5
-      md5: 31e15c6c21a7ca187ea48e19dfbb94c1
-      size: 7507
+      md5: 23fd6625b47315efd8ccea1406d2f3e5
+      size: 7245
     params:
       params.yaml:
         understanding.top_provinces_limit: 10
@@ -785,16 +785,16 @@ stages:
     deps:
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 54c8be08955209abb330ac7d5a26560e
-      size: 35880
+      md5: 1f42c6e8a1f9c018d09aef395c5e585a
+      size: 32816
     - path: src/reports/data_quality_template.md
       hash: md5
       md5: 5179f3f9d30b8fadcd813517502c7afd
       size: 2490
     - path: src/understanding/understanding_quality.py
       hash: md5
-      md5: b39f077c69132d5736932e3fd72ef9ec
-      size: 4694
+      md5: 978ae5c453e40c2bde756bcc181ab704
+      size: 4672
     outs:
     - path: reports/data_quality_metrics.json
       hash: md5
@@ -817,16 +817,16 @@ stages:
       size: 71671
     - path: data/raw/scraped_provinces.csv
       hash: md5
-      md5: 40cd239b2f83ee680e05c30c6f45cb9d
-      size: 4077
+      md5: b4a3aa4e5b3d290510dece33ff328d68
+      size: 3518
     - path: data/raw/scraped_regencies.csv
       hash: md5
-      md5: 54c8be08955209abb330ac7d5a26560e
-      size: 35880
+      md5: 1f42c6e8a1f9c018d09aef395c5e585a
+      size: 32816
     - path: src/preparation/preparation_clean.py
       hash: md5
-      md5: 8048f5403335d46b4ea62647a0d9fb0c
-      size: 4042
+      md5: 88cb0e83ff628802cd18300f0a8be7f8
+      size: 3685
     outs:
     - path: data/prepared/cleaned_provinces.csv
       hash: md5
