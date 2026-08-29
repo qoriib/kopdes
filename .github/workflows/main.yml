@@ -58,55 +58,22 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      # Stage 1: Data Understanding
-      - name: Run Stage 1 - Data Understanding
-        run: dvc repro understanding
-
-      - name: Generate & Post CML Data Understanding Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          jupyter nbconvert --to markdown --no-input src/outs/1_understanding.ipynb --output-dir src/outs
-          sed -i 's|](1_understanding_files/|](src/outs/1_understanding_files/|g' src/outs/1_understanding.md
-          cml comment create --publish src/outs/1_understanding.md
-          cat src/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
-
-      # Stage 2: Data Preparation
-      - name: Run Stage 2 - Data Preparation
-        run: dvc repro preparation
-
-      # Stage 3: Modeling
-      - name: Run Stage 3 - Modeling
-        run: dvc repro modeling
-
-      - name: Generate & Post CML Modeling Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          jupyter nbconvert --to markdown --no-input src/outs/3_modeling.ipynb --output-dir src/outs
-          sed -i 's|](3_modeling_files/|](src/outs/3_modeling_files/|g' src/outs/3_modeling.md
-          cml comment create --publish src/outs/3_modeling.md
-          cat src/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
-
-      # Stage 4: Evaluation
-      - name: Run Stage 4 - Evaluation
-        run: dvc repro evaluation
-
-      - name: Generate & Post CML Evaluation Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          jupyter nbconvert --to markdown --no-input src/outs/4_evaluation.ipynb --output-dir src/outs
-          sed -i 's|](4_evaluation_files/|](src/outs/4_evaluation_files/|g' src/outs/4_evaluation.md
-          cml comment create --publish src/outs/4_evaluation.md
-          cat src/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
-
-      # Stage 5: Deployment & Interpretation
-      - name: Run Stage 5 - Deployment & Interpretation
+      - name: Run DVC Pipeline
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc repro deployment
+        run: dvc repro
+
+      - name: Generate & Post CML Reports
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for stage in 1_understanding 3_modeling 4_evaluation; do
+            jupyter nbconvert --to markdown --no-input src/outs/${stage}.ipynb --output-dir src/outs
+            sed -i "s|](${stage}_files/|](src/outs/${stage}_files/|g" src/outs/${stage}.md
+            cml comment create --publish src/outs/${stage}.md
+            cat src/outs/${stage}.md >> $GITHUB_STEP_SUMMARY
+          done
 
       - name: Apply Remote Database Migrations
         env:
