@@ -70,8 +70,12 @@ jobs:
         run: |
           for stage in 1_understanding 3_modeling 4_evaluation; do
             jupyter nbconvert --to markdown --no-input src/outs/${stage}.ipynb --output-dir src/outs
-            sed -i "s|](${stage}_files/|](src/outs/${stage}_files/|g" src/outs/${stage}.md
-            cml comment create --publish src/outs/${stage}.md
+            for img in src/outs/${stage}_files/*.png; do
+              [ -f "$img" ] || continue
+              url=$(cml publish "$img")
+              filename=$(basename "$img")
+              sed -i "s|](${stage}_files/${filename})|]($url)|g" src/outs/${stage}.md
+            done
             cat src/outs/${stage}.md >> $GITHUB_STEP_SUMMARY
           done
 
