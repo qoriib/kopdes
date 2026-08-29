@@ -1,38 +1,26 @@
 stages:
-  data_understanding_collect:
-    cmd: python src/data_understanding/collect_initial_data.py
+  understanding_describe:
+    cmd: python src/understanding/understanding_describe.py
     always_changed: true
     deps:
-      - src/data_understanding/collect_initial_data.py
-      - src/reports/initial_data_collection_template.md
-      - data/raw/scraped_provinces.csv
-      - data/raw/scraped_regencies.csv
-    outs:
-      - reports/initial_data_collection_report.md
-      - reports/initial_data_collection_metrics.json
-
-  data_understanding_describe:
-    cmd: python src/data_understanding/describe_data.py
-    always_changed: true
-    deps:
-      - src/data_understanding/describe_data.py
+      - src/understanding/understanding_describe.py
       - src/reports/data_description_template.md
       - data/raw/scraped_regencies.csv
     outs:
       - reports/data_description_report.md
       - reports/data_description_metrics.json
 
-  data_understanding_explore:
-    cmd: python src/data_understanding/explore_data.py
+  understanding_explore:
+    cmd: python src/understanding/understanding_explore.py
     always_changed: true
     deps:
-      - src/data_understanding/explore_data.py
+      - src/understanding/understanding_explore.py
       - src/reports/data_exploration_template.md
       - data/raw/scraped_provinces.csv
       - data/raw/scraped_regencies.csv
     params:
-      - data_understanding.top_provinces_limit
-      - data_understanding.top_regencies_limit
+      - understanding.top_provinces_limit
+      - understanding.top_regencies_limit
     outs:
       - reports/data_exploration_report.md
       - reports/eda_metrics.json
@@ -41,22 +29,22 @@ stages:
       - reports/figures/eda_correlation_matrix.png
       - reports/figures/eda_feature_distributions.png
 
-  data_understanding_verify_quality:
-    cmd: python src/data_understanding/verify_data_quality.py
+  understanding_quality:
+    cmd: python src/understanding/understanding_quality.py
     always_changed: true
     deps:
-      - src/data_understanding/verify_data_quality.py
+      - src/understanding/understanding_quality.py
       - src/reports/data_quality_template.md
       - data/raw/scraped_regencies.csv
     outs:
       - reports/data_quality_report.md
       - reports/data_quality_metrics.json
 
-  data_preparation_clean:
-    cmd: python src/data_preparation/clean.py
+  preparation_clean:
+    cmd: python src/preparation/preparation_clean.py
     always_changed: true
     deps:
-      - src/data_preparation/clean.py
+      - src/preparation/preparation_clean.py
       - data/raw/scraped_provinces.csv
       - data/raw/scraped_regencies.csv
       - data/raw/province.json
@@ -65,23 +53,23 @@ stages:
       - data/prepared/cleaned_provinces.csv
       - data/prepared/cleaned_regencies.csv
 
-  data_preparation_transform:
-    cmd: python src/data_preparation/transform.py
+  preparation_transform:
+    cmd: python src/preparation/preparation_transform.py
     always_changed: true
     deps:
-      - src/data_preparation/transform.py
+      - src/preparation/preparation_transform.py
       - data/prepared/cleaned_regencies.csv
     params:
-      - data_preparation.log_transform_features
+      - preparation.log_transform_features
     outs:
       - data/prepared/scaled_features.csv
       - data/prepared/preparation_meta.json
 
   modeling_train:
-    cmd: python src/modeling/train.py
+    cmd: python src/modeling/modeling_train.py
     always_changed: true
     deps:
-      - src/modeling/train.py
+      - src/modeling/modeling_train.py
       - data/prepared/scaled_features.csv
       - data/prepared/cleaned_regencies.csv
     params:
@@ -100,10 +88,10 @@ stages:
       - reports/figures/model_elbow_curve.png
 
   evaluation_metrics:
-    cmd: python src/evaluation/evaluate.py
+    cmd: python src/evaluation/evaluation_metrics.py
     always_changed: true
     deps:
-      - src/evaluation/evaluate.py
+      - src/evaluation/evaluation_metrics.py
       - src/reports/evaluate_report_template.md
       - data/prepared/scaled_features.csv
       - data/modeling/clustered_regencies.csv
@@ -119,10 +107,10 @@ stages:
       - reports/figures/eval_avg_transaction.png
 
   evaluation_interpret:
-    cmd: python src/evaluation/interpret.py
+    cmd: python src/evaluation/evaluation_interpret.py
     always_changed: true
     deps:
-      - src/evaluation/interpret.py
+      - src/evaluation/evaluation_interpret.py
       - src/reports/interpret_report_template.md
       - reports/evaluate_metrics.json
       - data/modeling/clustered_regencies.csv
@@ -135,10 +123,10 @@ stages:
       - reports/interpret_report.md
 
   deployment_seed:
-    cmd: python src/deployment/seed.py
+    cmd: python src/deployment/deployment_seed.py
     always_changed: true
     deps:
-      - src/deployment/seed.py
+      - src/deployment/deployment_seed.py
       - data/prepared/cleaned_provinces.csv
       - data/modeling/clustered_regencies.csv
       - reports/evaluate_metrics.json

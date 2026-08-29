@@ -1,39 +1,26 @@
 import os
 import re
-import sys
 import json
-import dvc.api
 import urllib.request
 import urllib.error
 import pandas as pd
 
-# Ensure src root is in python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from utils.env_utils import load_env
 from utils.log_utils import get_logger
+from utils.config_utils import get_params
 from utils.report_utils import generate_report_from_template
 from config import (
     CLUSTERED_REGENCIES_CSV,
     EVALUATE_METRICS_JSON,
     INTERPRET_REPORT_MD,
     INTERPRET_LABELS_JSON,
-    INTERPRET_REPORT_TEMPLATE_MD
+    INTERPRET_REPORT_TEMPLATE_MD,
+    IGNORED_METADATA_COLUMNS
 )
 
 logger = get_logger("evaluation.interpret")
 
-# Ambil parameter DVC
-interpret_params = dvc.api.params_show().get('interpret', {})
-modeling_params = dvc.api.params_show().get('modeling', {})
-
-MODEL_NAME = interpret_params.get('model', "@cf/openai/gpt-oss-120b")
-MAX_TOKENS = interpret_params.get('max_tokens', 3000)
-SELECTED_FEATURES = modeling_params.get('selected_features', [])
-IGNORED_FEATURES = ['cluster_label', 'regency_name', 'province_name', 'No', 'Province_ID', 'latitude', 'longitude']
-
 def sanitize_json_string(s: str) -> str:
-    """Membersihkan karakter khusus atau enter dalam string JSON."""
     in_quote = False
     escaped = False
     chars = []
@@ -54,7 +41,6 @@ def sanitize_json_string(s: str) -> str:
     return "".join(chars)
 
 def extract_json_object(s: str) -> str:
-    """Mengekstrak blok JSON valid pertama dari respons LLM."""
     start_idx = s.find('{')
     if start_idx == -1:
         raise ValueError("Tidak ditemukan karakter '{' dalam respons")
@@ -81,7 +67,6 @@ def extract_json_object(s: str) -> str:
     raise ValueError("Jumlah kurung kurawal '{' dan '}' tidak seimbang")
 
 def build_cluster_profile_text(df: pd.DataFrame, active_features: list) -> str:
-    """Menyusun teks statistik profil klaster untuk prompt LLM."""
     num_cols = df[active_features].select_dtypes(include=['number']).columns.tolist()
 
     profile_text = ""
@@ -105,9 +90,15 @@ def build_cluster_profile_text(df: pd.DataFrame, active_features: list) -> str:
 
     return profile_text
 
-def main():
-    logger.info(f"Memulai Tahap Interpretasi AI Klaster dengan Cloudflare Workers AI ({MODEL_NAME})...")
+def run_interpret():
+    logger.info("Menjalankan CRISP-DM: Evaluation - AI Interpretation with Cloudflare Workers AI...")
     load_env()
+
+    i_params = get_params('interpret')
+    m_params = get_params('modeling')
+    model_name = i_params.get('model', "@cf/openai/gpt-oss-120b")
+    max_tokens = i_params.get('max_tokens', 3000)
+    selected_features = m_params.get('selected_features', [])
 
     account_id = os.environ.get("CF_ACCOUNT_ID")
     api_token = os.environ.get("CF_API_TOKEN")
@@ -133,11 +124,10 @@ def main():
     with open(EVALUATE_METRICS_JSON, encoding='utf-8') as f:
         metrics = json.load(f)
 
-    # Menentukan fitur aktif
-    if SELECTED_FEATURES:
-        active_features = [col for col in SELECTED_FEATURES if col in df.columns]
+    if selected_features:
+        active_features = [col for col in selected_features if col in df.columns]
     else:
-        active_features = [col for col in df.columns if col not in IGNORED_FEATURES]
+        active_features = [col for col in df.columns if col not in IGNORED_METADATA_COLUMNS]
 
     profile_text = build_cluster_profile_text(df, active_features)
     clustering_metrics = metrics.get('clustering_metrics', {})
@@ -176,7 +166,7 @@ PENTING:
 3. DILARANG menggunakan emoji atau separator '---' di dalam JSON.
 """
 
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{MODEL_NAME}"
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model_name}"
     headers = {
         "Authorization": f"Bearer {api_token}",
         "Content-Type": "application/json"
@@ -187,7 +177,7 @@ PENTING:
             {"role": "system", "content": "Anda adalah pakar analis data koperasi Indonesia yang merespons dalam format JSON murni."},
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": MAX_TOKENS
+        "max_tokens": max_tokens
     }
 
     req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
@@ -244,6 +234,9 @@ PENTING:
     except Exception as e:
         logger.error(f"HTTP/API Error saat interpretasi AI: {e}")
         sys.exit(1)
+
+def main():
+    run_interpret()
 
 if __name__ == "__main__":
     main()

@@ -1,8 +1,4 @@
 import os
-import sys
-
-# Ensure src root is in python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.log_utils import get_logger
 from utils.scraper_utils import scrape_provinces_data

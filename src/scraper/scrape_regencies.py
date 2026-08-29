@@ -1,27 +1,18 @@
 import os
-import sys
-
-# Ensure src root is in python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.log_utils import get_logger
 from utils.scraper_utils import scrape_all_regencies
-from config import (
-    RAW_REGENCIES_CSV,
-    RAW_PROVINCES_CSV,
-    SCRAPE_BASE_URL_TEMPLATE,
-    SCRAPE_MAX_WORKERS
-)
+from config import RAW_REGENCIES_CSV, SCRAPE_BASE_URL_TEMPLATE, SCRAPE_TABLE_INDEX, SCRAPE_MAX_WORKERS
 
 logger = get_logger("scraper.scrape_regencies")
 
 def main():
-    logger.info("Memulai ekstraksi mandiri data tingkat kabupaten/kota dari SIMKOPDES...")
+    logger.info("Memulai ekstraksi mandiri seluruh data kabupaten/kota dari SIMKOPDES...")
     os.makedirs(os.path.dirname(RAW_REGENCIES_CSV), exist_ok=True)
     scrape_all_regencies(
-        RAW_PROVINCES_CSV,
-        RAW_REGENCIES_CSV,
-        SCRAPE_BASE_URL_TEMPLATE,
+        base_url_template=SCRAPE_BASE_URL_TEMPLATE,
+        output_filename=RAW_REGENCIES_CSV,
+        target_table_index=SCRAPE_TABLE_INDEX,
         max_workers=SCRAPE_MAX_WORKERS
     )
     logger.info("Ekstraksi data kabupaten/kota selesai.")

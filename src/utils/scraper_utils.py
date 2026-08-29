@@ -1,8 +1,18 @@
 import os
 import csv
+import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from bs4 import BeautifulSoup
-from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import sync_playwright, Page, TimeoutError as PlaywrightTimeoutError
+
 from utils.log_utils import get_logger
+from utils.data_utils import clean_number_col
+from config import (
+    PROVINCE_COLUMN_MAPPING,
+    REGENCY_COLUMN_MAPPING,
+    GEO_PROVINCES_JSON,
+    RAW_PROVINCES_CSV
+)
 
 logger = get_logger("scraper_utils")
 
@@ -14,6 +24,10 @@ def is_header_row(row: list) -> bool:
     c1 = str(row[1]).strip().lower() if len(row) > 1 else ""
     return c0 == 'no' or c1 in ('provinsi', 'kabupaten/kota', 'kabupaten', 'kota') or 'provinsi' in c0
 
+def map_column_headers(headers: list, mapping: dict) -> list:
+    """Mengubah nama kolom sesuai dictionary mapping yang ditentukan di config.py."""
+    return [mapping.get(h.strip(), mapping.get(h, h.strip().lower().replace(" ", "_"))) for h in headers]
+
 def parse_table_from_html(html: str, target_index: int = 2) -> tuple[list, list]:
     """Parsir tabel HTML berdasarkan indeks target menggunakan BeautifulSoup."""
     try:
@@ -23,7 +37,6 @@ def parse_table_from_html(html: str, target_index: int = 2) -> tuple[list, list]
             logger.warning("Tidak ada tabel (<table/>) yang ditemukan dalam HTML.")
             return [], []
 
-        # Menentukan indeks tabel dengan aman
         selected_idx = min(max(1, target_index), len(tables)) - 1
         table = tables[selected_idx]
 
@@ -40,7 +53,6 @@ def parse_table_from_html(html: str, target_index: int = 2) -> tuple[list, list]
             if cols and not is_header_row(cols):
                 rows.append(cols)
 
-        # Jika thead tidak ada, ambil baris pertama sebagai header
         if not headers and rows:
             headers = rows[0]
             rows = rows[1:]
@@ -68,26 +80,23 @@ def change_page_size(page: Page) -> None:
                 page.wait_for_timeout(1500)
                 logger.info("Berhasil mengubah jumlah baris per halaman.")
     except Exception as e:
-        logger.warning(f"Gagal mengubah page size (melanjutkan dengan default): {e}")
+        logger.warning(f"Gagal mengubah page size: {e}")
 
 def scrape_table_with_pagination(page: Page, target_url: str, target_table_index: int = 2) -> tuple[list, list]:
     """Mengekstrak tabel dengan dukungan penuh paginasi Ant Design di Playwright."""
     logger.info(f"Navigasi ke URL: {target_url}")
     
-    # Handling Timeout & Navigasi
     try:
         page.goto(target_url, wait_until='networkidle', timeout=30000)
     except PlaywrightTimeoutError:
-        logger.warning("Batas waktu navigasi utama habis. Mencoba melanjutkan pemrosesan...")
+        logger.warning("Batas waktu navigasi utama habis. Melanjutkan...")
 
-    # Memastikan tabel ada sebelum mengekstrak
     try:
         page.wait_for_selector('table', timeout=20000)
     except PlaywrightTimeoutError:
-        logger.error("Gagal menemukan elemen <table> di halaman dalam batas waktu 20 detik.")
+        logger.error("Gagal menemukan elemen <table> di halaman.")
         return [], []
 
-    # Ubah opsi pagination jika tersedia
     change_page_size(page)
 
     all_headers = []
@@ -96,7 +105,6 @@ def scrape_table_with_pagination(page: Page, target_url: str, target_table_index
     page_count = 1
 
     while True:
-        logger.info(f"Mengekstrak data dari Halaman {page_count}...")
         try:
             html_content = page.content()
             headers, rows = parse_table_from_html(html_content, target_table_index)
@@ -112,12 +120,8 @@ def scrape_table_with_pagination(page: Page, target_url: str, target_table_index
                     all_rows.append(r)
                     new_entries += 1
 
-            logger.info(f"Halaman {page_count}: Mendapatkan {new_entries} baris baru (Total akumulasi: {len(all_rows)})")
-
-            # Cek Tombol 'Next'
             next_li = page.query_selector('li.ant-pagination-next')
             if not next_li:
-                logger.info("Tombol paginasi 'Next' tidak ditemukan. Selesai.")
                 break
 
             is_disabled = page.evaluate("""(li) => {
@@ -126,35 +130,26 @@ def scrape_table_with_pagination(page: Page, target_url: str, target_table_index
             }""", next_li)
 
             if is_disabled:
-                logger.info("Mencapai halaman terakhir (Tombol 'Next' nonaktif). Selesai.")
                 break
 
             next_btn = next_li.query_selector('button, a')
             if not next_btn:
-                logger.warning("Elemen tombol 'Next' tidak dapat diklik. Selesai.")
                 break
 
             next_btn.click()
             page_count += 1
             page.wait_for_timeout(2000)
 
-        except PlaywrightTimeoutError:
-            logger.error(f"Timeout terjadi saat pemrosesan Halaman {page_count}.")
-            break
         except Exception as e:
-            logger.error(f"Terjadi kesalahan tak terduga pada Halaman {page_count}: {e}")
+            logger.warning(f"Selesai atau kendala paginasi pada Halaman {page_count}: {e}")
             break
 
     return all_headers, all_rows
 
-
 def save_to_csv(filename: str, headers: list, rows: list) -> bool:
-    """
-    Menyimpan data ke berkas CSV (utf-8 dengan BOM).
-    Memastikan direktori tujuan dibuat secara otomatis.
-    """
+    """Menyimpan data ke berkas CSV (utf-8 dengan BOM)."""
     if not headers and not rows:
-        logger.warning("Tidak ada data untuk disimpan ke CSV (Header dan Rows kosong).")
+        logger.warning("Tidak ada data untuk disimpan ke CSV.")
         return False
 
     try:
@@ -172,21 +167,36 @@ def save_to_csv(filename: str, headers: list, rows: list) -> bool:
         logger.info(f"[BERHASIL] Data ({len(rows)} baris) disimpan ke: {filename}")
         return True
 
-    except PermissionError:
-        logger.error(f"Gagal menyimpan: Akses ditolak ke file '{filename}'. Cek apakah file sedang dibuka aplikasi lain.")
-    except IOError as e:
-        logger.error(f"Gagal melakukan I/O file pada '{filename}': {e}")
     except Exception as e:
-        logger.error(f"Gagal menyimpan file CSV: {e}")
+        logger.error(f"Gagal menyimpan file CSV {filename}: {e}")
+        return False
 
-    return False
+def scrape_provinces_data(target_url: str, output_csv: str, table_index: int = 2):
+    """Mengekstrak data provinsi dan menyimpan ke CSV dengan mapping header config.py."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        headers, rows = scrape_table_with_pagination(page, target_url, target_table_index=table_index)
+        browser.close()
+
+    if headers:
+        mapped_headers = map_column_headers(headers, PROVINCE_COLUMN_MAPPING)
+        save_to_csv(output_csv, mapped_headers, rows)
+
+def scrape_single_regency(prov_id: int, url_template: str, table_index: int = 2) -> tuple[list, list]:
+    url = url_template.format(id=prov_id)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        headers, rows = scrape_table_with_pagination(page, url, target_table_index=table_index)
+        browser.close()
+        
+    labeled_rows = [[prov_id] + r for r in rows]
+    return headers, labeled_rows
 
 def load_scraped_province_ids() -> list:
     """Memuat daftar province_id yang sudah berhasil discrape."""
     prov_ids = []
-    from config import GEO_PROVINCES_JSON, RAW_PROVINCES_CSV
-    import json
-    
     geo_id_map = {}
     if os.path.exists(GEO_PROVINCES_JSON):
         try:
@@ -194,7 +204,7 @@ def load_scraped_province_ids() -> list:
                 prov_data = json.load(f)
                 geo_id_map = {p['name'].strip().upper(): int(p['province_id']) for p in prov_data if 'name' in p}
         except Exception as e:
-            logger.error(f"Gagal memuat province.json untuk resolusi ID: {e}")
+            logger.error(f"Gagal memuat province.json: {e}")
 
     if os.path.exists(RAW_PROVINCES_CSV):
         try:
@@ -210,8 +220,32 @@ def load_scraped_province_ids() -> list:
                     geo_id = geo_id_map.get(name)
                     if geo_id is not None:
                         prov_ids.append(geo_id)
-                    else:
-                        logger.warning(f"Province name '{name}' dari scraped_provinces.csv tidak ditemukan di province.json!")
         except Exception as e:
             logger.error(f"Gagal membaca province IDs dari {RAW_PROVINCES_CSV}: {e}")
     return prov_ids
+
+def scrape_all_regencies(base_url_template: str, output_filename: str, target_table_index: int = 2, max_workers: int = 5):
+    """Mengekstrak data kabupaten/kota secara paralel dan menyimpan dengan header terstandardisasi."""
+    prov_ids = load_scraped_province_ids()
+    if not prov_ids:
+        logger.error("Tidak ada province IDs yang ditemukan untuk discrape.")
+        return
+
+    all_rows = []
+    final_headers = []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(scrape_single_regency, pid, base_url_template, target_table_index): pid for pid in prov_ids}
+        for future in as_completed(futures):
+            pid = futures[future]
+            try:
+                h, r = future.result()
+                if h and not final_headers:
+                    final_headers = ['province_id'] + map_column_headers(h, REGENCY_COLUMN_MAPPING)
+                all_rows.extend(r)
+                logger.info(f"Provinsi ID {pid}: Berhasil mengekstrak {len(r)} baris kabupaten/kota.")
+            except Exception as e:
+                logger.error(f"Provinsi ID {pid} gagal diekstrak: {e}")
+
+    if final_headers:
+        save_to_csv(output_filename, final_headers, all_rows)

@@ -136,8 +136,6 @@ jobs:
         with:
           name: data-understanding-files
           path: |
-            reports/initial_data_collection_report.md
-            reports/initial_data_collection_metrics.json
             reports/data_description_report.md
             reports/data_description_metrics.json
             reports/data_exploration_report.md

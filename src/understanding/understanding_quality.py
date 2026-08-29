@@ -1,36 +1,23 @@
 import os
-import sys
 import json
 import pandas as pd
 import numpy as np
 
-# Ensure src root is in python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from utils.log_utils import get_logger
+from utils.data_utils import clean_number_col
 from utils.report_utils import generate_report_from_template
 from config import (
     RAW_REGENCIES_CSV,
     DATA_QUALITY_REPORT_MD,
     DATA_QUALITY_METRICS_JSON,
-    DATA_QUALITY_TEMPLATE_MD
+    DATA_QUALITY_TEMPLATE_MD,
+    IGNORED_METADATA_COLUMNS
 )
 
-logger = get_logger("data_understanding.verify_data_quality")
+logger = get_logger("understanding.quality")
 
-def clean_numeric_col(series: pd.Series) -> pd.Series:
-    """Membersihkan format angka/mata uang ke numerik."""
-    return (
-        series.astype(str)
-        .str.replace(r'[Rp%\s]', '', regex=True)
-        .str.replace('.', '', regex=False)
-        .str.replace(',', '.', regex=False)
-        .pipe(pd.to_numeric, errors='coerce')
-        .fillna(0)
-    )
-
-def main():
-    logger.info("Memulai Tugas Generik 4: Verify Data Quality (CRISP-DM / CRISP-ML(Q))...")
+def run_quality():
+    logger.info("Menjalankan CRISP-DM: Understanding - Verify Data Quality...")
 
     if not os.path.exists(RAW_REGENCIES_CSV):
         raise FileNotFoundError(f"File {RAW_REGENCIES_CSV} tidak ditemukan.")
@@ -50,21 +37,22 @@ def main():
 
     # 2. Uji Keunikan (Uniqueness)
     duplicate_rows = int(df_raw.duplicated().sum())
-    duplicate_keys = int(df_raw.duplicated(subset=['Province_ID', 'No']).sum()) if 'Province_ID' in df_raw.columns and 'No' in df_raw.columns else 0
+    duplicate_keys = int(df_raw.duplicated(subset=['province_id', 'regency_no']).sum()) if 'province_id' in df_raw.columns and 'regency_no' in df_raw.columns else 0
 
     # 3. Uji Konsistensi Format Penulisan Wilayah
-    is_upper = df_raw['Kabupaten/Kota'].astype(str).str.isupper().all() if 'Kabupaten/Kota' in df_raw.columns else False
+    name_col = 'regency_name' if 'regency_name' in df_raw.columns else 'Kabupaten/Kota'
+    is_upper = df_raw[name_col].astype(str).str.isupper().all() if name_col in df_raw.columns else False
     naming_consistency_status = "100% Huruf Kapital Sesuai Standar Administrasi" if is_upper else "Sebagian Perlu Penyeragaman Kapital"
 
     # 4. Uji Kemiringan Distribusi & Deteksi Pencilan (IQR Method)
-    num_cols = [c for c in df_raw.columns if c not in ['Province_ID', 'No', 'Kabupaten/Kota']]
+    num_cols = [c for c in df_raw.columns if c not in IGNORED_METADATA_COLUMNS]
     outlier_headers = ["Nama Fitur", "Skewness (Kemiringan)", "Batas Bawah (IQR)", "Batas Atas (IQR)", "Jumlah Outliers", "Persentase Outliers"]
     outlier_rows = ""
 
     outlier_metrics = {}
 
     for col in num_cols:
-        series_clean = clean_numeric_col(df_raw[col])
+        series_clean = clean_number_col(df_raw[col])
         q1 = float(series_clean.quantile(0.25))
         q3 = float(series_clean.quantile(0.75))
         iqr = q3 - q1
@@ -83,7 +71,7 @@ def main():
             "outliers_pct": outliers_pct
         }
 
-        if "Nilai" in col or "Simpanan" in col:
+        if "nilai" in col or "simpanan" in col:
             low_str = f"Rp {lower:,.0f}"
             up_str = f"Rp {upper:,.0f}"
         else:
@@ -122,6 +110,9 @@ def main():
 
     generate_report_from_template(DATA_QUALITY_TEMPLATE_MD, DATA_QUALITY_REPORT_MD, replacements)
     logger.info(f"Data Quality Report -> {DATA_QUALITY_REPORT_MD}")
+
+def main():
+    run_quality()
 
 if __name__ == "__main__":
     main()
