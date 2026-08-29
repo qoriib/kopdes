@@ -1,7 +1,7 @@
 import os
+import re
 import sys
 import json
-import re
 import dvc.api
 import urllib.request
 import urllib.error
@@ -18,12 +18,19 @@ from config import (
 )
 
 logger = get_logger("interpret")
-params = dvc.api.params_show().get('interpret', {})
 
-MODEL_NAME = params.get('model', "@cf/openai/gpt-oss-120b")
-MAX_TOKENS = params.get('max_tokens', 3000)
+# Ambil parameter DVC
+interpret_params = dvc.api.params_show().get('interpret', {})
+model_params = dvc.api.params_show().get('model', {})
 
-def sanitize_json_string(s):
+MODEL_NAME = interpret_params.get('model', "@cf/openai/gpt-oss-120b")
+MAX_TOKENS = interpret_params.get('max_tokens', 3000)
+SELECTED_FEATURES = model_params.get('selected_features', [])
+
+IGNORED_FEATURES = ['cluster_label', 'regency_name', 'province_name', 'No', 'Province_ID']
+
+def sanitize_json_string(s: str) -> str:
+    """Membersihkan karakter tak berizin dalam string JSON."""
     in_quote = False
     escaped = False
     chars = []
@@ -43,10 +50,12 @@ def sanitize_json_string(s):
             chars.append(char)
     return "".join(chars)
 
-def extract_json_object(s):
+
+def extract_json_object(s: str) -> str:
+    """Mengekstrak blok JSON pertama dari string output AI."""
     start_idx = s.find('{')
     if start_idx == -1:
-        raise ValueError("No '{' found in string")
+        raise ValueError("Tidak ditemukan karakter '{' dalam string response")
     
     brace_count = 0
     in_quote = False
@@ -67,7 +76,43 @@ def extract_json_object(s):
                 brace_count -= 1
                 if brace_count == 0:
                     return s[start_idx:i+1]
-    raise ValueError("Unbalanced braces in string")
+    raise ValueError("Jumlah kurung kurawal '{' dan '}' tidak seimbang")
+
+def build_cluster_profile_text(df: pd.DataFrame, active_features: list) -> str:
+    """
+    Menyusun ringkasan statistik per klaster secara dinamis untuk prompt LLM.
+    - Fitur Numerik  : Mean
+    - Fitur Kategorik: Mode
+    """
+    num_cols = df[active_features].select_dtypes(include=['number']).columns.tolist()
+    cat_cols = df[active_features].select_dtypes(include=['object', 'category']).columns.tolist()
+
+    profile_text = ""
+    grouped = df.groupby('cluster_label')
+
+    for label, group in grouped:
+        member_count = len(group)
+        profile_text += f"- **Klaster {label}** ({member_count} Kabupaten/Kota):\n"
+        
+        # Ringkasan Numerik
+        for col in num_cols:
+            mean_val = group[col].mean()
+            col_label = col.replace("_", " ").title()
+            if "nilai" in col or "simpanan" in col:
+                profile_text += f"  - Rata-rata {col_label}: Rp {mean_val:,.2f}\n"
+            else:
+                profile_text += f"  - Rata-rata {col_label}: {mean_val:,.2f}\n"
+
+        # Ringkasan Kategorik
+        for col in cat_cols:
+            mode_series = group[col].mode()
+            mode_val = mode_series.iloc[0] if not mode_series.empty else "N/A"
+            col_label = col.replace("_", " ").title()
+            profile_text += f"  - Modus {col_label}: {mode_val}\n"
+
+        profile_text += "\n"
+
+    return profile_text
 
 def main():
     logger.info(f"Memulai Tahap Interpretasi AI dengan Cloudflare Workers AI ({MODEL_NAME})...")
@@ -81,61 +126,57 @@ def main():
         sys.exit(1)
         
     if not os.path.exists(CLUSTERED_REGENCIES_CSV) or not os.path.exists(MODEL_METRICS_JSON):
-        logger.error("Data atau metrik evaluasi tidak ditemukan.")
+        logger.error("Data terklasterisasi atau metrik evaluasi tidak ditemukan.")
         sys.exit(1)
         
     # Read files
     df = pd.read_csv(CLUSTERED_REGENCIES_CSV)
     with open(MODEL_METRICS_JSON, encoding='utf-8') as f:
         metrics = json.load(f)
-        
-    # Group by cluster and aggregate
-    cluster_profile = df.groupby('cluster_label').agg({
-        'jumlah_koperasi': 'mean',
-        'koperasi_nib': 'mean',
-        'koperasi_npwp': 'mean',
-        'koperasi_rat': 'mean',
-        'nilai_transaksi': 'mean',
-        'regency_name': 'count'
-    }).rename(columns={'regency_name': 'jumlah_anggota_kabupaten'}).round(2)
-    
-    profile_text = ""
-    for label, row in cluster_profile.iterrows():
-        profile_text += f"- **Klaster {label}** ({int(row['jumlah_anggota_kabupaten'])} Kabupaten/Kota):\n"
-        profile_text += f"  - Rata-rata Jumlah Koperasi: {row['jumlah_koperasi']:,}\n"
-        profile_text += f"  - Rata-rata Koperasi NIB: {row['koperasi_nib']:,}\n"
-        profile_text += f"  - Rata-rata Koperasi NPWP: {row['koperasi_npwp']:,}\n"
-        profile_text += f"  - Rata-rata Koperasi RAT: {row['koperasi_rat']:,}\n"
-        profile_text += f"  - Rata-rata Nilai Transaksi: Rp {row['nilai_transaksi']:,}\n\n"
-        
+
+    # 1. Menentukan Fitur Aktif secara Dinamis
+    if SELECTED_FEATURES:
+        active_features = [col for col in SELECTED_FEATURES if col in df.columns]
+    else:
+        active_features = [col for col in df.columns if col not in IGNORED_FEATURES]
+
+    # 2. Generate Teks Deskripsi Profil Klaster
+    profile_text = build_cluster_profile_text(df, active_features)
+
+    # 3. Menyusun Prompt LLM
+    clustering_metrics = metrics.get('clustering_metrics', {})
+    num_clusters = clustering_metrics.get('number_of_clusters', len(df['cluster_label'].unique()))
+    sil_score = clustering_metrics.get('silhouette_score', 'N/A')
+
     prompt = f"""
 Anda adalah pakar analis data koperasi Indonesia.
 Analisis hasil pengelompokan (clustering) koperasi kabupaten/kota di Indonesia berikut:
 
-Karakteristik Klaster:
+Karakteristik Klaster (Berdasarkan Fitur Terpilih):
 {profile_text}
 
 Metrik Nasional:
-- Jumlah klaster: {metrics['clustering_metrics']['number_of_clusters']}
-- Silhouette Score: {metrics['clustering_metrics']['silhouette_score']}
+- Jumlah klaster: {num_clusters}
+- Silhouette Score: {sil_score}
 
 Harap keluarkan hasil analisis dalam format JSON murni dengan struktur berikut:
 {{
   "labels": {{
     "0": {{
       "label_name": "Klaster 0 - [Berikan Nama Klaster yang Representatif dan Profesional]",
-      "description": "Klaster ini mencakup rata-rata [rata-rata koperasi] dengan rata-rata nilai transaksi Rp [nilai transaksi]..."
+      "description": "Klaster ini mencakup..."
     }},
     "1": {{
       "label_name": "Klaster 1 - [Berikan Nama Klaster yang Representatif dan Profesional]",
-      "description": "Klaster ini mencakup rata-rata [rata-rata koperasi] dengan rata-rata nilai transaksi Rp [nilai transaksi]..."
+      "description": "Klaster ini mencakup..."
     }}
-    // Dan seterusnya untuk semua klaster yang ada
   }},
   "report": "# Laporan Interpretasi AI\\n\\n[Tulis laporan analisis eksekutif komprehensif, minimal 2 paragraf singkat. Jelaskan karakteristik unik dari klaster-klaster tersebut dan rekomendasi kebijakan pembangunan daerah. Gunakan format Markdown untuk isi laporan ini.]"
 }}
 
-Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut. PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'. DILARANG KERAS menggunakan emoji, simbol grafis sejenis, maupun separator garis horizontal (seperti `---`) di dalam nama klaster, deskripsi, maupun laporan markdown yang Anda hasilkan.
+Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti ```json ... ```) di luar JSON tersebut.
+PENTING: Jangan gunakan karakter baris baru (enter/newline) asli di dalam nilai string JSON; jika Anda ingin membuat baris baru di dalam teks laporan atau deskripsi, gunakan escape character '\\n'.
+DILARANG KERAS menggunakan emoji, simbol grafis sejenis, maupun separator garis horizontal (seperti `---`) di dalam nama klaster, deskripsi, maupun laporan markdown yang Anda hasilkan.
 """
 
     url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{MODEL_NAME}"
@@ -162,22 +203,21 @@ Pastikan output hanya berupa JSON valid tanpa format markdown tambahan (seperti 
             if res_data.get("success"):
                 result_obj = res_data.get("result", {})
                 
-                # Try chat completions structure first
+                # Cek struktur chat completions
                 choices = result_obj.get("choices")
                 ai_text = None
                 if choices and len(choices) > 0:
                     ai_text = choices[0].get("message", {}).get("content")
                 
-                # Fallback to response or text
                 if not ai_text:
                     ai_text = result_obj.get("response") or result_obj.get("text")
                     
                 if not ai_text:
-                    logger.error("response/text/content tidak ditemukan dalam result:")
+                    logger.error("Response text tidak ditemukan dalam result API:")
                     logger.error(str(res_data))
                     sys.exit(1)
                 
-                # Clean up any potential markdown code block formatting
+                # Pembersihan format markdown code block
                 clean_text = ai_text.strip()
                 if clean_text.startswith("```"):
                     clean_text = re.sub(r"^```(?:json)?\n", "", clean_text)

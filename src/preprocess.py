@@ -1,86 +1,32 @@
 import os
 import json
 import pandas as pd
-import dvc.api
-import matplotlib.pyplot as plt
-import seaborn as sns
-from kneed import KneeLocator
 from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from utils.plot_utils import save_plot_to_file
 from utils.log_utils import get_logger
-from utils.report_utils import generate_report_from_template
 from config import (
     TRANSFORMED_REGENCIES_CSV,
     SCALED_FEATURES_CSV,
-    PREPROCESS_META_JSON,
-    PREPROCESS_REPORT_MD,
-    PREPROCESS_REPORT_TEMPLATE_MD,
-    PREPROCESS_DIR,
-    REPORTS_DIR,
-    FIGURES_DIR
+    PREPROCESS_META_JSON
 )
 
 logger = get_logger("preprocess")
 
 FEATURE_COLUMNS = [
-    'jumlah_koperasi', 'koperasi_nib', 'koperasi_npwp', 'koperasi_rat',
-    'simpanan_pokok', 'simpanan_wajib', 'volume_transaksi', 'nilai_transaksi',
-    'latitude', 'longitude'
+    'jumlah_koperasi',
+    'koperasi_nib',
+    'koperasi_npwp',
+    'koperasi_rat',
+    'simpanan_pokok',
+    'simpanan_wajib',
+    'volume_transaksi',
+    'nilai_transaksi',
+    'latitude',
+    'longitude'
 ]
 
-params = dvc.api.params_show().get('preprocess', {})
-
-MIN_K = params.get('min_k', 2)
-MAX_K = params.get('max_k', 8)
-RANDOM_STATE = params.get('random_state', 42)
-N_INIT = params.get('n_init', 10)
-KNEEDLE_CURVE = params.get('kneedle', {}).get('curve', 'convex')
-KNEEDLE_DIRECTION = params.get('kneedle', {}).get('direction', 'decreasing')
-FALLBACK_K = params.get('fallback_k', 3)
-PLOT_STYLE = params.get('plot_style', 'seaborn-v0_8-whitegrid')
-
-def find_optimal_k_and_plot(X_scaled, min_k=2, max_k=8):
-    k_range = list(range(min_k, max_k + 1))
-    inertias = []
-    
-    logger.info(f"Menghitung inertia untuk K dari {min_k} sampai {max_k}...")
-    for k in k_range:
-        km = KMeans(n_clusters=k, random_state=RANDOM_STATE, n_init=N_INIT)
-        km.fit(X_scaled)
-        inertias.append(km.inertia_)
-        
-    kneedle = KneeLocator(
-        x=k_range,
-        y=inertias,
-        curve=KNEEDLE_CURVE,
-        direction=KNEEDLE_DIRECTION
-    )
-    
-    optimal_k = kneedle.knee
-    if optimal_k is None:
-        logger.warning(f"KneeLocator tidak mendeteksi elbow point. Menggunakan K = {FALLBACK_K} sebagai fallback.")
-        optimal_k = FALLBACK_K
-    else:
-        logger.info(f"KneeLocator mendeteksi elbow point pada K = {optimal_k}")
-
-    # Generate Elbow Curve plot using standard seaborn lineplot
-    sns.set_theme()
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    sns.lineplot(x=list(k_range), y=inertias, marker='o', ax=ax)
-    ax.set_title('Metode Elbow untuk Penentuan K Optimal')
-    ax.set_xlabel('Jumlah Klaster (K)')
-    ax.set_ylabel('Inertia / WCSS')
-    fig.tight_layout()
-    save_plot_to_file(fig, os.path.join(FIGURES_DIR, "preprocess_elbow_curve.png"))
-
-    return int(optimal_k), k_range, inertias
 
 def main():
-    logger.info("Memulai Stage Preprocessing Machine Learning...")
-    os.makedirs(PREPROCESS_DIR, exist_ok=True)
-    os.makedirs(REPORTS_DIR, exist_ok=True)
-    os.makedirs(FIGURES_DIR, exist_ok=True)
+    logger.info("Memulai Stage Preprocessing Data...")
 
     if not os.path.exists(TRANSFORMED_REGENCIES_CSV):
         raise FileNotFoundError(f"Berkas input {TRANSFORMED_REGENCIES_CSV} tidak ditemukan.")
@@ -88,44 +34,31 @@ def main():
     df = pd.read_csv(TRANSFORMED_REGENCIES_CSV)
     logger.info(f"Berhasil memuat {len(df)} baris data kabupaten/kota.")
 
-    # 1. Seleksi Fitur Numerik
-    X = df[FEATURE_COLUMNS].fillna(0).values
+    # 1. Seleksi & Penanganan Missing Values pada Fitur Numerik
+    feature_cols_present = [col for col in FEATURE_COLUMNS if col in df.columns]
+    X = df[feature_cols_present].fillna(0).values
 
-    # 2. Standarisasi Fitur (StandardScaler)
+    # 2. Standarisasi Fitur Menggunakan StandardScaler
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # 3. Penentuan K Terbaik Menggunakan KneeLocator
-    logger.info("Menentukan nilai K terbaik dengan KneeLocator...")
-    optimal_k, k_range, inertias = find_optimal_k_and_plot(X_scaled, min_k=MIN_K, max_k=MAX_K)
-    logger.info(f"K Terbaik yang terdeteksi: K = {optimal_k}")
-
-    # 4. Simpan Scaled Features ke CSV
-    scaled_df = pd.DataFrame(X_scaled, columns=[f"scaled_{col}" for col in FEATURE_COLUMNS])
+    # 3. Simpan Scaled Features ke CSV (menggunakan prefix 'scaled_')
+    scaled_df = pd.DataFrame(X_scaled, columns=[f"scaled_{col}" for col in feature_cols_present])
     scaled_df.to_csv(SCALED_FEATURES_CSV, index=False)
     logger.info(f"Scaled Features -> {SCALED_FEATURES_CSV}")
 
-    # 5. Simpan Meta Config & Optimal K ke JSON
+    # 4. Simpan Metadata Preprocessing ke JSON
     meta = {
         "total_samples": len(df),
-        "feature_columns": FEATURE_COLUMNS,
-        "optimal_k": optimal_k,
+        "total_features": len(feature_cols_present),
+        "feature_columns": feature_cols_present,
         "scaler_type": "StandardScaler"
     }
+    
     with open(PREPROCESS_META_JSON, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)
-    logger.info(f"Preprocess Meta -> {PREPROCESS_META_JSON}")
-
-    wcss_table_rows = ""
-    for k, inertia in zip(k_range, inertias):
-        wcss_table_rows += f"| **K = {k}** | {inertia:,.2f} |\n"
-
-    replacements = {
-        "{{optimal_k}}": str(optimal_k),
-        "{{wcss_table_rows}}": wcss_table_rows,
-    }
     
-    generate_report_from_template(PREPROCESS_REPORT_TEMPLATE_MD, PREPROCESS_REPORT_MD, replacements)
+    logger.info(f"Preprocess Meta -> {PREPROCESS_META_JSON}")
 
     logger.info("Stage ML Preprocessing selesai.")
 

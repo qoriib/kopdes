@@ -34,21 +34,10 @@ stages:
     always_changed: true
     deps:
       - src/preprocess.py
-      - src/reports/preprocess_report_template.md
       - data/transform/transformed_regencies.csv
-    params:
-      - preprocess.min_k
-      - preprocess.max_k
-      - preprocess.random_state
-      - preprocess.n_init
-      - preprocess.kneedle.curve
-      - preprocess.kneedle.direction
-      - preprocess.fallback_k
     outs:
       - data/preprocess/scaled_features.csv
       - data/preprocess/preprocess_meta.json
-      - reports/preprocess_report.md
-      - reports/figures/preprocess_elbow_curve.png
 
   model:
     cmd: python src/model.py
@@ -59,13 +48,19 @@ stages:
       - data/preprocess/preprocess_meta.json
       - data/transform/transformed_regencies.csv
     params:
+      - model.min_k
+      - model.max_k
       - model.random_state
       - model.n_init
+      - model.kneedle.curve
+      - model.kneedle.direction
+      - model.fallback_k
       - model.override_k
       - model.selected_features
     outs:
       - models/kmeans_model.pkl
       - data/model/clustered_regencies.csv
+      - reports/figures/model_elbow_curve.png
 
   evaluate:
     cmd: python src/evaluate.py
@@ -96,6 +91,7 @@ stages:
     params:
       - interpret.model
       - interpret.max_tokens
+      - model.selected_features
     outs:
       - reports/interpret_labels.json
       - reports/interpret_report.md

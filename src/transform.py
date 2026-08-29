@@ -1,7 +1,6 @@
 import os
-import csv
 import json
-from utils.scraper_utils import save_to_csv
+import pandas as pd
 from utils.log_utils import get_logger
 from config import (
     RAW_PROVINCES_CSV,
@@ -14,124 +13,108 @@ from config import (
 
 logger = get_logger("transform")
 
-def parse_num(val):
-    if val is None:
-        return 0
-    import re
-    s = str(val).strip()
-    s = re.sub(r'[Rp\s]', '', s)
-    if not s or s == '-':
-        return 0
-    if '.' in s and ',' in s:
-        s = s.replace('.', '').replace(',', '.')
-    elif '.' in s and len(s.split('.')[-1]) == 3:
-        s = s.replace('.', '')
-    elif ',' in s:
-        s = s.replace(',', '.')
-    try:
-        f = float(s)
-        return int(f) if f.is_integer() else f
-    except ValueError:
-        return 0
+PROVINCE_RENAME_MAP = {
+    'Provinsi': 'province_name',
+    'Jumlah Koperasi': 'jumlah_koperasi',
+    'Koperasi Memiliki NIB': 'koperasi_nib',
+    'Koperasi Memiliki NPWP': 'koperasi_npwp',
+    'Koperasi Telah RAT (2025)': 'koperasi_rat',
+    'Simpanan Pokok': 'simpanan_pokok',
+    'Simpanan Wajib': 'simpanan_wajib',
+    'Volume Transaksi (2026)': 'volume_transaksi',
+    'Nilai Transaksi (2026)': 'nilai_transaksi',
+    'Pemetahaan Lahan': 'pemetahaan_lahan',
+    'Pemetahaan Lahan (%)': 'pemetahaan_lahan_pct',
+    'Pembangunan Gerai (%)': 'pembangunan_gerai_pct'
+}
 
-def load_geo_json(filepath):
+REGENCIES_RENAME_MAP = {
+    'Province_ID': 'province_id',
+    'No': 'regency_no',
+    'Kabupaten/Kota': 'regency_name',
+    'Jumlah Koperasi': 'jumlah_koperasi',
+    'Koperasi Memiliki NIB': 'koperasi_nib',
+    'Koperasi Memiliki NPWP': 'koperasi_npwp',
+    'Koperasi Telah RAT (2025)': 'koperasi_rat',
+    'Simpanan Pokok': 'simpanan_pokok',
+    'Simpanan Wajib': 'simpanan_wajib',
+    'Volume Transaksi (2026)': 'volume_transaksi',
+    'Nilai Transaksi (2026)': 'nilai_transaksi'
+}
+
+def clean_number_col(series: pd.Series) -> pd.Series:
+    """Membersihkan format mata uang/angka Indonesia dan mengonversi ke numerik."""
+    return (
+        series.astype(str)
+        .str.replace(r'[Rp%\s]', '', regex=True)
+        .str.replace('.', '', regex=False)
+        .str.replace(',', '.', regex=False)
+        .pipe(pd.to_numeric, errors='coerce')
+        .fillna(0)
+    )
+
+def load_geo_json(filepath: str) -> list:
+    """Membaca file JSON geografi jika tersedia."""
     if os.path.exists(filepath):
-        try:
-            with open(filepath, encoding='utf-8') as f:
-                return json.load(f)
-        except Exception:
-            pass
+        with open(filepath, encoding='utf-8') as f:
+            return json.load(f)
     return []
 
 def transform_provinces():
-    logger.info(f"Transforming Data Provinsi dari {RAW_PROVINCES_CSV}...")
+    """Transformasi data provinsi & gabung koordinat geografis."""
+    logger.info(f"Transforming Provinsi dari {RAW_PROVINCES_CSV}...")
+    df = pd.read_csv(RAW_PROVINCES_CSV)
+
+    # 1. Bersihkan Kolom Numerik
+    num_cols = [c for c in df.columns if c not in ['No', 'Provinsi']]
+    for col in num_cols:
+        df[col] = clean_number_col(df[col])
+
+    # 2. Mapping Geografi (Nama -> ID, Lat, Lon)
     geo_data = load_geo_json(GEO_PROVINCES_JSON)
-    # Map name -> (province_id, latitude, longitude)
-    geo_map = {p['name'].strip().upper(): (int(p['province_id']), p.get('latitude', 0.0), p.get('longitude', 0.0)) for p in geo_data if 'name' in p}
+    geo_df = pd.DataFrame(geo_data)
 
-    transformed_rows = []
-    headers = [
-        'province_id', 'province_name', 'jumlah_koperasi', 'koperasi_nib', 
-        'koperasi_npwp', 'koperasi_rat', 'simpanan_pokok', 'simpanan_wajib', 
-        'volume_transaksi', 'nilai_transaksi', 'pemetahaan_lahan', 
-        'pemetahaan_lahan_pct', 'pembangunan_gerai_pct', 'latitude', 'longitude'
-    ]
+    if not geo_df.empty:
+        geo_df['province_name_clean'] = geo_df['name'].astype(str).str.strip().str.upper()
+        df['province_name_clean'] = df['Provinsi'].astype(str).str.strip().str.upper()
 
-    with open(RAW_PROVINCES_CSV, encoding='utf-8-sig') as f:
-        reader = csv.reader(f)
-        raw_headers = next(reader, None)
+        df = df.merge(
+            geo_df[['province_name_clean', 'province_id', 'latitude', 'longitude']],
+            on='province_name_clean',
+            how='left'
+        ).drop(columns=['province_name_clean'])
 
-        for row in reader:
-            if not row or len(row) < 2:
-                continue
-            name = str(row[1]).strip()
-            jml = parse_num(row[2])
-            nib = parse_num(row[3])
-            npwp = parse_num(row[4])
-            rat = parse_num(row[5])
-            pokok = parse_num(row[6])
-            wajib = parse_num(row[7])
-            vol = parse_num(row[8])
-            nilai = parse_num(row[9])
-            lahan = parse_num(row[10]) if len(row) > 10 else 0
-            lahan_pct = parse_num(row[11]) if len(row) > 11 else 0
-            gerai_pct = parse_num(row[12]) if len(row) > 12 else 0
-
-            # Match by name to resolve geographic ID and coordinates
-            actual_prov_id, lat, lon = geo_map.get(name.upper(), (0, 0.0, 0.0))
-            if actual_prov_id == 0:
-                logger.warning(f"Province name '{name}' not matched in province.json!")
-
-            transformed_rows.append([
-                actual_prov_id, name, jml, nib, npwp, rat, pokok, wajib,
-                vol, nilai, lahan, lahan_pct, gerai_pct, lat, lon
-            ])
-
-    save_to_csv(TRANSFORMED_PROVINCES_CSV, headers, transformed_rows)
-    logger.info(f"Transformed {len(transformed_rows)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
+    # 3. Rename & Reorder Kolom
+    df = df.rename(columns=PROVINCE_RENAME_MAP).fillna(0)
+    df.to_csv(TRANSFORMED_PROVINCES_CSV, index=False)
+    logger.info(f"Transformed {len(df)} provinsi -> {TRANSFORMED_PROVINCES_CSV}")
 
 def transform_regencies():
-    logger.info(f"Transforming Data Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
+    """Transformasi data kabupaten/kota & gabung koordinat geografis."""
+    logger.info(f"Transforming Kabupaten/Kota dari {RAW_REGENCIES_CSV}...")
+    df = pd.read_csv(RAW_REGENCIES_CSV)
+
+    # 1. Bersihkan Kolom Numerik
+    num_cols = [c for c in df.columns if c not in ['Kabupaten/Kota']]
+    for col in num_cols:
+        df[col] = clean_number_col(df[col])
+
+    # 2. Mapping Geografi (Province ID + Regency No -> Lat, Lon)
     geo_data = load_geo_json(GEO_REGENCIES_JSON)
-    # Match using (province_id, regency_no) directly from geographic-aligned JSON
-    geo_map = {(int(r['province_id']), int(r['regency_no'])): (r.get('latitude', 0.0), r.get('longitude', 0.0)) for r in geo_data if 'province_id' in r and 'regency_no' in r}
+    geo_df = pd.DataFrame(geo_data)
 
-    transformed_rows = []
-    headers = [
-        'province_id', 'regency_no', 'regency_name', 'jumlah_koperasi', 
-        'koperasi_nib', 'koperasi_npwp', 'koperasi_rat', 'simpanan_pokok', 
-        'simpanan_wajib', 'volume_transaksi', 'nilai_transaksi', 'latitude', 'longitude'
-    ]
+    if not geo_df.empty:
+        df = df.merge(
+            geo_df[['province_id', 'regency_no', 'latitude', 'longitude']],
+            left_on=['Province_ID', 'No'],
+            right_on=['province_id', 'regency_no'],
+            how='left'
+        )
 
-    with open(RAW_REGENCIES_CSV, encoding='utf-8-sig') as f:
-        reader = csv.reader(f)
-        raw_headers = next(reader, None)
-
-        for row in reader:
-            if not row or len(row) < 3:
-                continue
-            prov_id = parse_num(row[0])
-            reg_no = parse_num(row[1])
-            name = str(row[2]).strip()
-            jml = parse_num(row[3])
-            nib = parse_num(row[4])
-            npwp = parse_num(row[5])
-            rat = parse_num(row[6])
-            pokok = parse_num(row[7])
-            wajib = parse_num(row[8])
-            vol = parse_num(row[9])
-            nilai = parse_num(row[10])
-
-            # Directly lookup coordinates since IDs are now aligned
-            lat, lon = geo_map.get((prov_id, reg_no), (0.0, 0.0))
-
-            transformed_rows.append([
-                prov_id, reg_no, name, jml, nib, npwp, rat, pokok,
-                wajib, vol, nilai, lat, lon
-            ])
-
-    save_to_csv(TRANSFORMED_REGENCIES_CSV, headers, transformed_rows)
-    logger.info(f"Transformed {len(transformed_rows)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
+    # 3. Rename & Reorder Kolom
+    df = df.rename(columns=REGENCIES_RENAME_MAP).fillna(0)
+    df.to_csv(TRANSFORMED_REGENCIES_CSV, index=False)
+    logger.info(f"Transformed {len(df)} kabupaten/kota -> {TRANSFORMED_REGENCIES_CSV}")
 
 def main():
     logger.info("Memulai Stage Data Transformation...")

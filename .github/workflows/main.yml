@@ -80,17 +80,6 @@ jobs:
           cml comment create reports/cml_eda.md
           cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
 
-      - name: Generate & Post CML Preprocess Report
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python src/utils/cml_utils.py \
-            --report reports/preprocess_report.md \
-            --output reports/cml_preprocess.md \
-            --title "Laporan Preprocessing"
-          cml comment create reports/cml_preprocess.md
-          cat reports/cml_preprocess.md >> $GITHUB_STEP_SUMMARY
-
       - name: Generate & Post CML Evaluate Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -156,8 +145,6 @@ jobs:
           path: |
             data/preprocess/scaled_features.csv
             data/preprocess/preprocess_meta.json
-            reports/preprocess_report.md
-            reports/figures/preprocess_elbow_curve.png
 
       - name: Upload Model Files
         uses: actions/upload-artifact@v7
@@ -166,6 +153,7 @@ jobs:
           path: |
             models/kmeans_model.pkl
             data/model/clustered_regencies.csv
+            reports/figures/model_elbow_curve.png
 
       - name: Upload Evaluate Files
         uses: actions/upload-artifact@v7

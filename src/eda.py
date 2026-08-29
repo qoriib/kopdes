@@ -3,9 +3,8 @@ import sys
 import json
 import dvc.api
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.plot_utils import save_plot_to_file
+import matplotlib.pyplot as plt
 from utils.log_utils import get_logger
 from utils.report_utils import generate_report_from_template
 from config import (
@@ -14,7 +13,6 @@ from config import (
     METRICS_JSON,
     EDA_SUMMARY_MD,
     EDA_SUMMARY_TEMPLATE_MD,
-    REPORTS_DIR,
     FIGURES_DIR
 )
 
@@ -22,18 +20,8 @@ logger = get_logger("eda")
 params = dvc.api.params_show().get('eda', {})
 
 TOP_PROVINCES_LIMIT = params.get('top_provinces_limit', 10)
-TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 5)
-NUM_COLS_PROV = [
-    'jumlah_koperasi',
-    'koperasi_nib',
-    'koperasi_npwp',
-    'koperasi_rat',
-    'simpanan_pokok',
-    'simpanan_wajib',
-    'volume_transaksi',
-    'nilai_transaksi'
-]
-NUM_COLS_REG = [
+TOP_REGENCIES_LIMIT = params.get('top_regencies_limit', 10)
+NUM_COLS = [
     'jumlah_koperasi',
     'koperasi_nib',
     'koperasi_npwp',
@@ -46,23 +34,17 @@ NUM_COLS_REG = [
 
 def main():
     logger.info("Memulai Tahap Analisis Eksplorasi Data (EDA) yang Dikembangkan...")
-    os.makedirs(REPORTS_DIR, exist_ok=True)
-    os.makedirs(FIGURES_DIR, exist_ok=True)
-
-    if not os.path.exists(TRANSFORMED_PROVINCES_CSV) or not os.path.exists(TRANSFORMED_REGENCIES_CSV):
-        logger.error("Data transform tidak ditemukan. Silakan jalankan transform terlebih dahulu.")
-        sys.exit(1)
 
     # Load data with Pandas
     df_prov = pd.read_csv(TRANSFORMED_PROVINCES_CSV)
     df_reg = pd.read_csv(TRANSFORMED_REGENCIES_CSV)
 
     # Clean data
-    for col in NUM_COLS_PROV:
+    for col in NUM_COLS:
         if col in df_prov.columns:
             df_prov[col] = pd.to_numeric(df_prov[col], errors='coerce').fillna(0)
 
-    for col in NUM_COLS_REG:
+    for col in NUM_COLS:
         if col in df_reg.columns:
             df_reg[col] = pd.to_numeric(df_reg[col], errors='coerce').fillna(0)
 
@@ -87,33 +69,35 @@ def main():
     top_regencies_transaksi = df_reg.sort_values(by='nilai_transaksi', ascending=False).head(TOP_REGENCIES_LIMIT)
 
     # Descriptive Stats
-    desc_prov = df_prov[NUM_COLS_PROV].describe().T
+    desc_prov = df_prov[NUM_COLS].describe().T
     desc_prov.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', 'Median', '75%', 'Max']
     desc_prov_markdown = desc_prov.to_markdown(floatfmt=",.2f")
 
-    desc_reg = df_reg[NUM_COLS_REG].describe().T
+    desc_reg = df_reg[NUM_COLS].describe().T
     desc_reg.columns = ['Count', 'Mean', 'Std Dev', 'Min', '25%', 'Median', '75%', 'Max']
     desc_reg_markdown = desc_reg.to_markdown(floatfmt=",.2f")
 
     # Chart 1: Top Provinces by Total Koperasi
-    fig1, ax1 = plt.subplots(figsize=(10, 5))
+    plt.figure(figsize=(10, 5))
     prov_sorted = df_prov.sort_values(by='jumlah_koperasi', ascending=True).tail(TOP_PROVINCES_LIMIT)
-    sns.barplot(x='jumlah_koperasi', y='province_name', data=prov_sorted, ax=ax1)
-    ax1.set_title(f'{TOP_PROVINCES_LIMIT} Provinsi dengan Jumlah Koperasi Terbanyak')
-    ax1.set_xlabel('Jumlah Koperasi')
-    ax1.set_ylabel('')
-    fig1.tight_layout()
-    save_plot_to_file(fig1, os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
+    sns.barplot(x='jumlah_koperasi', y='province_name', data=prov_sorted)
+    plt.title(f'{TOP_PROVINCES_LIMIT} Provinsi dengan Jumlah Koperasi Terbanyak')
+    plt.xlabel('Jumlah Koperasi')
+    plt.ylabel('')
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIGURES_DIR, "eda_top_provinces.png"))
+    plt.close()
 
     # Chart 2: Top Regencies by Nilai Transaksi
-    fig2, ax2 = plt.subplots(figsize=(10, 5))
-    reg_sorted = df_reg.sort_values(by='nilai_transaksi', ascending=True).tail(TOP_PROVINCES_LIMIT)
-    sns.barplot(x=reg_sorted['nilai_transaksi'] / 1e6, y=reg_sorted['regency_name'], ax=ax2)
-    ax2.set_title(f'{TOP_PROVINCES_LIMIT} Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)')
-    ax2.set_xlabel('Nilai Transaksi (Juta Rp)')
-    ax2.set_ylabel('')
-    fig2.tight_layout()
-    save_plot_to_file(fig2, os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
+    plt.figure(figsize=(10, 5))
+    reg_sorted = df_reg.sort_values(by='nilai_transaksi', ascending=True).tail(TOP_REGENCIES_LIMIT)
+    sns.barplot(x=reg_sorted['nilai_transaksi'] / 1e6, y=reg_sorted['regency_name'])
+    plt.title(f'{TOP_REGENCIES_LIMIT} Kabupaten/Kota dengan Nilai Transaksi Tertinggi (Juta Rp)')
+    plt.xlabel('Nilai Transaksi (Juta Rp)')
+    plt.ylabel('')
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIGURES_DIR, "eda_top_regencies_transaksi.png"))
+    plt.close()
 
     # Save metrics
     metrics = {
