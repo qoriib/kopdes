@@ -10,3 +10,5 @@ dvc-s3
 seaborn
 matplotlib
 tabulate
+papermill
+ipykernel
