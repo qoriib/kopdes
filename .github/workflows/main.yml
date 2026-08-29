@@ -58,16 +58,9 @@ jobs:
       - name: Setup Pipeline Environment
         uses: ./.github/actions/setup-pipeline
 
-      - name: Run DVC Pipeline
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: dvc repro
-
-      - name: Push Pipeline Data & Git State
-        uses: ./.github/actions/push-pipeline
-        with:
-          commit-message: "auto: update pipeline artifacts [skip ci]"
+      # Stage 1: Data Understanding
+      - name: Run Stage 1 - Data Understanding
+        run: dvc repro understanding
 
       - name: Generate & Post CML Data Understanding Report
         env:
@@ -78,6 +71,14 @@ jobs:
           cml comment create --publish src/outs/1_understanding.md
           cat src/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
 
+      # Stage 2: Data Preparation
+      - name: Run Stage 2 - Data Preparation
+        run: dvc repro preparation
+
+      # Stage 3: Modeling
+      - name: Run Stage 3 - Modeling
+        run: dvc repro modeling
+
       - name: Generate & Post CML Modeling Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,6 +88,10 @@ jobs:
           cml comment create --publish src/outs/3_modeling.md
           cat src/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
 
+      # Stage 4: Evaluation
+      - name: Run Stage 4 - Evaluation
+        run: dvc repro evaluation
+
       - name: Generate & Post CML Evaluation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -95,6 +100,13 @@ jobs:
           sed -i 's|](4_evaluation_files/|](src/outs/4_evaluation_files/|g' src/outs/4_evaluation.md
           cml comment create --publish src/outs/4_evaluation.md
           cat src/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
+
+      # Stage 5: Deployment & Interpretation
+      - name: Run Stage 5 - Deployment & Interpretation
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: dvc repro deployment
 
       - name: Apply Remote Database Migrations
         env:
@@ -111,6 +123,11 @@ jobs:
         run: |
           cd web/backend
           npx wrangler d1 execute simkopdes_db --remote --file=../../data/5_deployment/seed.sql
+
+      - name: Push Pipeline Data & Git State
+        uses: ./.github/actions/push-pipeline
+        with:
+          commit-message: "auto: update pipeline artifacts [skip ci]"
 
       - name: Upload Notebook Outputs
         uses: actions/upload-artifact@v7
