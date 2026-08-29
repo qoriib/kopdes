@@ -869,12 +869,12 @@ stages:
     deps:
     - path: data/0_scrape/scraped_provinces.csv
       hash: md5
-      md5: b4a3aa4e5b3d290510dece33ff328d68
-      size: 3518
+      md5: 7adcbae32779948747358670965febaa
+      size: 3890
     - path: data/0_scrape/scraped_regencies.csv
       hash: md5
-      md5: 1f42c6e8a1f9c018d09aef395c5e585a
-      size: 32816
+      md5: 93e07efd07ca5a863f5d276f2dac4c9e
+      size: 37108
     - path: src/1_understanding.ipynb
       hash: md5
       md5: a339d7b52398429e7af4b4f93854201b
@@ -901,12 +901,12 @@ stages:
       size: 71671
     - path: data/0_scrape/scraped_provinces.csv
       hash: md5
-      md5: b4a3aa4e5b3d290510dece33ff328d68
-      size: 3518
+      md5: 7adcbae32779948747358670965febaa
+      size: 3890
     - path: data/0_scrape/scraped_regencies.csv
       hash: md5
-      md5: 1f42c6e8a1f9c018d09aef395c5e585a
-      size: 32816
+      md5: 93e07efd07ca5a863f5d276f2dac4c9e
+      size: 37108
     - path: src/2_preparation.ipynb
       hash: md5
       md5: f5f5f28506d14dccb746b2731da15331
