@@ -909,8 +909,8 @@ stages:
       size: 37108
     - path: src/2_preparation.ipynb
       hash: md5
-      md5: 5a77ee990ada79e7d8a3526e539be0b5
-      size: 7235
+      md5: f5f5f28506d14dccb746b2731da15331
+      size: 7486
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -918,36 +918,36 @@ stages:
     outs:
     - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
-      md5: 9cc714cf4af74e1683bc9afb31eb2e79
-      size: 5232
+      md5: b71750556e69d450ef8ce2f9815c37eb
+      size: 4902
     - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
-      md5: 5ccdd8e5c4fc74fb8ce1dc2c2e120b33
-      size: 52367
+      md5: 155ce3af4b55db6943203f3f9ba95da7
+      size: 48583
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: eee9690975f66626854db83498720e89
-      size: 72527
+      md5: 95209721412584b656080193eedb4ae1
+      size: 80945
     - path: src/outs/2_preparation.ipynb
       hash: md5
-      md5: bb93d2c51e4329ed17164e2b8a8feace
-      size: 29791
+      md5: ae18e1eda659ec657ca921b311533510
+      size: 30706
   modeling:
     cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN 2 -p 
       K_MAX 10 -p RANDOM_STATE 42
     deps:
     - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
-      md5: 5ccdd8e5c4fc74fb8ce1dc2c2e120b33
-      size: 52367
+      md5: 155ce3af4b55db6943203f3f9ba95da7
+      size: 48583
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: eee9690975f66626854db83498720e89
-      size: 72527
+      md5: 95209721412584b656080193eedb4ae1
+      size: 80945
     - path: src/3_modeling.ipynb
       hash: md5
-      md5: 449a23e0c5a3e62075e59d2707a65dc3
-      size: 5731
+      md5: b5250c5b623d51dbef4a64003c3b605d
+      size: 5969
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -960,32 +960,32 @@ stages:
     outs:
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f5c1866a2b8423b8e7c227ae9a7c1314
-      size: 53409
+      md5: f4f32c325a9212414849dfc55df17e9f
+      size: 49625
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: 733560b0b3cfe9c44274219b915542cb
-      size: 3045
+      md5: 79147815ba999727c52a1357c43877a8
+      size: 2908
     - path: src/outs/3_modeling.ipynb
       hash: md5
-      md5: e5607e1e85e4099bf31e92722aea47e4
-      size: 87986
+      md5: 5f5a5609ab8cb6857e93a1d2f4c72d8a
+      size: 85947
   evaluation:
     cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb -p 
       TARGET_SILHOUETTE_MIN 0.5
     deps:
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: eee9690975f66626854db83498720e89
-      size: 72527
+      md5: 95209721412584b656080193eedb4ae1
+      size: 80945
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f5c1866a2b8423b8e7c227ae9a7c1314
-      size: 53409
+      md5: f4f32c325a9212414849dfc55df17e9f
+      size: 49625
     - path: src/4_evaluation.ipynb
       hash: md5
-      md5: e22f27b2d6493be9a234657b29f0eef3
-      size: 5716
+      md5: 9f4f843a3b9355cffb56ebc7bce308ee
+      size: 5954
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -996,24 +996,24 @@ stages:
     outs:
     - path: src/outs/4_evaluation.ipynb
       hash: md5
-      md5: b5f6b754a04f9012e59cb4a0c59a313f
-      size: 211869
+      md5: 05ab15f7faa6abf516ce360b79d6dd49
+      size: 184087
   deployment:
     cmd: papermill src/5_deployment.ipynb src/outs/5_deployment.ipynb -p MODEL 
       "@cf/openai/gpt-oss-120b" -p MAX_TOKENS 3000
     deps:
     - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
-      md5: 9cc714cf4af74e1683bc9afb31eb2e79
-      size: 5232
+      md5: b71750556e69d450ef8ce2f9815c37eb
+      size: 4902
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f5c1866a2b8423b8e7c227ae9a7c1314
-      size: 53409
+      md5: f4f32c325a9212414849dfc55df17e9f
+      size: 49625
     - path: src/5_deployment.ipynb
       hash: md5
-      md5: cd53332ddcf91d31864a40c014fab466
-      size: 10107
+      md5: d12cf5f8b017f60417a391703988ec21
+      size: 11718
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -1025,9 +1025,9 @@ stages:
     outs:
     - path: data/5_deployment/seed.sql
       hash: md5
-      md5: ba34357b9dabdffd7a317b07723dc19b
-      size: 220821
+      md5: df0a2293c4f12b88638a0ced5f613eee
+      size: 217275
     - path: src/outs/5_deployment.ipynb
       hash: md5
-      md5: 7f3fd6ead1b1eecd4fd0175f29cb990f
-      size: 23380
+      md5: ebe83acd649e52ba896962593a1b0956
+      size: 25251
