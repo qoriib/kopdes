@@ -14,10 +14,6 @@ runs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-    - name: Set PYTHONPATH
-      shell: bash
-      run: echo "PYTHONPATH=$GITHUB_WORKSPACE/src" >> $GITHUB_ENV
-
     - name: Setup Python
       uses: actions/setup-python@v6
       with:
@@ -27,7 +23,9 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pip install -r requirements.txt
+      run: |
+        pip install -r requirements.txt
+        pip install -e .
 
     - name: Setup CML
       uses: iterative/setup-cml@v2

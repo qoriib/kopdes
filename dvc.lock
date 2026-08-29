@@ -866,280 +866,169 @@ stages:
       size: 80945
   understanding:
     cmd: papermill notebooks/1_understanding.ipynb 
-      notebooks/outs/1_understanding.ipynb -p top_provinces_limit 10 -p 
-      top_regencies_limit 10
+      notebooks/outs/1_understanding.ipynb
     deps:
-    - path: data/raw/scraped_provinces.csv
+    - path: data/0_scrape/scraped_provinces.csv
       hash: md5
       md5: b4a3aa4e5b3d290510dece33ff328d68
       size: 3518
-    - path: data/raw/scraped_regencies.csv
+    - path: data/0_scrape/scraped_regencies.csv
       hash: md5
       md5: 1f42c6e8a1f9c018d09aef395c5e585a
       size: 32816
     - path: notebooks/1_understanding.ipynb
       hash: md5
-      md5: 5fba2a5a1c087f1e4ea58e7c89ef1aae
-      size: 13135
-    - path: src/config.py
+      md5: 56dff3e688cf595e8d1afb396874209f
+      size: 9326
+    - path: notebooks/config.py
       hash: md5
-      md5: d327fb0c66c257b0186dd5aeff28cf66
-      size: 4390
-    params:
-      params.yaml:
-        understanding.top_provinces_limit: 10
-        understanding.top_regencies_limit: 10
+      md5: 87a770317fb9c9be72cab1bf281ad513
+      size: 1636
     outs:
     - path: notebooks/outs/1_understanding.ipynb
       hash: md5
-      md5: 8fe0493e731721bc28e9d66e57140b31
-      size: 293792
-    - path: reports/data_description_metrics.json
-      hash: md5
-      md5: 4aac4e7f48190eb672eaa055e699da90
-      size: 1447
-    - path: reports/data_description_report.md
-      hash: md5
-      md5: 0951065032c479312b3704a00ecf9ad5
-      size: 1296
-    - path: reports/data_exploration_report.md
-      hash: md5
-      md5: 1e760badbe9f40278b7fad2650f65607
-      size: 1400
-    - path: reports/data_quality_metrics.json
-      hash: md5
-      md5: dc0b01534e286c12b651f985bbff4f8b
-      size: 1762
-    - path: reports/data_quality_report.md
-      hash: md5
-      md5: 846614c561655474aeb44d3c35513c45
-      size: 2422
-    - path: reports/eda_metrics.json
-      hash: md5
-      md5: 991aa3d982b7fc8a9f71efd4c343c70e
-      size: 430
-    - path: reports/figures/eda_correlation_matrix.png
-      hash: md5
-      md5: 2aa98b9e787e836493f2f02cc27ec648
-      size: 75196
-    - path: reports/figures/eda_feature_distributions.png
-      hash: md5
-      md5: 99a4efb99614fee58f8f57b3b619d618
-      size: 65859
-    - path: reports/figures/eda_top_provinces.png
-      hash: md5
-      md5: 1b6114af26574cdc3b0c71243daf8bab
-      size: 28453
-    - path: reports/figures/eda_top_regencies_transaksi.png
-      hash: md5
-      md5: 46cd0d177f01c66fcc11be860c36e7ef
-      size: 33362
+      md5: 314b7cdf11addef4fea744ccf3250069
+      size: 299130
   preparation:
     cmd: papermill notebooks/2_preparation.ipynb 
       notebooks/outs/2_preparation.ipynb
     deps:
-    - path: data/raw/province.json
+    - path: data/0_scrape/province.json
       hash: md5
       md5: 6f527313adb7a1c4a781903ca1965340
       size: 4365
-    - path: data/raw/regency.json
+    - path: data/0_scrape/regency.json
       hash: md5
       md5: 38cdf9dde54d8bbdb35581b739a6c0c4
       size: 71671
-    - path: data/raw/scraped_provinces.csv
+    - path: data/0_scrape/scraped_provinces.csv
       hash: md5
       md5: b4a3aa4e5b3d290510dece33ff328d68
       size: 3518
-    - path: data/raw/scraped_regencies.csv
+    - path: data/0_scrape/scraped_regencies.csv
       hash: md5
       md5: 1f42c6e8a1f9c018d09aef395c5e585a
       size: 32816
     - path: notebooks/2_preparation.ipynb
       hash: md5
-      md5: 787e1b2b4a0a3d20f04104706f292450
-      size: 6119
-    - path: src/config.py
+      md5: 3d1742f8c1406f3a9a97a72b531da006
+      size: 7486
+    - path: notebooks/config.py
       hash: md5
-      md5: d327fb0c66c257b0186dd5aeff28cf66
-      size: 4390
-    params:
-      params.yaml:
-        preparation.log_transform_features:
-        - total_koperasi
-        - simpanan_pokok
-        - simpanan_wajib
-        - volume_transaksi
-        - nilai_transaksi
+      md5: 87a770317fb9c9be72cab1bf281ad513
+      size: 1636
     outs:
-    - path: data/prepared/cleaned_provinces.csv
+    - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
       md5: b71750556e69d450ef8ce2f9815c37eb
       size: 4902
-    - path: data/prepared/cleaned_regencies.csv
+    - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
       md5: 155ce3af4b55db6943203f3f9ba95da7
       size: 48583
-    - path: data/prepared/preparation_meta.json
-      hash: md5
-      md5: 04fb6369a9b43565ba4dceba722b728c
-      size: 470
-    - path: data/prepared/scaled_features.csv
+    - path: data/2_preparation/scaled_features.csv
       hash: md5
       md5: 95209721412584b656080193eedb4ae1
       size: 80945
     - path: notebooks/outs/2_preparation.ipynb
       hash: md5
-      md5: 5bd1c0d25b712e86d5f9d66c723dfbf2
-      size: 9239
+      md5: 81d2a3da7f326f2ed3f6944c6b19181b
+      size: 30717
   modeling:
     cmd: papermill notebooks/3_modeling.ipynb notebooks/outs/3_modeling.ipynb -p
-      k_min 2 -p k_max 10 -p random_state 42
+      K_MIN 2 -p K_MAX 10 -p RANDOM_STATE 42
     deps:
-    - path: data/prepared/cleaned_regencies.csv
+    - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
       md5: 155ce3af4b55db6943203f3f9ba95da7
       size: 48583
-    - path: data/prepared/scaled_features.csv
+    - path: data/2_preparation/scaled_features.csv
       hash: md5
       md5: 95209721412584b656080193eedb4ae1
       size: 80945
     - path: notebooks/3_modeling.ipynb
       hash: md5
-      md5: 608b5217f1a9a5f065ed78f7a181ea0a
-      size: 3988
-    - path: src/config.py
+      md5: ad501a5e3bde9de8726635cd6451954e
+      size: 5969
+    - path: notebooks/config.py
       hash: md5
-      md5: d327fb0c66c257b0186dd5aeff28cf66
-      size: 4390
+      md5: 87a770317fb9c9be72cab1bf281ad513
+      size: 1636
     params:
       params.yaml:
         modeling.k_max: 10
         modeling.k_min: 2
         modeling.random_state: 42
-        modeling.selected_features:
-        - total_koperasi
-        - rasio_nib
-        - rasio_npwp
-        - rasio_rat
-        - simpanan_pokok
-        - simpanan_wajib
-        - volume_transaksi
-        - nilai_transaksi
     outs:
-    - path: data/modeling/clustered_regencies.csv
+    - path: data/3_modeling/clustered_regencies.csv
       hash: md5
       md5: f4f32c325a9212414849dfc55df17e9f
       size: 49625
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: 6e3e37382881d6c8d558c2665d5060ee
+      md5: 79147815ba999727c52a1357c43877a8
       size: 2908
     - path: notebooks/outs/3_modeling.ipynb
       hash: md5
-      md5: 0e880738d9b3d9f4ac3cc8127227538c
-      size: 56347
-    - path: reports/figures/model_elbow_curve.png
-      hash: md5
-      md5: 72b5f4b91a21b5929b66578142f8ccc7
-      size: 36294
+      md5: 7686085b6715f62baea337d705569d08
+      size: 85959
   evaluation:
     cmd: papermill notebooks/4_evaluation.ipynb 
-      notebooks/outs/4_evaluation.ipynb -p target_silhouette_min 0.5 -p model 
-      "@cf/openai/gpt-oss-120b" -p max_tokens 3000
+      notebooks/outs/4_evaluation.ipynb -p TARGET_SILHOUETTE_MIN 0.5 -p MODEL 
+      "@cf/openai/gpt-oss-120b" -p MAX_TOKENS 3000
     deps:
-    - path: data/modeling/clustered_regencies.csv
-      hash: md5
-      md5: f4f32c325a9212414849dfc55df17e9f
-      size: 49625
-    - path: data/prepared/scaled_features.csv
+    - path: data/2_preparation/scaled_features.csv
       hash: md5
       md5: 95209721412584b656080193eedb4ae1
       size: 80945
+    - path: data/3_modeling/clustered_regencies.csv
+      hash: md5
+      md5: f4f32c325a9212414849dfc55df17e9f
+      size: 49625
     - path: notebooks/4_evaluation.ipynb
       hash: md5
-      md5: 7f22fc925fc513164f954ee89fffff94
-      size: 9243
-    - path: src/config.py
+      md5: dc4aa2dba5b01d09ccab8ae80130e3d9
+      size: 7069
+    - path: notebooks/config.py
       hash: md5
-      md5: d327fb0c66c257b0186dd5aeff28cf66
-      size: 4390
+      md5: 87a770317fb9c9be72cab1bf281ad513
+      size: 1636
     params:
       params.yaml:
         evaluation.max_tokens: 3000
         evaluation.model: '@cf/openai/gpt-oss-120b'
         evaluation.target_silhouette_min: 0.5
-        modeling.selected_features:
-        - total_koperasi
-        - rasio_nib
-        - rasio_npwp
-        - rasio_rat
-        - simpanan_pokok
-        - simpanan_wajib
-        - volume_transaksi
-        - nilai_transaksi
     outs:
     - path: notebooks/outs/4_evaluation.ipynb
       hash: md5
-      md5: 59b33cffbdebbf997b8d90513ac137cb
-      size: 177533
-    - path: reports/evaluate_metrics.json
-      hash: md5
-      md5: 68ce403d20e6977572b8aaeb2323024b
-      size: 216
-    - path: reports/evaluate_report.md
-      hash: md5
-      md5: 84370c7cf728e001a894e25529c3ca79
-      size: 1486
-    - path: reports/figures/eval_cluster_distribution.png
-      hash: md5
-      md5: 88d9339b6e4c59b306657fb0cd16dcb1
-      size: 15339
-    - path: reports/figures/eval_pca_projection.png
-      hash: md5
-      md5: cc8f4edd83f179a914c0a3fe40c51b63
-      size: 105008
-    - path: reports/interpret_labels.json
-      hash: md5
-      md5: aa7fbddc406629974022d7aa3aae4b34
-      size: 1380
-    - path: reports/interpret_report.md
-      hash: md5
-      md5: 45f7067eeaf305c8f7376db12bfced4d
-      size: 1666
+      md5: 78151d3028c6df6fc49f6157fc57ae2d
+      size: 188097
   deployment:
     cmd: papermill notebooks/5_deployment.ipynb 
       notebooks/outs/5_deployment.ipynb
     deps:
-    - path: data/modeling/clustered_regencies.csv
-      hash: md5
-      md5: f4f32c325a9212414849dfc55df17e9f
-      size: 49625
-    - path: data/prepared/cleaned_provinces.csv
+    - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
       md5: b71750556e69d450ef8ce2f9815c37eb
       size: 4902
+    - path: data/3_modeling/clustered_regencies.csv
+      hash: md5
+      md5: f4f32c325a9212414849dfc55df17e9f
+      size: 49625
     - path: notebooks/5_deployment.ipynb
       hash: md5
-      md5: 25c77fdee4a925a89a38002126f65e35
-      size: 3957
-    - path: reports/evaluate_metrics.json
+      md5: 76815cd8d2ddf95b8772ddfc35b13407
+      size: 5830
+    - path: notebooks/config.py
       hash: md5
-      md5: 68ce403d20e6977572b8aaeb2323024b
-      size: 216
-    - path: reports/interpret_report.md
-      hash: md5
-      md5: 45f7067eeaf305c8f7376db12bfced4d
-      size: 1666
-    - path: src/config.py
-      hash: md5
-      md5: d327fb0c66c257b0186dd5aeff28cf66
-      size: 4390
+      md5: 87a770317fb9c9be72cab1bf281ad513
+      size: 1636
     outs:
-    - path: data/seed.sql
+    - path: data/5_deployment/seed.sql
       hash: md5
-      md5: b98b88ed8b1bdfb119cbf290671e2554
-      size: 212414
+      md5: cfe77d9e599113fde36fa31b3bbe272d
+      size: 210414
     - path: notebooks/outs/5_deployment.ipynb
       hash: md5
-      md5: a4872587e54736dae510e3707505886e
-      size: 5479
+      md5: 88dfc6953c526a9c814089d4ad1f55dd
+      size: 14519

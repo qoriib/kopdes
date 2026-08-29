@@ -1,30 +1,15 @@
 # Pipeline Hyperparameters & Settings per CRISP-DM Stage
 
-understanding:
-  top_provinces_limit: 10
-  top_regencies_limit: 10
-
-preparation:
-  log_transform_features:
-    - total_koperasi
-    - simpanan_pokok
-    - simpanan_wajib
-    - volume_transaksi
-    - nilai_transaksi
+scraping:
+  table_index: 2
+  max_workers: 5
+  target_url: "https://simkopdes.go.id/pers/dashboard"
+  base_url_template: "https://simkopdes.go.id/pers/dashboard/district/{id}"
 
 modeling:
   k_min: 2
   k_max: 10
   random_state: 42
-  selected_features:
-    - total_koperasi
-    - rasio_nib
-    - rasio_npwp
-    - rasio_rat
-    - simpanan_pokok
-    - simpanan_wajib
-    - volume_transaksi
-    - nilai_transaksi
 
 evaluation:
   target_silhouette_min: 0.50

@@ -7,8 +7,7 @@ name = "kopdes"
 version = "1.0.0"
 description = "CRISP-DM Analytics & MLOps Pipeline for SIMKOPDES"
 authors = [{ name = "Qoriib" }]
-readme = "README.md"
 requires-python = ">=3.10"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["notebooks"]

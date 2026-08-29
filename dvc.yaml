@@ -2,121 +2,76 @@ stages:
   understanding:
     cmd: >-
       papermill notebooks/1_understanding.ipynb notebooks/outs/1_understanding.ipynb
-      -p top_provinces_limit ${understanding.top_provinces_limit}
-      -p top_regencies_limit ${understanding.top_regencies_limit}
     deps:
       - notebooks/1_understanding.ipynb
-      - data/raw/scraped_provinces.csv
-      - data/raw/scraped_regencies.csv
-      - src/config.py
-    params:
-      - understanding.top_provinces_limit
-      - understanding.top_regencies_limit
+      - data/0_scrape/scraped_provinces.csv
+      - data/0_scrape/scraped_regencies.csv
+      - notebooks/config.py
     outs:
       - notebooks/outs/1_understanding.ipynb
-      - reports/data_description_report.md
-      - reports/data_exploration_report.md
-      - reports/data_quality_report.md
-    metrics:
-      - reports/data_description_metrics.json:
-          cache: false
-      - reports/eda_metrics.json:
-          cache: false
-      - reports/data_quality_metrics.json:
-          cache: false
-    plots:
-      - reports/figures/eda_top_provinces.png:
-          cache: false
-      - reports/figures/eda_top_regencies_transaksi.png:
-          cache: false
-      - reports/figures/eda_correlation_matrix.png:
-          cache: false
-      - reports/figures/eda_feature_distributions.png:
-          cache: false
 
   preparation:
     cmd: >-
       papermill notebooks/2_preparation.ipynb notebooks/outs/2_preparation.ipynb
     deps:
       - notebooks/2_preparation.ipynb
-      - data/raw/scraped_provinces.csv
-      - data/raw/scraped_regencies.csv
-      - data/raw/province.json
-      - data/raw/regency.json
-      - src/config.py
-    params:
-      - preparation.log_transform_features
+      - data/0_scrape/scraped_provinces.csv
+      - data/0_scrape/scraped_regencies.csv
+      - data/0_scrape/province.json
+      - data/0_scrape/regency.json
+      - notebooks/config.py
     outs:
       - notebooks/outs/2_preparation.ipynb
-      - data/prepared/cleaned_provinces.csv
-      - data/prepared/cleaned_regencies.csv
-      - data/prepared/scaled_features.csv
-      - data/prepared/preparation_meta.json
+      - data/2_preparation/cleaned_provinces.csv
+      - data/2_preparation/cleaned_regencies.csv
+      - data/2_preparation/scaled_features.csv
 
   modeling:
     cmd: >-
       papermill notebooks/3_modeling.ipynb notebooks/outs/3_modeling.ipynb
-      -p k_min ${modeling.k_min}
-      -p k_max ${modeling.k_max}
-      -p random_state ${modeling.random_state}
+      -p K_MIN ${modeling.k_min}
+      -p K_MAX ${modeling.k_max}
+      -p RANDOM_STATE ${modeling.random_state}
     deps:
       - notebooks/3_modeling.ipynb
-      - data/prepared/cleaned_regencies.csv
-      - data/prepared/scaled_features.csv
-      - src/config.py
+      - data/2_preparation/cleaned_regencies.csv
+      - data/2_preparation/scaled_features.csv
+      - notebooks/config.py
     params:
       - modeling.k_min
       - modeling.k_max
       - modeling.random_state
-      - modeling.selected_features
     outs:
       - notebooks/outs/3_modeling.ipynb
       - models/kmeans_model.pkl
-      - data/modeling/clustered_regencies.csv
-    plots:
-      - reports/figures/model_elbow_curve.png:
-          cache: false
+      - data/3_modeling/clustered_regencies.csv
 
   evaluation:
     cmd: >-
       papermill notebooks/4_evaluation.ipynb notebooks/outs/4_evaluation.ipynb
-      -p target_silhouette_min ${evaluation.target_silhouette_min}
-      -p model "${evaluation.model}"
-      -p max_tokens ${evaluation.max_tokens}
+      -p TARGET_SILHOUETTE_MIN ${evaluation.target_silhouette_min}
+      -p MODEL "${evaluation.model}"
+      -p MAX_TOKENS ${evaluation.max_tokens}
     deps:
       - notebooks/4_evaluation.ipynb
-      - data/modeling/clustered_regencies.csv
-      - data/prepared/scaled_features.csv
-      - src/config.py
+      - data/3_modeling/clustered_regencies.csv
+      - data/2_preparation/scaled_features.csv
+      - notebooks/config.py
     params:
       - evaluation.target_silhouette_min
       - evaluation.model
       - evaluation.max_tokens
-      - modeling.selected_features
     outs:
       - notebooks/outs/4_evaluation.ipynb
-      - reports/evaluate_report.md
-      - reports/interpret_report.md
-      - reports/interpret_labels.json
-    metrics:
-      - reports/evaluate_metrics.json:
-          cache: false
-    plots:
-      - reports/figures/eval_pca_projection.png:
-          cache: false
-      - reports/figures/eval_cluster_distribution.png:
-          cache: false
 
   deployment:
     cmd: >-
       papermill notebooks/5_deployment.ipynb notebooks/outs/5_deployment.ipynb
     deps:
       - notebooks/5_deployment.ipynb
-      - data/prepared/cleaned_provinces.csv
-      - data/modeling/clustered_regencies.csv
-      - reports/evaluate_metrics.json
-      - reports/interpret_report.md
-      - src/config.py
+      - data/2_preparation/cleaned_provinces.csv
+      - data/3_modeling/clustered_regencies.csv
+      - notebooks/config.py
     outs:
       - notebooks/outs/5_deployment.ipynb
-      - data/seed.sql
+      - data/5_deployment/seed.sql
