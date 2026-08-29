@@ -73,25 +73,25 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to html --no-input src/outs/1_understanding.ipynb --output-dir src/outs
-          cml comment create src/outs/1_understanding.html
-          cat src/outs/1_understanding.html >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/1_understanding.ipynb --output-dir src/outs
+          cml comment create --publish src/outs/1_understanding.md
+          cat src/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
 
       - name: Generate & Post CML Modeling Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to html --no-input src/outs/3_modeling.ipynb --output-dir src/outs
-          cml comment create src/outs/3_modeling.html
-          cat src/outs/3_modeling.html >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/3_modeling.ipynb --output-dir src/outs
+          cml comment create --publish src/outs/3_modeling.md
+          cat src/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
 
       - name: Generate & Post CML Evaluation Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to html --no-input src/outs/4_evaluation.ipynb --output-dir src/outs
-          cml comment create src/outs/4_evaluation.html
-          cat src/outs/4_evaluation.html >> $GITHUB_STEP_SUMMARY
+          jupyter nbconvert --to markdown --no-input src/outs/4_evaluation.ipynb --output-dir src/outs
+          cml comment create --publish src/outs/4_evaluation.md
+          cat src/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
 
       - name: Apply Remote Database Migrations
         env:
