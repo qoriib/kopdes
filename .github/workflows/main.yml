@@ -74,6 +74,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           jupyter nbconvert --to markdown --no-input src/outs/1_understanding.ipynb --output-dir src/outs
+          sed -i 's|](1_understanding_files/|](src/outs/1_understanding_files/|g' src/outs/1_understanding.md
           cml comment create --publish src/outs/1_understanding.md
           cat src/outs/1_understanding.md >> $GITHUB_STEP_SUMMARY
 
@@ -82,6 +83,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           jupyter nbconvert --to markdown --no-input src/outs/3_modeling.ipynb --output-dir src/outs
+          sed -i 's|](3_modeling_files/|](src/outs/3_modeling_files/|g' src/outs/3_modeling.md
           cml comment create --publish src/outs/3_modeling.md
           cat src/outs/3_modeling.md >> $GITHUB_STEP_SUMMARY
 
@@ -90,6 +92,7 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           jupyter nbconvert --to markdown --no-input src/outs/4_evaluation.ipynb --output-dir src/outs
+          sed -i 's|](4_evaluation_files/|](src/outs/4_evaluation_files/|g' src/outs/4_evaluation.md
           cml comment create --publish src/outs/4_evaluation.md
           cat src/outs/4_evaluation.md >> $GITHUB_STEP_SUMMARY
 

@@ -877,8 +877,8 @@ stages:
       size: 37108
     - path: src/1_understanding.ipynb
       hash: md5
-      md5: 1a7b5b592ad658e4e5059fb113a4a90a
-      size: 8982
+      md5: 8c2df479b15da6cd41690ec9e5d65de8
+      size: 9374
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -886,8 +886,8 @@ stages:
     outs:
     - path: src/outs/1_understanding.ipynb
       hash: md5
-      md5: 1365fa167c08d5490fb6d839f732dc27
-      size: 290296
+      md5: 795c86af0ac183f558494d7a420fa877
+      size: 283740
   preparation:
     cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb
     deps:
@@ -909,8 +909,8 @@ stages:
       size: 37108
     - path: src/2_preparation.ipynb
       hash: md5
-      md5: f5f5f28506d14dccb746b2731da15331
-      size: 7486
+      md5: a4262d5c9ef9c078b84969b55f793992
+      size: 7571
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -918,36 +918,36 @@ stages:
     outs:
     - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
-      md5: b71750556e69d450ef8ce2f9815c37eb
-      size: 4902
+      md5: 1df64b5d12eb2ed547582e6945652e55
+      size: 5271
     - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
-      md5: 155ce3af4b55db6943203f3f9ba95da7
-      size: 48583
+      md5: 367e82de159e115f6d66c62c042aba6a
+      size: 52882
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: 95209721412584b656080193eedb4ae1
-      size: 80945
+      md5: 9de90013c1076183d2eef6dcea864649
+      size: 73040
     - path: src/outs/2_preparation.ipynb
       hash: md5
-      md5: ae18e1eda659ec657ca921b311533510
-      size: 30706
+      md5: fbc97b99f114dc1be9ec99c7c8c0bed2
+      size: 18981
   modeling:
     cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN 2 -p 
       K_MAX 10 -p RANDOM_STATE 42
     deps:
     - path: data/2_preparation/cleaned_regencies.csv
       hash: md5
-      md5: 155ce3af4b55db6943203f3f9ba95da7
-      size: 48583
+      md5: 367e82de159e115f6d66c62c042aba6a
+      size: 52882
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: 95209721412584b656080193eedb4ae1
-      size: 80945
+      md5: 9de90013c1076183d2eef6dcea864649
+      size: 73040
     - path: src/3_modeling.ipynb
       hash: md5
-      md5: b5250c5b623d51dbef4a64003c3b605d
-      size: 5969
+      md5: 14bffafceee846551cd98b14d9650916
+      size: 6029
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -960,32 +960,32 @@ stages:
     outs:
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f4f32c325a9212414849dfc55df17e9f
-      size: 49625
+      md5: 9fb420acf99e0229d4c2517882a9d797
+      size: 53924
     - path: models/kmeans_model.pkl
       hash: md5
-      md5: 79147815ba999727c52a1357c43877a8
-      size: 2908
+      md5: 3b1694490466aeb0fde8e3adaa29a589
+      size: 3036
     - path: src/outs/3_modeling.ipynb
       hash: md5
-      md5: 5f5a5609ab8cb6857e93a1d2f4c72d8a
-      size: 85947
+      md5: 08e604cbbed82e52c1e0776c7e6e792e
+      size: 83800
   evaluation:
     cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb -p 
       TARGET_SILHOUETTE_MIN 0.5
     deps:
     - path: data/2_preparation/scaled_features.csv
       hash: md5
-      md5: 95209721412584b656080193eedb4ae1
-      size: 80945
+      md5: 9de90013c1076183d2eef6dcea864649
+      size: 73040
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f4f32c325a9212414849dfc55df17e9f
-      size: 49625
+      md5: 9fb420acf99e0229d4c2517882a9d797
+      size: 53924
     - path: src/4_evaluation.ipynb
       hash: md5
-      md5: 9f4f843a3b9355cffb56ebc7bce308ee
-      size: 5954
+      md5: 77dfea623b7b332fe1d1b4b2e308d57a
+      size: 6035
     - path: src/config.py
       hash: md5
       md5: bf4fa97e7196da9af3951138591257db
@@ -996,23 +996,23 @@ stages:
     outs:
     - path: src/outs/4_evaluation.ipynb
       hash: md5
-      md5: 05ab15f7faa6abf516ce360b79d6dd49
-      size: 184087
+      md5: 95d841e347f1039de60e0b907510b33d
+      size: 184905
   deployment:
     cmd: papermill src/5_deployment.ipynb src/outs/5_deployment.ipynb -p MODEL 
       "@cf/openai/gpt-oss-120b" -p MAX_TOKENS 3000
     deps:
     - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
-      md5: b71750556e69d450ef8ce2f9815c37eb
-      size: 4902
+      md5: 1df64b5d12eb2ed547582e6945652e55
+      size: 5271
     - path: data/3_modeling/clustered_regencies.csv
       hash: md5
-      md5: f4f32c325a9212414849dfc55df17e9f
-      size: 49625
+      md5: 9fb420acf99e0229d4c2517882a9d797
+      size: 53924
     - path: src/5_deployment.ipynb
       hash: md5
-      md5: d12cf5f8b017f60417a391703988ec21
+      md5: 59139d8786bcbb612ea8eb56ce2d9c4e
       size: 11718
     - path: src/config.py
       hash: md5
@@ -1025,9 +1025,9 @@ stages:
     outs:
     - path: data/5_deployment/seed.sql
       hash: md5
-      md5: df0a2293c4f12b88638a0ced5f613eee
-      size: 217275
+      md5: 0c7566e32bdda4b9dd8f31aa32c4cd6b
+      size: 222697
     - path: src/outs/5_deployment.ipynb
       hash: md5
-      md5: ebe83acd649e52ba896962593a1b0956
-      size: 25251
+      md5: 243e5a872cb7ca22ac9e1770a4e10f2e
+      size: 25447
