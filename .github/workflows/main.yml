@@ -1,4 +1,4 @@
-name: End-to-End Data & ML Pipeline
+name: End-to-End CRISP-DM Data & ML Pipeline
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   scrape:
-    name: Scrape Data
+    name: Web Scraping - SIMKOPDES Ingestion
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -28,10 +28,10 @@ jobs:
         run: playwright install chromium --with-deps
 
       - name: Scrape Province Data
-        run: python src/scrape_provinces.py
+        run: python src/scraper/scrape_provinces.py
 
       - name: Scrape Regency Data
-        run: python src/scrape_regencies.py
+        run: python src/scraper/scrape_regencies.py
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -47,7 +47,7 @@ jobs:
             data/raw/scraped_regencies.csv
 
   pipeline:
-    name: Run DVC Pipeline
+    name: Run CRISP-DM DVC Pipeline
     needs: scrape
     runs-on: ubuntu-latest
     steps:
@@ -69,16 +69,27 @@ jobs:
         with:
           commit-message: "auto: update pipeline artifacts [skip ci]"
 
-      - name: Generate & Post CML EDA Report
+      - name: Generate & Post CML Data Exploration Report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python src/utils/cml_utils.py \
-            --report reports/eda_summary.md \
-            --output reports/cml_eda.md \
-            --title "Exploratory Data Analysis"
-          cml comment create reports/cml_eda.md
-          cat reports/cml_eda.md >> $GITHUB_STEP_SUMMARY
+            --report reports/data_exploration_report.md \
+            --output reports/cml_data_exploration.md \
+            --title "Laporan Eksplorasi Data (CRISP-DM Data Understanding)"
+          cml comment create reports/cml_data_exploration.md
+          cat reports/cml_data_exploration.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate & Post CML Data Quality Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python src/utils/cml_utils.py \
+            --report reports/data_quality_report.md \
+            --output reports/cml_data_quality.md \
+            --title "Laporan Verifikasi Kualitas Data"
+          cml comment create reports/cml_data_quality.md
+          cat reports/cml_data_quality.md >> $GITHUB_STEP_SUMMARY
 
       - name: Generate & Post CML Evaluate Report
         env:
@@ -120,45 +131,47 @@ jobs:
           cd web/backend
           npx wrangler d1 execute simkopdes_db --remote --file=../../data/seed.sql
 
-      - name: Upload Transform Files
+      - name: Upload Data Understanding Files
         uses: actions/upload-artifact@v7
         with:
-          name: transform-files
+          name: data-understanding-files
           path: |
-            data/transform/transformed_provinces.csv
-            data/transform/transformed_regencies.csv
-
-      - name: Upload EDA Files
-        uses: actions/upload-artifact@v7
-        with:
-          name: eda-files
-          path: |
+            reports/initial_data_collection_report.md
+            reports/initial_data_collection_metrics.json
+            reports/data_description_report.md
+            reports/data_description_metrics.json
+            reports/data_exploration_report.md
             reports/eda_metrics.json
-            reports/eda_summary.md
+            reports/data_quality_report.md
+            reports/data_quality_metrics.json
             reports/figures/eda_top_provinces.png
             reports/figures/eda_top_regencies_transaksi.png
+            reports/figures/eda_correlation_matrix.png
+            reports/figures/eda_feature_distributions.png
 
-      - name: Upload Preprocess Files
+      - name: Upload Prepared Files
         uses: actions/upload-artifact@v7
         with:
-          name: preprocess-files
+          name: prepared-files
           path: |
-            data/preprocess/scaled_features.csv
-            data/preprocess/preprocess_meta.json
+            data/prepared/cleaned_provinces.csv
+            data/prepared/cleaned_regencies.csv
+            data/prepared/scaled_features.csv
+            data/prepared/preparation_meta.json
 
-      - name: Upload Model Files
+      - name: Upload Modeling Files
         uses: actions/upload-artifact@v7
         with:
-          name: model-files
+          name: modeling-files
           path: |
             models/kmeans_model.pkl
-            data/model/clustered_regencies.csv
+            data/modeling/clustered_regencies.csv
             reports/figures/model_elbow_curve.png
 
-      - name: Upload Evaluate Files
+      - name: Upload Evaluation Files
         uses: actions/upload-artifact@v7
         with:
-          name: evaluate-files
+          name: evaluation-files
           path: |
             reports/evaluate_report.md
             reports/evaluate_metrics.json
@@ -174,10 +187,10 @@ jobs:
             reports/interpret_report.md
             reports/interpret_labels.json
 
-      - name: Upload Store Files
+      - name: Upload Deployment Files
         uses: actions/upload-artifact@v7
         with:
-          name: store-files
+          name: deployment-files
           path: |
             data/seed.sql
 

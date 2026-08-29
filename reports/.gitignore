@@ -12,3 +12,10 @@
 /cml_interpret.md
 /figures/
 
+/initial_data_collection_report.md
+/initial_data_collection_metrics.json
+/data_description_report.md
+/data_description_metrics.json
+/data_exploration_report.md
+/data_quality_report.md
+/data_quality_metrics.json

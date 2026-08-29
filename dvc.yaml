@@ -1,78 +1,116 @@
 stages:
-  transform:
-    cmd: python src/transform.py
+  data_understanding_collect:
+    cmd: python src/data_understanding/collect_initial_data.py
     always_changed: true
     deps:
-      - src/transform.py
+      - src/data_understanding/collect_initial_data.py
+      - src/reports/initial_data_collection_template.md
+      - data/raw/scraped_provinces.csv
+      - data/raw/scraped_regencies.csv
+    outs:
+      - reports/initial_data_collection_report.md
+      - reports/initial_data_collection_metrics.json
+
+  data_understanding_describe:
+    cmd: python src/data_understanding/describe_data.py
+    always_changed: true
+    deps:
+      - src/data_understanding/describe_data.py
+      - src/reports/data_description_template.md
+      - data/raw/scraped_regencies.csv
+    outs:
+      - reports/data_description_report.md
+      - reports/data_description_metrics.json
+
+  data_understanding_explore:
+    cmd: python src/data_understanding/explore_data.py
+    always_changed: true
+    deps:
+      - src/data_understanding/explore_data.py
+      - src/reports/data_exploration_template.md
+      - data/raw/scraped_provinces.csv
+      - data/raw/scraped_regencies.csv
+    params:
+      - data_understanding.top_provinces_limit
+      - data_understanding.top_regencies_limit
+    outs:
+      - reports/data_exploration_report.md
+      - reports/eda_metrics.json
+      - reports/figures/eda_top_provinces.png
+      - reports/figures/eda_top_regencies_transaksi.png
+      - reports/figures/eda_correlation_matrix.png
+      - reports/figures/eda_feature_distributions.png
+
+  data_understanding_verify_quality:
+    cmd: python src/data_understanding/verify_data_quality.py
+    always_changed: true
+    deps:
+      - src/data_understanding/verify_data_quality.py
+      - src/reports/data_quality_template.md
+      - data/raw/scraped_regencies.csv
+    outs:
+      - reports/data_quality_report.md
+      - reports/data_quality_metrics.json
+
+  data_preparation_clean:
+    cmd: python src/data_preparation/clean.py
+    always_changed: true
+    deps:
+      - src/data_preparation/clean.py
       - data/raw/scraped_provinces.csv
       - data/raw/scraped_regencies.csv
       - data/raw/province.json
       - data/raw/regency.json
     outs:
-      - data/transform/transformed_provinces.csv
-      - data/transform/transformed_regencies.csv
+      - data/prepared/cleaned_provinces.csv
+      - data/prepared/cleaned_regencies.csv
 
-  eda:
-    cmd: python src/eda.py
+  data_preparation_transform:
+    cmd: python src/data_preparation/transform.py
     always_changed: true
     deps:
-      - src/eda.py
-      - src/reports/eda_summary_template.md
-      - data/transform/transformed_provinces.csv
-      - data/transform/transformed_regencies.csv
+      - src/data_preparation/transform.py
+      - data/prepared/cleaned_regencies.csv
     params:
-      - eda.top_provinces_limit
-      - eda.top_regencies_limit
+      - data_preparation.log_transform_features
     outs:
-      - reports/eda_summary.md
-      - reports/eda_metrics.json
-      - reports/figures/eda_top_provinces.png
-      - reports/figures/eda_top_regencies_transaksi.png
+      - data/prepared/scaled_features.csv
+      - data/prepared/preparation_meta.json
 
-  preprocess:
-    cmd: python src/preprocess.py
+  modeling_train:
+    cmd: python src/modeling/train.py
     always_changed: true
     deps:
-      - src/preprocess.py
-      - data/transform/transformed_regencies.csv
-    outs:
-      - data/preprocess/scaled_features.csv
-      - data/preprocess/preprocess_meta.json
-
-  model:
-    cmd: python src/model.py
-    always_changed: true
-    deps:
-      - src/model.py
-      - data/preprocess/scaled_features.csv
-      - data/preprocess/preprocess_meta.json
-      - data/transform/transformed_regencies.csv
+      - src/modeling/train.py
+      - data/prepared/scaled_features.csv
+      - data/prepared/cleaned_regencies.csv
     params:
-      - model.min_k
-      - model.max_k
-      - model.random_state
-      - model.n_init
-      - model.kneedle.curve
-      - model.kneedle.direction
-      - model.fallback_k
-      - model.override_k
-      - model.selected_features
+      - modeling.min_k
+      - modeling.max_k
+      - modeling.random_state
+      - modeling.n_init
+      - modeling.kneedle.curve
+      - modeling.kneedle.direction
+      - modeling.fallback_k
+      - modeling.override_k
+      - modeling.selected_features
     outs:
       - models/kmeans_model.pkl
-      - data/model/clustered_regencies.csv
+      - data/modeling/clustered_regencies.csv
       - reports/figures/model_elbow_curve.png
 
-  evaluate:
-    cmd: python src/evaluate.py
+  evaluation_metrics:
+    cmd: python src/evaluation/evaluate.py
     always_changed: true
     deps:
-      - src/evaluate.py
+      - src/evaluation/evaluate.py
       - src/reports/evaluate_report_template.md
-      - data/preprocess/scaled_features.csv
-      - data/model/clustered_regencies.csv
+      - data/prepared/scaled_features.csv
+      - data/modeling/clustered_regencies.csv
       - models/kmeans_model.pkl
     params:
-      - model.selected_features
+      - modeling.selected_features
+      - evaluation.target_silhouette_min
     outs:
       - reports/evaluate_report.md
       - reports/evaluate_metrics.json
@@ -80,29 +118,29 @@ stages:
       - reports/figures/eval_cluster_distribution.png
       - reports/figures/eval_avg_transaction.png
 
-  interpret:
-    cmd: python src/interpret.py
+  evaluation_interpret:
+    cmd: python src/evaluation/interpret.py
     always_changed: true
     deps:
-      - src/interpret.py
+      - src/evaluation/interpret.py
       - src/reports/interpret_report_template.md
       - reports/evaluate_metrics.json
-      - data/model/clustered_regencies.csv
+      - data/modeling/clustered_regencies.csv
     params:
       - interpret.model
       - interpret.max_tokens
-      - model.selected_features
+      - modeling.selected_features
     outs:
       - reports/interpret_labels.json
       - reports/interpret_report.md
 
-  store:
-    cmd: python src/store.py
+  deployment_seed:
+    cmd: python src/deployment/seed.py
     always_changed: true
     deps:
-      - src/store.py
-      - data/transform/transformed_provinces.csv
-      - data/model/clustered_regencies.csv
+      - src/deployment/seed.py
+      - data/prepared/cleaned_provinces.csv
+      - data/modeling/clustered_regencies.csv
       - reports/evaluate_metrics.json
       - reports/interpret_report.md
       - reports/interpret_labels.json
@@ -119,7 +157,7 @@ artifacts:
       - model
       - clustering
   clustered-regencies:
-    path: data/model/clustered_regencies.csv
+    path: data/modeling/clustered_regencies.csv
     type: dataset
     desc: "Clustered regencies dataset containing assigned cluster labels and details."
     labels:
