@@ -17,7 +17,6 @@ stages:
     deps:
       - src/2_preparation.ipynb
       - src/config.py
-      - data/1_understanding/cleaned_provinces.csv
       - data/1_understanding/cleaned_regencies.csv
       - data/1_understanding/feature_evaluation.json
     params:
@@ -26,9 +25,7 @@ stages:
       - preparation.skewness_threshold
     outs:
       - src/outs/2_preparation.ipynb
-      - data/2_preparation/prepared_provinces.csv
       - data/2_preparation/prepared_regencies.csv
-      - data/2_preparation/scaled_features.csv
       - data/2_preparation/feature_selection.json
 
   modeling:
@@ -37,7 +34,7 @@ stages:
       - src/3_modeling.ipynb
       - src/config.py
       - data/2_preparation/prepared_regencies.csv
-      - data/2_preparation/scaled_features.csv
+      - data/2_preparation/feature_selection.json
     params:
       - modeling.k_min
       - modeling.k_max
@@ -53,7 +50,7 @@ stages:
       - src/4_evaluation.ipynb
       - src/config.py
       - data/3_modeling/clustered_regencies.csv
-      - data/2_preparation/scaled_features.csv
+      - data/2_preparation/feature_selection.json
     params:
       - evaluation.target_silhouette_min
     outs:
@@ -64,7 +61,7 @@ stages:
     deps:
       - src/5_deployment.ipynb
       - src/config.py
-      - data/2_preparation/prepared_provinces.csv
+      - data/1_understanding/cleaned_provinces.csv
       - data/3_modeling/clustered_regencies.csv
       - data/2_preparation/feature_selection.json
       - data/5_deployment/province.json

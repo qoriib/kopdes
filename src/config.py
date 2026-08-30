@@ -20,9 +20,7 @@ UNDERSTANDING_REGENCIES_CSV = os.path.join(UNDERSTANDING_DIR, "cleaned_regencies
 GEO_PROVINCES_JSON = os.path.join(DEPLOYMENT_DIR, "province.json")
 GEO_REGENCIES_JSON = os.path.join(DEPLOYMENT_DIR, "regency.json")
 
-PREPARED_PROVINCES_CSV = os.path.join(PREPARATION_DIR, "prepared_provinces.csv")
 PREPARED_REGENCIES_CSV = os.path.join(PREPARATION_DIR, "prepared_regencies.csv")
-SCALED_FEATURES_CSV = os.path.join(PREPARATION_DIR, "scaled_features.csv")
 
 CLUSTERED_REGENCIES_CSV = os.path.join(MODELING_DIR, "clustered_regencies.csv")
 MODEL_PKL = os.path.join(MODELS_DIR, "kmeans_model.pkl")
