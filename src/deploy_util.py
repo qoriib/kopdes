@@ -9,20 +9,6 @@ from config import (
     GEO_REGENCIES_JSON
 )
 
-
-def sql_val(val):
-    """
-    Format nilai kolom ke literal SQL yang aman untuk Cloudflare D1.
-    Menangani NULL, tipe angka, dan escaping single quote.
-    """
-    if pd.isna(val) or val is None:
-        return "NULL"
-    if isinstance(val, (int, float)):
-        return str(val)
-    escaped = str(val).replace("'", "''")
-    return f"'{escaped}'"
-
-
 def load_merged_deployment_data() -> tuple[pd.DataFrame, pd.DataFrame, list]:
     """
     Memuat data provinsi, kabupaten/kota hasil klasterisasi, dan menggabungkan
@@ -83,3 +69,59 @@ def load_merged_deployment_data() -> tuple[pd.DataFrame, pd.DataFrame, list]:
             )
 
     return df_prov, df_reg, selected_features
+
+
+def prepare_provinces_for_db(df_prov: pd.DataFrame) -> pd.DataFrame:
+    """
+    Menyiapkan DataFrame provinsi sesuai dengan skema database SQLite / Cloudflare D1.
+    """
+    df = df_prov.copy()
+    tot = df["total_koperasi"].replace(0, 1)
+
+    df_out = pd.DataFrame({
+        "id": df.get("province_id", df.get("no", range(1, len(df) + 1))).fillna(0).astype(int),
+        "province_name": df["province_name"].astype(str),
+        "total_koperasi": df["total_koperasi"].fillna(0).astype(int),
+        "koperasi_nib": df.get("koperasi_nib", 0).fillna(0).astype(int),
+        "koperasi_npwp": df.get("koperasi_npwp", 0).fillna(0).astype(int),
+        "koperasi_rat": df.get("koperasi_rat", 0).fillna(0).astype(int),
+        "rasio_nib": ((df.get("koperasi_nib", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "rasio_npwp": ((df.get("koperasi_npwp", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "rasio_rat": ((df.get("koperasi_rat", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "simpanan_pokok": df.get("simpanan_pokok", 0.0).fillna(0.0).astype(float),
+        "simpanan_wajib": df.get("simpanan_wajib", 0.0).fillna(0.0).astype(float),
+        "volume_transaksi": df.get("volume_transaksi", 0.0).fillna(0.0).astype(float),
+        "nilai_transaksi": df.get("nilai_transaksi", 0.0).fillna(0.0).astype(float),
+        "latitude": df.get("latitude", 0.0).fillna(0.0).astype(float),
+        "longitude": df.get("longitude", 0.0).fillna(0.0).astype(float),
+    })
+    return df_out
+
+
+def prepare_regencies_for_db(df_reg: pd.DataFrame) -> pd.DataFrame:
+    """
+    Menyiapkan DataFrame kabupaten/kota sesuai dengan skema database SQLite / Cloudflare D1.
+    """
+    df = df_reg.copy()
+    tot = df["total_koperasi"].replace(0, 1)
+
+    df_out = pd.DataFrame({
+        "id": range(1, len(df) + 1),
+        "province_id": df.get("province_id", 1).fillna(1).astype(int),
+        "regency_name": df["regency_name"].astype(str),
+        "total_koperasi": df["total_koperasi"].fillna(0).astype(int),
+        "koperasi_nib": df.get("koperasi_nib", 0).fillna(0).astype(int),
+        "koperasi_npwp": df.get("koperasi_npwp", 0).fillna(0).astype(int),
+        "koperasi_rat": df.get("koperasi_rat", 0).fillna(0).astype(int),
+        "rasio_nib": ((df.get("koperasi_nib", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "rasio_npwp": ((df.get("koperasi_npwp", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "rasio_rat": ((df.get("koperasi_rat", 0) / tot) * 100).round(2).fillna(0.0).astype(float),
+        "simpanan_pokok": df.get("simpanan_pokok", 0.0).fillna(0.0).astype(float),
+        "simpanan_wajib": df.get("simpanan_wajib", 0.0).fillna(0.0).astype(float),
+        "volume_transaksi": df.get("volume_transaksi", 0.0).fillna(0.0).astype(float),
+        "nilai_transaksi": df.get("nilai_transaksi", 0.0).fillna(0.0).astype(float),
+        "cluster_label": df.get("cluster_label", 0).fillna(0).astype(int),
+        "latitude": df.get("latitude", 0.0).fillna(0.0).astype(float),
+        "longitude": df.get("longitude", 0.0).fillna(0.0).astype(float),
+    })
+    return df_out

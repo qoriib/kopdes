@@ -4,7 +4,6 @@ import pandas as pd
 from config import INTERPRETATION_JSON, AI_REPORT_MD
 from deploy_util import load_merged_deployment_data
 
-
 def generate_cluster_interpretation(
     df_reg: pd.DataFrame, selected_features: list
 ) -> tuple[dict, str, pd.DataFrame]:

@@ -952,8 +952,8 @@ stages:
       size: 92885
     - path: src/3_modeling.ipynb
       hash: md5
-      md5: 368cc80b7549753fea31b65baad6aa33
-      size: 7288
+      md5: 866180720abe2304a8f6eccf2aac82e5
+      size: 7293
     - path: src/config.py
       hash: md5
       md5: f64aad67d6ecd3b81fd46aedb7d3e527
@@ -971,11 +971,11 @@ stages:
       size: 12821
     - path: artifact/3_modeling/kmeans_model.pkl
       hash: md5
-      md5: adee033d035b21abaf8b12b4eb1018f8
+      md5: b124aa7c2ba262b590e0fceaf4da5b2b
       size: 2812
     - path: src/outs/3_modeling.ipynb
       hash: md5
-      md5: 038a5de6590c3a4849265bd4e6cbbb02
+      md5: 512bfd18b2c38a327f66434bef24fdd7
       size: 100712
   evaluation:
     cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb
@@ -994,12 +994,12 @@ stages:
       size: 12821
     - path: artifact/3_modeling/kmeans_model.pkl
       hash: md5
-      md5: adee033d035b21abaf8b12b4eb1018f8
+      md5: b124aa7c2ba262b590e0fceaf4da5b2b
       size: 2812
     - path: src/4_evaluation.ipynb
       hash: md5
-      md5: 4353c4f45287b28ed8623b0c0fdec618
-      size: 9019
+      md5: b457ddd972b53fb6120693191dbfc2e5
+      size: 8724
     - path: src/config.py
       hash: md5
       md5: f64aad67d6ecd3b81fd46aedb7d3e527
@@ -1015,8 +1015,8 @@ stages:
       size: 435
     - path: src/outs/4_evaluation.ipynb
       hash: md5
-      md5: 3c3ac79c6a1e9b9637ce871f40591f26
-      size: 154320
+      md5: 5395090aa654ee27d673c4edf2330708
+      size: 154321
   deployment:
     cmd: papermill src/5_deployment.ipynb src/outs/5_deployment.ipynb -p MODEL 
       "@cf/openai/gpt-oss-120b" -p MAX_TOKENS 3000
