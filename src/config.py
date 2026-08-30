@@ -5,7 +5,6 @@ SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
 
 ARTIFACT_DIR = os.path.join(BASE_DIR, "artifact")
-DATA_DIR = ARTIFACT_DIR
 SCRAPE_DIR = os.path.join(ARTIFACT_DIR, "scrape")
 UNDERSTANDING_DIR = os.path.join(ARTIFACT_DIR, "1_understanding")
 PREPARATION_DIR = os.path.join(ARTIFACT_DIR, "2_preparation")
@@ -32,8 +31,12 @@ CLUSTERED_REGENCIES_CSV = os.path.join(EVALUATION_DIR, "clustered_regencies.csv"
 MODEL_COMPARISON_JSON = os.path.join(EVALUATION_DIR, "model_comparison.json")
 INTERPRETATION_JSON = os.path.join(DEPLOYMENT_DIR, "interpretation.json")
 AI_REPORT_MD = os.path.join(DEPLOYMENT_DIR, "ai_report.md")
-SCHEMA_SQL = os.path.join(DEPLOYMENT_DIR, "schema.sql")
-SEED_SQL = os.path.join(DEPLOYMENT_DIR, "seed.sql")
+PROMPT_MD = os.path.join(DEPLOYMENT_DIR, "prompt.md")
+BACKEND_DIR = os.path.join(BASE_DIR, "web", "backend")
+MIGRATIONS_DIR = os.path.join(BACKEND_DIR, "migrations")
+SCHEMA_SQL = os.path.join(MIGRATIONS_DIR, "0001_schema.sql")
+SEED_DATA_SQL = os.path.join(DEPLOYMENT_DIR, "seed_data.sql")
+SEED_INTERPRET_SQL = os.path.join(DEPLOYMENT_DIR, "seed_interpret.sql")
 
 # Raw Scraped Column Mappings
 PROVINCE_COLUMN_MAPPING = {

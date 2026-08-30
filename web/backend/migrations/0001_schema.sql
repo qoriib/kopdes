@@ -1,8 +1,8 @@
--- Cloudflare D1 Database Schema
--- Generated & Managed by CRISP-DM Deployment Pipeline
+-- Cloudflare D1 Database Migration
+-- 0001_schema.sql
 
 CREATE TABLE IF NOT EXISTS provinces (
-    id INTEGER PRIMARY KEY,
+    id INTEGER NOT NULL,
     province_name TEXT NOT NULL,
     total_koperasi INTEGER DEFAULT 0,
     koperasi_nib INTEGER DEFAULT 0,
@@ -16,12 +16,14 @@ CREATE TABLE IF NOT EXISTS provinces (
     volume_transaksi REAL DEFAULT 0.0,
     nilai_transaksi REAL DEFAULT 0.0,
     latitude REAL DEFAULT 0.0,
-    longitude REAL DEFAULT 0.0
+    longitude REAL DEFAULT 0.0,
+    upload_date TEXT NOT NULL DEFAULT (CURRENT_DATE),
+    PRIMARY KEY (id, upload_date)
 );
 
 CREATE TABLE IF NOT EXISTS regencies (
-    id INTEGER PRIMARY KEY,
-    province_id INTEGER NOT NULL REFERENCES provinces(id) ON DELETE CASCADE,
+    id INTEGER NOT NULL,
+    province_id INTEGER NOT NULL,
     regency_name TEXT NOT NULL,
     total_koperasi INTEGER DEFAULT 0,
     koperasi_nib INTEGER DEFAULT 0,
@@ -36,16 +38,22 @@ CREATE TABLE IF NOT EXISTS regencies (
     nilai_transaksi REAL DEFAULT 0.0,
     cluster_label INTEGER DEFAULT 0,
     latitude REAL DEFAULT 0.0,
-    longitude REAL DEFAULT 0.0
+    longitude REAL DEFAULT 0.0,
+    upload_date TEXT NOT NULL DEFAULT (CURRENT_DATE),
+    PRIMARY KEY (id, upload_date)
 );
 
 CREATE TABLE IF NOT EXISTS metrics (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
+    key TEXT NOT NULL,
+    value TEXT NOT NULL,
+    upload_date TEXT NOT NULL DEFAULT (CURRENT_DATE),
+    PRIMARY KEY (key, upload_date)
 );
 
 CREATE TABLE IF NOT EXISTS ai_report (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL,
     report_text TEXT NOT NULL,
-    labels_json TEXT NOT NULL
+    labels_json TEXT NOT NULL,
+    upload_date TEXT NOT NULL DEFAULT (CURRENT_DATE),
+    PRIMARY KEY (id, upload_date)
 );

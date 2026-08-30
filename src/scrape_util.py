@@ -126,22 +126,20 @@ def load_scraped_province_ids(geo_json_path: str, raw_prov_csv: str) -> list:
 
     if os.path.exists(geo_json_path):
         try:
-            with open(geo_json_path, encoding="utf-8") as geo_file:
-                province_json_data = json.load(geo_file)
-                for province_entry in province_json_data:
-                    if "name" in province_entry and "province_id" in province_entry:
-                        normalized_province_name = province_entry["name"].strip().upper()
-                        province_id_number = int(province_entry["province_id"])
-                        geo_province_id_lookup[normalized_province_name] = province_id_number
+            province_json_data = json.load(open(geo_json_path, encoding="utf-8"))
+            for province_entry in province_json_data:
+                if "name" in province_entry and "province_id" in province_entry:
+                    normalized_province_name = province_entry["name"].strip().upper()
+                    province_id_number = int(province_entry["province_id"])
+                    geo_province_id_lookup[normalized_province_name] = province_id_number
         except Exception as error_message:
             print(f"Gagal memuat {geo_json_path}: {error_message}")
 
     if os.path.exists(raw_prov_csv):
         try:
-            with open(raw_prov_csv, encoding="utf-8-sig") as csv_file:
-                csv_reader = csv.reader(csv_file)
-                # Skip CSV header line
-                next(csv_reader, None)
+            csv_reader = csv.reader(open(raw_prov_csv, encoding="utf-8-sig"))
+            # Skip CSV header line
+            next(csv_reader, None)
 
                 for csv_row in csv_reader:
                     if not csv_row or len(csv_row) < 2:

@@ -1,4 +1,5 @@
-/seed.sql
+/seed_data.sql
+/seed_interpret.sql
 /province.json
 /regency.json
 /interpretation.json

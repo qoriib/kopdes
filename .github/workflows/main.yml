@@ -107,24 +107,28 @@ jobs:
       - name: Generate AI Cluster Interpretation & Report
         run: python src/deploy_interpret.py
 
-      - name: Generate Cloudflare D1 Database Seed SQL
-        run: python src/deploy_store.py
+      - name: Generate Database Seed SQL (Data & Interpretation)
+        run: |
+          python src/deploy_store_data.py
+          python src/deploy_store_interpret.py
 
-      - name: Apply Remote Database Schema
+      - name: Apply Remote Database Migrations
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: 'web/backend'
-          command: d1 execute simkopdes_db --remote --file=../../artifact/deployment/schema.sql
+          command: d1 migrations apply simkopdes_db --remote
 
-      - name: Seed Remote Database
+      - name: Seed Remote Database (Data & Interpretation)
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: 'web/backend'
-          command: d1 execute simkopdes_db --remote --file=../../artifact/deployment/seed.sql
+          command: |
+            d1 execute simkopdes_db --remote --file=../../artifact/deployment/seed_data.sql
+            d1 execute simkopdes_db --remote --file=../../artifact/deployment/seed_interpret.sql
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -167,7 +171,8 @@ jobs:
         with:
           name: deployment-files
           path: |
-            artifact/deployment/seed.sql
+            artifact/deployment/seed_data.sql
+            artifact/deployment/seed_interpret.sql
             artifact/deployment/interpretation.json
             artifact/deployment/ai_report.md
 

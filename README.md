@@ -168,15 +168,18 @@ Notebook ini memuat model terlatih, mengevaluasi perbandingan metrik, memilih mo
 ---
 
 ### 5. Modul Deployment (`src/deploy_*.py`)
-Tahap deployment dibangun modular setara modul scraping, terdiri dari 3 modul spesifik:
+Tahap deployment dibangun secara modular dan terisolasi:
 - **`src/deploy_util.py`**:
-  - Utilitas bersama untuk memuat dataset terintegrasi geospasial (`load_merged_deployment_data`) dan sanitasi SQL (`sql_val`).
+  - Utilitas bersama untuk memuat dataset terintegrasi geospasial (`load_merged_deployment_data`), transformasi data dengan `upload_date`, dan eksportir SQLite seeder (`dump_tables_to_sql`).
 - **`src/deploy_interpret.py`**:
   - Menganalisis profil rata-rata tiap klaster, menentukan label tipologi wilayah, dan menyusun laporan rekomendasi kebijakan.
   - Artefak Output: `artifact/deployment/interpretation.json` & `artifact/deployment/ai_report.md`.
-- **`src/deploy_store.py`**:
-  - Menyusun seluruh pernyataan DDL & INSERT SQL untuk tabel `provinces`, `regencies`, dan `ai_report` ke Cloudflare D1.
-  - Artefak Output: `artifact/deployment/seed.sql`.
+- **`src/deploy_store_data.py`**:
+  - Menyusun dan mengekspor pernyataan SQL untuk tabel data numerik wilayah (`provinces` dan `regencies`).
+  - Artefak Output: `artifact/deployment/seed_data.sql`.
+- **`src/deploy_store_interpret.py`**:
+  - Menyusun dan mengekspor pernyataan SQL untuk teks laporan dan metadata tipologi (`ai_report`).
+  - Artefak Output: `artifact/deployment/seed_interpret.sql`.
 
 ---
 
@@ -195,7 +198,7 @@ kopdes/
 │   ├── 2_preparation/         # Data terimputasi & fitur terstandarisasi
 │   ├── 3_modeling/            # Model tersimpan (kmeans_model.pkl, agglomerative_model.pkl)
 │   ├── 4_evaluation/          # Data hasil klasterisasi (clustered_regencies.csv) & model_comparison.json
-│   └── deployment/            # Berkas seed.sql database D1 & data referensi geospasial
+│   └── deployment/            # Berkas seed_data.sql, seed_interpret.sql, & data referensi geospasial
 ├── src/                       # Source code pipeline analitik
 │   ├── scrape_util.py         # Modul utilitas scraping & parser tabel HTML
 │   ├── scrape_provinces.py    # Script scraping data tingkat provinsi
@@ -204,9 +207,10 @@ kopdes/
 │   ├── 2_preparation.ipynb    # Notebook pra-pemrosesan data
 │   ├── 3_modeling.ipynb       # Notebook pemodelan K-Means & Agglomerative
 │   ├── 4_evaluation.ipynb     # Notebook evaluasi metrik & komparasi
-│   ├── deploy_util.py         # Modul utilitas pemuatan data spasial & SQL escaping
+│   ├── deploy_util.py         # Modul utilitas pemuatan data spasial & SQL builder
 │   ├── deploy_interpret.py    # Generator laporan interpretasi & metadata tipologi klaster
-│   ├── deploy_store.py        # Generator seeder SQL database Cloudflare D1
+│   ├── deploy_store_data.py   # Generator seeder SQL data wilayah (provinces, regencies)
+│   ├── deploy_store_interpret.py # Generator seeder SQL laporan interpretasi (ai_report)
 │   ├── config.py              # Konfigurasi konstanta & fitur global
 │   └── outs/                  # Output notebook hasil eksekusi Papermill
 ├── web/
@@ -291,11 +295,12 @@ dvc repro
 cd web/backend
 npm install
 
-# Terapkan skema database D1 secara lokal
-npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/schema.sql
+# Terapkan migrasi skema database D1 secara lokal
+npx wrangler d1 migrations apply simkopdes_db --local
 
-# Isi data awal database dari hasil pipeline
-npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/seed.sql
+# Isi data awal database dari hasil pipeline (Data Tabular & Interpretasi AI)
+npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/seed_data.sql
+npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/seed_interpret.sql
 
 # Jalankan server backend lokal
 npm run dev
