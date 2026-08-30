@@ -9,7 +9,6 @@ modeling:
   fallback_k: 3
   random_state: 42
 
-
 deployment:
   model: "@cf/openai/gpt-oss-120b"
   max_tokens: 3000
