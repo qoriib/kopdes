@@ -13,3 +13,4 @@ tabulate
 papermill
 ipykernel
 nbconvert
+boto3

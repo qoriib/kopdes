@@ -15,8 +15,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   # Cloudflare Account & API Credentials (used by DVC, Wrangler, D1 & Pages)
-  CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
   # R2 Storage Configuration
   R2_BUCKET: kopdes-cml
@@ -71,31 +71,7 @@ jobs:
         run: dvc repro
 
       - name: Generate Reports & Upload Plots to R2
-        run: |
-          upload_to_r2() {
-            local file_path="$1"
-            local filename=$(basename "$file_path")
-            local key="reports/${filename}"
-            local endpoint="https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com"
-            local base_url="${R2_PUBLIC_URL:-https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}}"
-
-            aws s3 cp "$file_path" "s3://${R2_BUCKET}/${key}" \
-              --endpoint-url "$endpoint" \
-              --content-type "image/png" > /dev/null
-
-            echo "${base_url}/${key}"
-          }
-
-          for stage in 1_understanding 3_modeling 4_evaluation; do
-            jupyter nbconvert --to markdown --no-input src/outs/${stage}.ipynb --output-dir src/outs
-            for img in src/outs/${stage}_files/*.png; do
-              [ -f "$img" ] || continue
-              url=$(upload_to_r2 "$img")
-              filename=$(basename "$img")
-              sed -i "s|](${stage}_files/${filename})|]($url)|g" src/outs/${stage}.md
-            done
-            cat src/outs/${stage}.md >> $GITHUB_STEP_SUMMARY
-          done
+        run: python src/report.py
 
       - name: Apply Remote Database Migrations
         uses: cloudflare/wrangler-action@v4
