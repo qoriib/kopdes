@@ -104,6 +104,9 @@ jobs:
             fi
           done
 
+      - name: Generate Cloudflare D1 Database Seed SQL
+        run: python src/deploy_seed.py
+
       - name: Apply Remote Database Migrations
         uses: cloudflare/wrangler-action@v4
         with:
@@ -118,7 +121,7 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: 'web/backend'
-          command: d1 execute simkopdes_db --remote --file=../../artifact/5_deployment/seed.sql
+          command: d1 execute simkopdes_db --remote --file=../../artifact/deployment/seed.sql
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -161,7 +164,7 @@ jobs:
         with:
           name: deployment-files
           path: |
-            artifact/5_deployment/seed.sql
+            artifact/deployment/seed.sql
 
   deploy_backend:
     name: Deploy Backend

@@ -11,7 +11,7 @@ UNDERSTANDING_DIR = os.path.join(ARTIFACT_DIR, "1_understanding")
 PREPARATION_DIR = os.path.join(ARTIFACT_DIR, "2_preparation")
 MODELING_DIR = os.path.join(ARTIFACT_DIR, "3_modeling")
 EVALUATION_DIR = os.path.join(ARTIFACT_DIR, "4_evaluation")
-DEPLOYMENT_DIR = os.path.join(ARTIFACT_DIR, "5_deployment")
+DEPLOYMENT_DIR = os.path.join(ARTIFACT_DIR, "deployment")
 
 # Data File Paths per Stage
 RAW_PROVINCES_CSV = os.path.join(SCRAPE_DIR, "scraped_provinces.csv")
