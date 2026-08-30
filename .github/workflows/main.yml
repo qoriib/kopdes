@@ -73,10 +73,17 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for stage in 1_understanding 3_modeling 4_evaluation; do
-            if [ -f "src/outs/${stage}.ipynb" ]; then
-              echo "Converting src/outs/${stage}.ipynb to Markdown..."
-              jupyter nbconvert --to markdown --no-input "src/outs/${stage}.ipynb" --output-dir src/outs
+          shopt -s nullglob
+          notebooks=(src/outs/*.ipynb)
+          if [ ${#notebooks[@]} -eq 0 ]; then
+            notebooks=(src/*.ipynb)
+          fi
+
+          for nb in "${notebooks[@]}"; do
+            if [ -f "$nb" ]; then
+              stage=$(basename "$nb" .ipynb)
+              echo "Processing $nb ($stage)..."
+              jupyter nbconvert --to markdown --no-input "$nb" --output-dir src/outs
               
               if [ -d "src/outs/${stage}_files" ]; then
                 for img in src/outs/${stage}_files/*.png; do
