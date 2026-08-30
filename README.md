@@ -4,7 +4,7 @@
 [![MLOps](https://img.shields.io/badge/MLOps-DVC%20%2B%20Cloudflare%20R2-945DD6?style=for-the-badge&logo=dvc&logoColor=white)](https://dvc.org)
 [![Backend](https://img.shields.io/badge/Backend-Cloudflare%20Workers%20%2B%20Hono-F38020?style=for-the-badge&logo=cloudflareworkers&logoColor=white)](https://workers.cloudflare.com)
 [![Database](https://img.shields.io/badge/Database-Cloudflare%20D1%20(SQLite)-0051C3?style=for-the-badge&logo=sqlite&logoColor=white)](https://developers.cloudflare.com/d1/)
-[![Frontend](https://img.shields.io/badge/Frontend-React%2019%20%2B%20Tailwind%20v4-61DAFB?style=for-the-badge&logo=react&logoColor=black)](web/frontend)
+[![Frontend](https://img.shields.io/badge/Frontend-React%2019%20%2B%20Astryx-61DAFB?style=for-the-badge&logo=react&logoColor=black)](web/frontend)
 
 **KOPDES** adalah platform analitik dan machine learning *end-to-end* yang menerapkan metodologi **CRISP-DM 1.0 (Cross-Industry Standard Process for Data Mining)** untuk mengumpulkan, memproses, mengelompokkan (clustering), mengevaluasi, dan mendiseminasikan data profil serta performa Koperasi Desa di seluruh Indonesia dari portal [SIMKOPDES](https://simkopdes.go.id).
 
@@ -73,8 +73,8 @@ flowchart TD
 
 ### Frontend (Cloudflare Pages)
 - **Framework**: React 19, TypeScript, Vite.
-- **Styling**: Tailwind CSS v4, `@base-ui/react`, Lucide Icons, Dark/Light Mode.
-- **Visualisasi**: Recharts (Interactive Radar, Bar, and Line charts).
+- **Design System**: Astryx Design System (`@astryxdesign/core`, `@astryxdesign/theme-neutral`), StyleX, Lucide Icons, Figtree Font, Dark/Light Mode.
+- **Visualisasi**: Leaflet Map (Spatial Cluster Map), Astryx Markdown & Analytics Cards.
 
 ---
 
@@ -233,7 +233,7 @@ Workflow terpusat pada [`.github/workflows/main.yml`](.github/workflows/main.yml
 1. **Scrape Job**: Mengambil data terbaru dari portal SIMKOPDES via Playwright headless browser.
 2. **Pipeline Job**:
    - Menjalankan `dvc repro` untuk memproses seluruh tahapan analitik & model training.
-   - Mengonversi notebook ke laporan ringkasan Markdown dan mengunggah plot visualisasi ke **Cloudflare R2**.
+   - Mengonversi notebook ke laporan Markdown dan mempublikasikan visualisasi plot via **CML (Continuous Machine Learning)** langsung ke GitHub Actions Step Summary.
    - Menerapkan migrasi skema dan melakukan seeding database ke **Cloudflare D1 Remote**.
    - Menyimpan dan menyinkronkan data cache model ke remote storage via `dvc push`.
 3. **Deploy Backend Job**: Membangun dan merilis API Worker ke **Cloudflare Workers** via `cloudflare/wrangler-action@v4`.
