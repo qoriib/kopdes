@@ -34,9 +34,11 @@ jobs:
         shell: bash
         run: playwright install chromium --with-deps
 
-      - name: Run Scraper Script
+      - name: Run Scraper Scripts
         shell: bash
-        run: python src/0_scrape.py
+        run: |
+          python src/scrape_provinces.py
+          python src/scrape_regencies.py
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -48,8 +50,8 @@ jobs:
         with:
           name: scrape-files
           path: |
-            data/0_scrape/scraped_provinces.csv
-            data/0_scrape/scraped_regencies.csv
+            data/scrape/scraped_provinces.csv
+            data/scrape/scraped_regencies.csv
 
   pipeline:
     name: Run CRISP-DM DVC Pipeline

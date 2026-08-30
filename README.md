@@ -82,7 +82,7 @@ flowchart TD
 
 | Tahap | Berkas / Notebook | Deskripsi |
 | :--- | :--- | :--- |
-| **0. Ingestion** | `src/0_scrape.py` | Scraping data provinsi & kabupaten/kota (NIB, NPWP, RAT, modal, transaksi). |
+| **0. Ingestion** | `src/scrape_provinces.py`, `src/scrape_regencies.py` | Scraping data provinsi & kabupaten/kota (NIB, NPWP, RAT, modal, transaksi). |
 | **1. Data Understanding** | `src/1_understanding.ipynb` | Analisis statistik deskriptif, missing values, skewness, dan korelasi fitur koperasi. |
 | **2. Data Preparation** | `src/2_preparation.ipynb` | Cleaning teks daerah, imputasi, feature engineering (rasio legalitas/keaktifan), dan *Robust/Standard Scaling*. |
 | **3. Modeling** | `src/3_modeling.ipynb` | Pencarian cluster optimal via *Elbow Method* & *Kneedle Algorithm*, fitting K-Means model, dan penyimpanan model `.pkl`. |
@@ -101,13 +101,15 @@ kopdes/
 │       └── main.yml           # CI/CD End-to-End Orchestration Workflow
 ├── .dvc/                      # Konfigurasi DVC & R2 Remote Storage
 ├── data/                      # Data storage per tahapan CRISP-DM
-│   ├── 0_scrape/              # Data mentah hasil scraping
+│   ├── scrape/                # Data mentah hasil scraping
 │   ├── 2_preparation/         # Data bersih & fitur ternormalisasi
 │   ├── 3_modeling/            # Data hasil clustering regencies
 │   └── 5_deployment/          # Berkas seed.sql database D1
 ├── models/                    # Model machine learning tersimpan (kmeans_model.pkl)
 ├── src/                       # Source code pipeline analitik
-│   ├── 0_scrape.py            # Script scraping Playwright
+│   ├── scrape_util.py         # Modul utilitas scraping & parser tabel HTML
+│   ├── scrape_provinces.py    # Script scraping data tingkat provinsi
+│   ├── scrape_regencies.py    # Script scraping data tingkat kabupaten/kota
 │   ├── 1_understanding.ipynb  # Notebook eksplorasi & pemahaman data
 │   ├── 2_preparation.ipynb    # Notebook pra-pemrosesan data
 │   ├── 3_modeling.ipynb       # Notebook pemodelan K-Means

@@ -1,9 +1,3 @@
-scraping:
-  table_index: 2
-  max_workers: 5
-  target_url: "https://simkopdes.go.id/pers/dashboard"
-  base_url_template: "https://simkopdes.go.id/pers/dashboard/district/{id}"
-
 modeling:
   k_min: 2
   k_max: 10

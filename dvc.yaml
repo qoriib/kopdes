@@ -4,8 +4,8 @@ stages:
     deps:
       - src/1_understanding.ipynb
       - src/config.py
-      - data/0_scrape/scraped_regencies.csv
-      - data/0_scrape/scraped_provinces.csv
+      - data/scrape/scraped_regencies.csv
+      - data/scrape/scraped_provinces.csv
     outs:
       - src/outs/1_understanding.ipynb
 
@@ -14,10 +14,10 @@ stages:
     deps:
       - src/2_preparation.ipynb
       - src/config.py
-      - data/0_scrape/scraped_provinces.csv
-      - data/0_scrape/scraped_regencies.csv
-      - data/0_scrape/province.json
-      - data/0_scrape/regency.json
+      - data/scrape/scraped_provinces.csv
+      - data/scrape/scraped_regencies.csv
+      - data/2_preparation/province.json
+      - data/2_preparation/regency.json
     outs:
       - src/outs/2_preparation.ipynb
       - data/2_preparation/cleaned_provinces.csv

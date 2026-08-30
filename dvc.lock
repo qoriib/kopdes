@@ -867,22 +867,22 @@ stages:
   understanding:
     cmd: papermill src/1_understanding.ipynb src/outs/1_understanding.ipynb
     deps:
-    - path: data/0_scrape/scraped_provinces.csv
+    - path: data/scrape/scraped_provinces.csv
       hash: md5
-      md5: 7adcbae32779948747358670965febaa
-      size: 3890
-    - path: data/0_scrape/scraped_regencies.csv
+      md5: d8e25afa473b9a0e4bedc4e8879f4a88
+      size: 4067
+    - path: data/scrape/scraped_regencies.csv
       hash: md5
-      md5: 93e07efd07ca5a863f5d276f2dac4c9e
-      size: 37108
+      md5: 5096e88535527c2a567fab970faff370
+      size: 36533
     - path: src/1_understanding.ipynb
       hash: md5
       md5: bf0eff39997b5f29b8fe54d7ad40468a
       size: 9018
     - path: src/config.py
       hash: md5
-      md5: bf4fa97e7196da9af3951138591257db
-      size: 1624
+      md5: f2a0c87ad38e809388a3ecac76a01145
+      size: 1632
     outs:
     - path: src/outs/1_understanding.ipynb
       hash: md5
@@ -891,30 +891,30 @@ stages:
   preparation:
     cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb
     deps:
-    - path: data/0_scrape/province.json
+    - path: data/2_preparation/province.json
       hash: md5
       md5: 6f527313adb7a1c4a781903ca1965340
       size: 4365
-    - path: data/0_scrape/regency.json
+    - path: data/2_preparation/regency.json
       hash: md5
       md5: 38cdf9dde54d8bbdb35581b739a6c0c4
       size: 71671
-    - path: data/0_scrape/scraped_provinces.csv
+    - path: data/scrape/scraped_provinces.csv
       hash: md5
-      md5: 7adcbae32779948747358670965febaa
-      size: 3890
-    - path: data/0_scrape/scraped_regencies.csv
+      md5: d8e25afa473b9a0e4bedc4e8879f4a88
+      size: 4067
+    - path: data/scrape/scraped_regencies.csv
       hash: md5
-      md5: 93e07efd07ca5a863f5d276f2dac4c9e
-      size: 37108
+      md5: 5096e88535527c2a567fab970faff370
+      size: 36533
     - path: src/2_preparation.ipynb
       hash: md5
       md5: cc62357852188e8efb9ac52b9ac27b57
       size: 7311
     - path: src/config.py
       hash: md5
-      md5: bf4fa97e7196da9af3951138591257db
-      size: 1624
+      md5: f2a0c87ad38e809388a3ecac76a01145
+      size: 1632
     outs:
     - path: data/2_preparation/cleaned_provinces.csv
       hash: md5
@@ -950,8 +950,8 @@ stages:
       size: 5780
     - path: src/config.py
       hash: md5
-      md5: bf4fa97e7196da9af3951138591257db
-      size: 1624
+      md5: f2a0c87ad38e809388a3ecac76a01145
+      size: 1632
     params:
       params.yaml:
         modeling.k_max: 10
@@ -988,8 +988,8 @@ stages:
       size: 5787
     - path: src/config.py
       hash: md5
-      md5: bf4fa97e7196da9af3951138591257db
-      size: 1624
+      md5: f2a0c87ad38e809388a3ecac76a01145
+      size: 1632
     params:
       params.yaml:
         evaluation.target_silhouette_min: 0.5
@@ -1016,8 +1016,8 @@ stages:
       size: 11375
     - path: src/config.py
       hash: md5
-      md5: bf4fa97e7196da9af3951138591257db
-      size: 1624
+      md5: f2a0c87ad38e809388a3ecac76a01145
+      size: 1632
     params:
       params.yaml:
         deployment.max_tokens: 3000
