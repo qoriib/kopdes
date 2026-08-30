@@ -167,16 +167,16 @@ Notebook ini memuat model terlatih, mengevaluasi perbandingan metrik, memilih mo
 
 ---
 
-### 5. `src/deploy_seed.py` — Deployment Seeder
-Skrip Python ini mengintegrasikan hasil analitik ke database operasional dan menghasilkan interpretasi tipologi:
-- **Pemetaan Spasial (GeoJSON)**:
-  - Menggabungkan data klaster kabupaten/kota dengan referensi geometri dan kode wilayah dari `province.json` dan `regency.json`.
-- **Interpretasi Karakteristik & Rekomendasi Klaster**:
-  - Menghasilkan profil karakteristik dan rekomendasi kebijakan strategis untuk masing-masing klaster secara otomatis.
-- **Pembangkitan Seeder Database (`seed.sql`)**:
-  - Menghasilkan skrip DDL/DML SQL untuk seeding tabel `provinces`, `regencies`, dan metadata klaster ke **Cloudflare D1 Database**.
-- **Artefak Output**:
-  - `artifact/deployment/seed.sql`
+### 5. Modul Deployment (`src/deploy_*.py`)
+Tahap deployment dibangun modular setara modul scraping, terdiri dari 3 modul spesifik:
+- **`src/deploy_util.py`**:
+  - Utilitas bersama untuk memuat dataset terintegrasi geospasial (`load_merged_deployment_data`) dan sanitasi SQL (`sql_val`).
+- **`src/deploy_interpret.py`**:
+  - Menganalisis profil rata-rata tiap klaster, menentukan label tipologi wilayah, dan menyusun laporan rekomendasi kebijakan.
+  - Artefak Output: `artifact/deployment/interpretation.json` & `artifact/deployment/ai_report.md`.
+- **`src/deploy_store.py`**:
+  - Menyusun seluruh pernyataan DDL & INSERT SQL untuk tabel `provinces`, `regencies`, dan `ai_report` ke Cloudflare D1.
+  - Artefak Output: `artifact/deployment/seed.sql`.
 
 ---
 
@@ -204,7 +204,9 @@ kopdes/
 │   ├── 2_preparation.ipynb    # Notebook pra-pemrosesan data
 │   ├── 3_modeling.ipynb       # Notebook pemodelan K-Means & Agglomerative
 │   ├── 4_evaluation.ipynb     # Notebook evaluasi metrik & komparasi
-│   ├── deploy_seed.py         # Generator seed SQL Cloudflare D1 & laporan interpretasi
+│   ├── deploy_util.py         # Modul utilitas pemuatan data spasial & SQL escaping
+│   ├── deploy_interpret.py    # Generator laporan interpretasi & metadata tipologi klaster
+│   ├── deploy_store.py        # Generator seeder SQL database Cloudflare D1
 │   ├── config.py              # Konfigurasi konstanta & fitur global
 │   └── outs/                  # Output notebook hasil eksekusi Papermill
 ├── web/
