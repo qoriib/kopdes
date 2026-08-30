@@ -6,6 +6,7 @@ BASE_DIR = os.path.dirname(SRC_DIR)
 
 DATA_DIR = os.path.join(BASE_DIR, "data")
 SCRAPE_DIR = os.path.join(DATA_DIR, "scrape")
+UNDERSTANDING_DIR = os.path.join(DATA_DIR, "1_understanding")
 PREPARATION_DIR = os.path.join(DATA_DIR, "2_preparation")
 MODELING_DIR = os.path.join(DATA_DIR, "3_modeling")
 DEPLOYMENT_DIR = os.path.join(DATA_DIR, "5_deployment")
@@ -14,6 +15,8 @@ MODELS_DIR = os.path.join(BASE_DIR, "models")
 # Data File Paths per Stage
 RAW_PROVINCES_CSV = os.path.join(SCRAPE_DIR, "scraped_provinces.csv")
 RAW_REGENCIES_CSV = os.path.join(SCRAPE_DIR, "scraped_regencies.csv")
+UNDERSTANDING_PROVINCES_CSV = os.path.join(UNDERSTANDING_DIR, "cleaned_provinces.csv")
+UNDERSTANDING_REGENCIES_CSV = os.path.join(UNDERSTANDING_DIR, "cleaned_regencies.csv")
 GEO_PROVINCES_JSON = os.path.join(PREPARATION_DIR, "province.json")
 GEO_REGENCIES_JSON = os.path.join(PREPARATION_DIR, "regency.json")
 
@@ -26,17 +29,38 @@ MODEL_PKL = os.path.join(MODELS_DIR, "kmeans_model.pkl")
 
 SEED_SQL = os.path.join(DEPLOYMENT_DIR, "seed.sql")
 
+# Raw Scraped Column Mappings
+PROVINCE_COLUMN_MAPPING = {
+    'No': 'no',
+    'Provinsi': 'province_name',
+    'Jumlah Koperasi': 'total_koperasi',
+    'Koperasi Memiliki NIB': 'koperasi_nib',
+    'Koperasi Memiliki NPWP': 'koperasi_npwp',
+    'Koperasi Telah RAT (2025)': 'koperasi_rat',
+    'Simpanan Pokok': 'simpanan_pokok',
+    'Simpanan Wajib': 'simpanan_wajib',
+    'Volume Transaksi (2026)': 'volume_transaksi',
+    'Nilai Transaksi (2026)': 'nilai_transaksi',
+    'Pemetahaan Lahan': 'pemetahaan_lahan',
+    'Pemetahaan Lahan (%)': 'pemetahaan_lahan_pct',
+    'Pembangunan Gerai (%)': 'pembangunan_gerai_pct'
+}
+
+REGENCY_COLUMN_MAPPING = {
+    'province_id': 'province_id',
+    'No': 'regency_no',
+    'Kabupaten/Kota': 'regency_name',
+    'Jumlah Koperasi': 'total_koperasi',
+    'Koperasi Memiliki NIB': 'koperasi_nib',
+    'Koperasi Memiliki NPWP': 'koperasi_npwp',
+    'Koperasi Telah RAT (2025)': 'koperasi_rat',
+    'Simpanan Pokok': 'simpanan_pokok',
+    'Simpanan Wajib': 'simpanan_wajib',
+    'Volume Transaksi (2026)': 'volume_transaksi',
+    'Nilai Transaksi (2026)': 'nilai_transaksi'
+}
+
 # Shared Feature Definitions
-NUMERIC_COLUMNS = [
-    'total_koperasi',
-    'koperasi_nib',
-    'koperasi_npwp',
-    'koperasi_rat',
-    'simpanan_pokok',
-    'simpanan_wajib',
-    'volume_transaksi',
-    'nilai_transaksi'
-]
 
 FEATURE_COLUMNS = [
     'total_koperasi',

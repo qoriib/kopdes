@@ -8,14 +8,16 @@ stages:
       - data/scrape/scraped_provinces.csv
     outs:
       - src/outs/1_understanding.ipynb
+      - data/1_understanding/cleaned_provinces.csv
+      - data/1_understanding/cleaned_regencies.csv
 
   preparation:
     cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb
     deps:
       - src/2_preparation.ipynb
       - src/config.py
-      - data/scrape/scraped_provinces.csv
-      - data/scrape/scraped_regencies.csv
+      - data/1_understanding/cleaned_provinces.csv
+      - data/1_understanding/cleaned_regencies.csv
       - data/2_preparation/province.json
       - data/2_preparation/regency.json
     outs:

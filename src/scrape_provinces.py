@@ -4,8 +4,7 @@ from config import RAW_PROVINCES_CSV
 from scrape_util import (
     SCRAPE_TARGET_URL,
     SCRAPE_TABLE_INDEX,
-    scrape_table_with_pagination,
-    save_raw_dataframe
+    scrape_table_with_pagination
 )
 
 print("=== Scraping Data Tingkat Provinsi ===")
@@ -17,7 +16,7 @@ with sync_playwright() as p:
 
 if headers and rows:
     df_prov = pd.DataFrame(rows, columns=headers)
-    save_raw_dataframe(df_prov, RAW_PROVINCES_CSV)
+    df_prov.to_csv(RAW_PROVINCES_CSV, index=False)
     print(f"Ekstraksi data provinsi selesai ({len(df_prov)} entri).")
 else:
     print("Tidak ada data provinsi yang berhasil diekstrak.")

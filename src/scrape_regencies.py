@@ -10,8 +10,7 @@ from scrape_util import (
     SCRAPE_TABLE_INDEX,
     SCRAPE_MAX_WORKERS,
     load_scraped_province_ids,
-    scrape_single_regency,
-    save_raw_dataframe
+    scrape_single_regency
 )
 
 print("=== Scraping Data Tingkat Kabupaten/Kota ===")
@@ -43,7 +42,7 @@ else:
 
     if final_headers and all_rows:
         df_reg = pd.DataFrame(all_rows, columns=final_headers)
-        save_raw_dataframe(df_reg, RAW_REGENCIES_CSV)
+        df_reg.to_csv(RAW_REGENCIES_CSV, index=False)
         print(f"Ekstraksi data kabupaten/kota selesai ({len(df_reg)} entri).")
     else:
         print("Tidak ada data kabupaten/kota yang berhasil diekstrak.")

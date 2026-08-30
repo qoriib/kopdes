@@ -184,14 +184,3 @@ def scrape_single_regency(prov_id: int,
         labeled_rows_with_province_id.append(row_with_id)
 
     return table_headers, labeled_rows_with_province_id
-
-def save_raw_dataframe(dataframe: pd.DataFrame, output_csv_path: str) -> None:
-    """
-    Saves raw scraped DataFrame directly to CSV without any data cleaning or type conversion.
-    """
-    output_directory = os.path.dirname(output_csv_path)
-    if output_directory:
-        os.makedirs(output_directory, exist_ok=True)
-
-    dataframe.to_csv(output_csv_path, index=False, encoding="utf-8")
-    print(f"[BERHASIL] Dataset RAW ({len(dataframe)} baris) disimpan ke: {output_csv_path}")
