@@ -78,16 +78,109 @@ flowchart TD
 
 ---
 
-## 🔬 Tahapan CRISP-DM
+## 🔬 Alur Kerja & Penjelasan Step Tiap Notebook
 
-| Tahap | Berkas / Notebook | Deskripsi |
-| :--- | :--- | :--- |
-| **0. Ingestion** | `src/scrape_provinces.py`, `src/scrape_regencies.py` | Scraping data provinsi & kabupaten/kota (NIB, NPWP, RAT, modal, transaksi). |
-| **1. Data Understanding** | `src/1_understanding.ipynb` | Analisis statistik deskriptif, missing values, skewness, dan korelasi fitur koperasi. |
-| **2. Data Preparation** | `src/2_preparation.ipynb` | Cleaning teks daerah, imputasi, feature engineering (rasio legalitas/keaktifan), dan *Robust/Standard Scaling*. |
-| **3. Modeling** | `src/3_modeling.ipynb` | Pencarian cluster optimal via *Elbow Method* & *Kneedle Algorithm*, fitting K-Means model, dan penyimpanan model `.pkl`. |
-| **4. Evaluation** | `src/4_evaluation.ipynb` | Validasi kualitas klasterisasi menggunakan *Silhouette Coefficient*, *Davies-Bouldin*, dan *Calinski-Harabasz*. |
-| **5. Deployment** | `src/5_deployment.ipynb` | Profiling klaster otomatis via Workers AI LLM, pembuatan berkas `seed.sql`, dan ekspor visualisasi. |
+Pipeline analitik KOPDES dibangun secara modular dalam 5 notebook Jupyter (`src/*.ipynb`) yang dijalankan otomatis secara parametrik menggunakan **Papermill** dan dipantau oleh **DVC**.
+
+```
+[0. Ingestion (Playwright)]
+       │
+       ▼
+[1_understanding.ipynb] ──> cleaned_provinces.csv, cleaned_regencies.csv, feature_evaluation.json
+       │
+       ▼
+[2_preparation.ipynb]   ──> prepared_regencies.csv, feature_selection.json
+       │
+       ▼
+[3_modeling.ipynb]      ──> kmeans_model.pkl, agglomerative_model.pkl
+       │
+       ▼
+[4_evaluation.ipynb]    ──> clustered_regencies.csv, model_comparison.json
+       │
+       ▼
+[5_deployment.ipynb]    ──> seed.sql (Cloudflare D1 Seeder & AI Interpretation)
+```
+
+---
+
+### 1. `src/1_understanding.ipynb` — Data Understanding
+Notebook ini bertujuan memahami struktur, integritas, dan korelasi data mentah hasil scraping:
+- **Pemuatan Data Mentah**: Memuat `scraped_provinces.csv` dan `scraped_regencies.csv`.
+- **Pembersihan Teks & Parsing Numerik**: Standardisasi nama kolom dan konversi format string (mata uang, titik pemisah ribuan) menjadi tipe numerik (`float64`/`int64`).
+- **Analisis Statistik Deskriptif**: Menghitung *mean, median, standard deviation, min, max,* serta persentase *missing values*.
+- **Evaluasi Fitur & Multikolinearitas**:
+  - Menghitung nilai **VIF (Variance Inflation Factor)** untuk mendeteksi multikolinearitas antar fitur.
+  - Menghitung **CV (Coefficient of Variation)** untuk menilai variabilitas sebaran data.
+  - Menghitung tingkat kemencengan data (**Skewness**).
+- **Artefak Output**:
+  - `artifact/1_understanding/cleaned_provinces.csv`
+  - `artifact/1_understanding/cleaned_regencies.csv`
+  - `artifact/1_understanding/feature_evaluation.json`
+
+---
+
+### 2. `src/2_preparation.ipynb` — Data Preparation
+Notebook ini memproses data kabupaten/kota agar siap untuk pemodelan machine learning:
+- **Injeksi Parameter**: `MAX_VIF` (default: `10.0`), `MIN_CV` (default: `10.0`), `SKEWNESS_THRESHOLD` (default: `2.0`).
+- **Imputasi Nilai Hilang (Missing Values)**: Menggunakan algoritma **k-Nearest Neighbors Imputation (`KNNImputer`, $k=5$)** untuk menjaga pola kovarian data.
+- **Rule-Based Feature Selection**:
+  - Mengeliminasi fitur dengan multikolinearitas tinggi ($VIF \ge \text{MAX\_VIF}$) dan variabilitas rendah ($CV < \text{MIN\_CV}$) berdasarkan metadata `feature_evaluation.json`.
+- **Transformasi Logaritmik**: Menerapkan transformasi $\log(1+x)$ (`np.log1p`) pada fitur yang memiliki skewness ekstrem ($|\text{skew}| > \text{SKEWNESS\_THRESHOLD}$).
+- **Standardisasi Fitur**: Menggunakan `StandardScaler` untuk menghasilkan kolom fitur berskala baku (`scaled_*`).
+- **Penyimpanan Gabungan Data**: Menggabungkan seluruh kolom awal terimputasi dengan kolom fitur terstandarisasi.
+- **Artefak Output**:
+  - `artifact/2_preparation/prepared_regencies.csv`
+  - `artifact/2_preparation/feature_selection.json`
+
+---
+
+### 3. `src/3_modeling.ipynb` — Modeling
+Notebook ini menentukan jumlah klaster optimal dan melatih model klasterisasi:
+- **Injeksi Parameter**: `K_MIN` (default: `2`), `K_MAX` (default: `10`), `FALLBACK_K` (default: `4`), `RANDOM_STATE` (default: `42`).
+- **Optimasi Nilai $K$ Optimal**:
+  - **K-Means**: Menghitung WCSS (*Within-Cluster Sum of Squares* / Inersia) pada rentang $K \in [K\_MIN, K\_MAX]$ dan mendeteksi titik siku (*knee point*) dengan `kneed.KneeLocator`.
+  - **Agglomerative Clustering**: Mengoptimalkan $K$ berdasarkan maksimasi nilai *Silhouette Score* serta matriks hierarki *Ward Linkage*.
+- **Pelatihan & Penyimpanan Model Individual**:
+  - Melatih model **K-Means** dan **Agglomerative Clustering** pada $K$ optimal masing-masing.
+  - Menyimpan setiap model terlatih secara terpisah ke direktori `artifact/3_modeling/`.
+- **Artefak Output**:
+  - `artifact/3_modeling/kmeans_model.pkl`
+  - `artifact/3_modeling/agglomerative_model.pkl`
+
+---
+
+### 4. `src/4_evaluation.ipynb` — Evaluation
+Notebook ini memuat model terlatih, mengevaluasi perbandingan metrik, memilih model terbaik, dan menghasilkan data terklaster:
+- **Injeksi Parameter**: `TARGET_SILHOUETTE_MIN` (default: `0.50`).
+- **Pemuatan Model & Komparasi Metrik**:
+  - Memuat model `artifact/3_modeling/kmeans_model.pkl` dan `artifact/3_modeling/agglomerative_model.pkl`.
+  - Menghitung metrik validasi internal: *Silhouette Coefficient*, *Calinski-Harabasz Index*, dan *Davies-Bouldin Index*.
+- **Pemilihan Model Terbaik & Penetapan Klaster**:
+  - Memilih model dengan performa terbaik (*best model selection*).
+  - Membentuk kolom `cluster_label` dan menyimpan dataset hasil klasterisasi.
+  - Menyimpan ringkasan komparasi ke `model_comparison.json`.
+- **Eksplorasi Visual & Distribusi**:
+  - Proyeksi 2D Klaster menggunakan PCA (*Principal Component Analysis*).
+  - Distribusi jumlah anggota per klaster (tabel dan grafik batang).
+- **Artefak Output**:
+  - `artifact/4_evaluation/clustered_regencies.csv`
+  - `artifact/4_evaluation/model_comparison.json`
+- **Metrik Target**:
+  - Membandingkan skor terhadap target batas kelayakan klasterisasi (`TARGET_SILHOUETTE_MIN`).
+
+---
+
+### 5. `src/5_deployment.ipynb` — Deployment & AI Interpretation
+Notebook ini mengintegrasikan hasil analitik ke database operasional dan menghasilkan interpretasi cerdas:
+- **Injeksi Parameter**: `MODEL` (`@cf/openai/gpt-oss-120b`), `MAX_TOKENS` (`3000`).
+- **Pemetaan Spasial (GeoJSON)**:
+  - Menggabungkan data klaster kabupaten/kota dengan referensi geometri dan kode wilayah dari `province.json` dan `regency.json`.
+- **Interpretasi Klaster via Workers AI (LLM)**:
+  - Menghasilkan profil karakteristik dan rekomendasi kebijakan strategis untuk masing-masing klaster secara otomatis menggunakan LLM.
+- **Pembangkitan Seeder Database (`seed.sql`)**:
+  - Menghasilkan skrip DDL/DML SQL untuk seeding tabel `provinces`, `regencies`, dan metadata klaster ke **Cloudflare D1 Database**.
+- **Artefak Output**:
+  - `artifact/5_deployment/seed.sql`
 
 ---
 
@@ -100,12 +193,13 @@ kopdes/
 │   └── workflows/
 │       └── main.yml           # CI/CD End-to-End Orchestration Workflow
 ├── .dvc/                      # Konfigurasi DVC & R2 Remote Storage
-├── data/                      # Data storage per tahapan CRISP-DM
+├── artifact/                  # Artifact storage per tahapan CRISP-DM
 │   ├── scrape/                # Data mentah hasil scraping
-│   ├── 2_preparation/         # Data bersih & fitur ternormalisasi
-│   ├── 3_modeling/            # Data hasil clustering regencies
+│   ├── 1_understanding/       # Data bersih & metadata evaluasi fitur
+│   ├── 2_preparation/         # Data terimputasi & fitur terstandarisasi
+│   ├── 3_modeling/            # Model tersimpan (kmeans_model.pkl, agglomerative_model.pkl)
+│   ├── 4_evaluation/          # Data hasil klasterisasi (clustered_regencies.csv) & model_comparison.json
 │   └── 5_deployment/          # Berkas seed.sql database D1
-├── models/                    # Model machine learning tersimpan (kmeans_model.pkl)
 ├── src/                       # Source code pipeline analitik
 │   ├── scrape_util.py         # Modul utilitas scraping & parser tabel HTML
 │   ├── scrape_provinces.py    # Script scraping data tingkat provinsi
@@ -204,7 +298,7 @@ npm install
 npx wrangler d1 migrations apply simkopdes_db --local
 
 # Isi data awal database dari hasil pipeline
-npx wrangler d1 execute simkopdes_db --local --file=../../data/5_deployment/seed.sql
+npx wrangler d1 execute simkopdes_db --local --file=../../artifact/5_deployment/seed.sql
 
 # Jalankan server backend lokal
 npm run dev

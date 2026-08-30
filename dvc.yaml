@@ -4,71 +4,76 @@ stages:
     deps:
       - src/1_understanding.ipynb
       - src/config.py
-      - data/scrape/scraped_regencies.csv
-      - data/scrape/scraped_provinces.csv
+      - artifact/scrape/scraped_regencies.csv
+      - artifact/scrape/scraped_provinces.csv
     outs:
       - src/outs/1_understanding.ipynb
-      - data/1_understanding/cleaned_provinces.csv
-      - data/1_understanding/cleaned_regencies.csv
-      - data/1_understanding/feature_evaluation.json
+      - artifact/1_understanding/cleaned_provinces.csv
+      - artifact/1_understanding/cleaned_regencies.csv
+      - artifact/1_understanding/feature_evaluation.json
 
   preparation:
     cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb -p MAX_VIF ${preparation.max_vif} -p MIN_CV ${preparation.min_cv} -p SKEWNESS_THRESHOLD ${preparation.skewness_threshold}
     deps:
       - src/2_preparation.ipynb
       - src/config.py
-      - data/1_understanding/cleaned_regencies.csv
-      - data/1_understanding/feature_evaluation.json
+      - artifact/1_understanding/cleaned_regencies.csv
+      - artifact/1_understanding/feature_evaluation.json
     params:
       - preparation.max_vif
       - preparation.min_cv
       - preparation.skewness_threshold
     outs:
       - src/outs/2_preparation.ipynb
-      - data/2_preparation/prepared_regencies.csv
-      - data/2_preparation/feature_selection.json
+      - artifact/2_preparation/prepared_regencies.csv
+      - artifact/2_preparation/feature_selection.json
 
   modeling:
-    cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN ${modeling.k_min} -p K_MAX ${modeling.k_max} -p RANDOM_STATE ${modeling.random_state}
+    cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN ${modeling.k_min} -p K_MAX ${modeling.k_max} -p FALLBACK_K ${modeling.fallback_k} -p RANDOM_STATE ${modeling.random_state}
     deps:
       - src/3_modeling.ipynb
       - src/config.py
-      - data/2_preparation/prepared_regencies.csv
-      - data/2_preparation/feature_selection.json
+      - artifact/2_preparation/prepared_regencies.csv
+      - artifact/2_preparation/feature_selection.json
     params:
       - modeling.k_min
       - modeling.k_max
+      - modeling.fallback_k
       - modeling.random_state
     outs:
       - src/outs/3_modeling.ipynb
-      - models/kmeans_model.pkl
-      - data/3_modeling/clustered_regencies.csv
+      - artifact/3_modeling/kmeans_model.pkl
+      - artifact/3_modeling/agglomerative_model.pkl
 
   evaluation:
     cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb -p TARGET_SILHOUETTE_MIN ${evaluation.target_silhouette_min}
     deps:
       - src/4_evaluation.ipynb
       - src/config.py
-      - data/3_modeling/clustered_regencies.csv
-      - data/2_preparation/feature_selection.json
+      - artifact/2_preparation/prepared_regencies.csv
+      - artifact/2_preparation/feature_selection.json
+      - artifact/3_modeling/kmeans_model.pkl
+      - artifact/3_modeling/agglomerative_model.pkl
     params:
       - evaluation.target_silhouette_min
     outs:
       - src/outs/4_evaluation.ipynb
+      - artifact/4_evaluation/clustered_regencies.csv
+      - artifact/4_evaluation/model_comparison.json
 
   deployment:
     cmd: papermill src/5_deployment.ipynb src/outs/5_deployment.ipynb -p MODEL "${deployment.model}" -p MAX_TOKENS ${deployment.max_tokens}
     deps:
       - src/5_deployment.ipynb
       - src/config.py
-      - data/1_understanding/cleaned_provinces.csv
-      - data/3_modeling/clustered_regencies.csv
-      - data/2_preparation/feature_selection.json
-      - data/5_deployment/province.json
-      - data/5_deployment/regency.json
+      - artifact/1_understanding/cleaned_provinces.csv
+      - artifact/4_evaluation/clustered_regencies.csv
+      - artifact/2_preparation/feature_selection.json
+      - artifact/5_deployment/province.json
+      - artifact/5_deployment/regency.json
     params:
       - deployment.model
       - deployment.max_tokens
     outs:
       - src/outs/5_deployment.ipynb
-      - data/5_deployment/seed.sql
+      - artifact/5_deployment/seed.sql

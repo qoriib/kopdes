@@ -4,13 +4,14 @@ import os
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
 
-DATA_DIR = os.path.join(BASE_DIR, "data")
-SCRAPE_DIR = os.path.join(DATA_DIR, "scrape")
-UNDERSTANDING_DIR = os.path.join(DATA_DIR, "1_understanding")
-PREPARATION_DIR = os.path.join(DATA_DIR, "2_preparation")
-MODELING_DIR = os.path.join(DATA_DIR, "3_modeling")
-DEPLOYMENT_DIR = os.path.join(DATA_DIR, "5_deployment")
-MODELS_DIR = os.path.join(BASE_DIR, "models")
+ARTIFACT_DIR = os.path.join(BASE_DIR, "artifact")
+DATA_DIR = ARTIFACT_DIR
+SCRAPE_DIR = os.path.join(ARTIFACT_DIR, "scrape")
+UNDERSTANDING_DIR = os.path.join(ARTIFACT_DIR, "1_understanding")
+PREPARATION_DIR = os.path.join(ARTIFACT_DIR, "2_preparation")
+MODELING_DIR = os.path.join(ARTIFACT_DIR, "3_modeling")
+EVALUATION_DIR = os.path.join(ARTIFACT_DIR, "4_evaluation")
+DEPLOYMENT_DIR = os.path.join(ARTIFACT_DIR, "5_deployment")
 
 # Data File Paths per Stage
 RAW_PROVINCES_CSV = os.path.join(SCRAPE_DIR, "scraped_provinces.csv")
@@ -22,8 +23,13 @@ GEO_REGENCIES_JSON = os.path.join(DEPLOYMENT_DIR, "regency.json")
 
 PREPARED_REGENCIES_CSV = os.path.join(PREPARATION_DIR, "prepared_regencies.csv")
 
-CLUSTERED_REGENCIES_CSV = os.path.join(MODELING_DIR, "clustered_regencies.csv")
-MODEL_PKL = os.path.join(MODELS_DIR, "kmeans_model.pkl")
+# Models (stored in artifact/3_modeling)
+KMEANS_MODEL_PKL = os.path.join(MODELING_DIR, "kmeans_model.pkl")
+AGGLOMERATIVE_MODEL_PKL = os.path.join(MODELING_DIR, "agglomerative_model.pkl")
+
+# Evaluation & Output Paths
+CLUSTERED_REGENCIES_CSV = os.path.join(EVALUATION_DIR, "clustered_regencies.csv")
+MODEL_COMPARISON_JSON = os.path.join(EVALUATION_DIR, "model_comparison.json")
 SEED_SQL = os.path.join(DEPLOYMENT_DIR, "seed.sql")
 
 # Raw Scraped Column Mappings

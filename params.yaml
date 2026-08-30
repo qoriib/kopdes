@@ -6,6 +6,7 @@ preparation:
 modeling:
   k_min: 2
   k_max: 10
+  fallback_k: 3
   random_state: 42
 
 evaluation:

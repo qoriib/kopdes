@@ -50,8 +50,8 @@ jobs:
         with:
           name: scrape-files
           path: |
-            data/scrape/scraped_provinces.csv
-            data/scrape/scraped_regencies.csv
+            artifact/scrape/scraped_provinces.csv
+            artifact/scrape/scraped_regencies.csv
 
   pipeline:
     name: Run CRISP-DM DVC Pipeline
@@ -118,7 +118,7 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: 'web/backend'
-          command: d1 execute simkopdes_db --remote --file=../../data/5_deployment/seed.sql
+          command: d1 execute simkopdes_db --remote --file=../../artifact/5_deployment/seed.sql
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -137,24 +137,31 @@ jobs:
         with:
           name: prepared-files
           path: |
-            data/2_preparation/cleaned_provinces.csv
-            data/2_preparation/cleaned_regencies.csv
-            data/2_preparation/scaled_features.csv
+            artifact/2_preparation/prepared_regencies.csv
+            artifact/2_preparation/feature_selection.json
 
       - name: Upload Modeling Files
         uses: actions/upload-artifact@v7
         with:
           name: modeling-files
           path: |
-            models/kmeans_model.pkl
-            data/3_modeling/clustered_regencies.csv
+            artifact/3_modeling/kmeans_model.pkl
+            artifact/3_modeling/agglomerative_model.pkl
+
+      - name: Upload Evaluation Files
+        uses: actions/upload-artifact@v7
+        with:
+          name: evaluation-files
+          path: |
+            artifact/4_evaluation/clustered_regencies.csv
+            artifact/4_evaluation/model_comparison.json
 
       - name: Upload Deployment Files
         uses: actions/upload-artifact@v7
         with:
           name: deployment-files
           path: |
-            data/5_deployment/seed.sql
+            artifact/5_deployment/seed.sql
 
   deploy_backend:
     name: Deploy Backend
