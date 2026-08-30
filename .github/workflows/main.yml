@@ -69,7 +69,7 @@ jobs:
       - name: Setup CML
         uses: iterative/setup-cml@v2
 
-      - name: Generate Reports & Publish to GitHub Summary & CML
+      - name: Publish Reports & Plots to GitHub Summary via CML
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -77,33 +77,23 @@ jobs:
             if [ -f "src/outs/${stage}.ipynb" ]; then
               echo "Converting src/outs/${stage}.ipynb to Markdown..."
               jupyter nbconvert --to markdown --no-input "src/outs/${stage}.ipynb" --output-dir src/outs
+              
+              if [ -d "src/outs/${stage}_files" ]; then
+                for img in src/outs/${stage}_files/*.png; do
+                  if [ -f "$img" ]; then
+                    img_url=$(cml publish "$img")
+                    filename=$(basename "$img")
+                    sed -i "s|${stage}_files/${filename}|${img_url}|g" "src/outs/${stage}.md"
+                  fi
+                done
+              fi
+              
+              if [ -f "src/outs/${stage}.md" ]; then
+                cat "src/outs/${stage}.md" >> $GITHUB_STEP_SUMMARY
+                echo -e "\n\n---\n\n" >> $GITHUB_STEP_SUMMARY
+              fi
             fi
           done
-
-          python -c '
-          import os, glob, base64
-          for stage in ["1_understanding", "3_modeling", "4_evaluation"]:
-              md_file = f"src/outs/{stage}.md"
-              if not os.path.exists(md_file):
-                  continue
-              with open(md_file, "r", encoding="utf-8") as f:
-                  content = f.read()
-              for img in glob.glob(f"src/outs/{stage}_files/*.png"):
-                  filename = os.path.basename(img)
-                  with open(img, "rb") as img_f:
-                      b64 = base64.b64encode(img_f.read()).decode("utf-8")
-                  content = content.replace(f"{stage}_files/{filename}", f"data:image/png;base64,{b64}")
-              with open(md_file, "w", encoding="utf-8") as f:
-                  f.write(content)
-          '
-
-          cd src/outs
-          cat 1_understanding.md 3_modeling.md 4_evaluation.md > summary_report.md 2>/dev/null || true
-          if [ -f "summary_report.md" ]; then
-            cat summary_report.md >> $GITHUB_STEP_SUMMARY
-            cml comment create summary_report.md
-          fi
-          cd ../..
 
       - name: Apply Remote Database Migrations
         uses: cloudflare/wrangler-action@v4
