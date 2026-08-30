@@ -1,6 +1,6 @@
 preparation:
-  max_vif: 10.0
-  min_cv: 10.0
+  max_vif: 5.0
+  min_cv: 15.0
   skewness_threshold: 2.0
 
 modeling:
