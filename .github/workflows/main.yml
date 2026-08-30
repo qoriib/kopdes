@@ -19,7 +19,7 @@ env:
   CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
   # R2 Storage Configuration
-  R2_BUCKET: kopdes
+  R2_BUCKET: kopdes-cml
   R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
 
 jobs:
