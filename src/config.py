@@ -32,6 +32,7 @@ CLUSTERED_REGENCIES_CSV = os.path.join(EVALUATION_DIR, "clustered_regencies.csv"
 MODEL_COMPARISON_JSON = os.path.join(EVALUATION_DIR, "model_comparison.json")
 INTERPRETATION_JSON = os.path.join(DEPLOYMENT_DIR, "interpretation.json")
 AI_REPORT_MD = os.path.join(DEPLOYMENT_DIR, "ai_report.md")
+SCHEMA_SQL = os.path.join(DEPLOYMENT_DIR, "schema.sql")
 SEED_SQL = os.path.join(DEPLOYMENT_DIR, "seed.sql")
 
 # Raw Scraped Column Mappings

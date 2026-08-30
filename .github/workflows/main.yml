@@ -110,13 +110,13 @@ jobs:
       - name: Generate Cloudflare D1 Database Seed SQL
         run: python src/deploy_store.py
 
-      - name: Apply Remote Database Migrations
+      - name: Apply Remote Database Schema
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           workingDirectory: 'web/backend'
-          command: d1 migrations apply simkopdes_db --remote
+          command: d1 execute simkopdes_db --remote --file=../../artifact/deployment/schema.sql
 
       - name: Seed Remote Database
         uses: cloudflare/wrangler-action@v4

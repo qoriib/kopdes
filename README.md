@@ -291,8 +291,8 @@ dvc repro
 cd web/backend
 npm install
 
-# Terapkan migrasi skema database D1 secara lokal
-npx wrangler d1 migrations apply simkopdes_db --local
+# Terapkan skema database D1 secara lokal
+npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/schema.sql
 
 # Isi data awal database dari hasil pipeline
 npx wrangler d1 execute simkopdes_db --local --file=../../artifact/deployment/seed.sql

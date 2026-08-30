@@ -2,7 +2,7 @@ import os
 import json
 import sqlite3
 import pandas as pd
-from config import SEED_SQL, INTERPRETATION_JSON, AI_REPORT_MD
+from config import SCHEMA_SQL, SEED_SQL, INTERPRETATION_JSON, AI_REPORT_MD
 from deploy_util import (
     load_merged_deployment_data,
     prepare_provinces_for_db,
@@ -10,7 +10,7 @@ from deploy_util import (
 )
 from deploy_interpret import generate_cluster_interpretation
 
-SCHEMA_DDL = """
+DEFAULT_SCHEMA_DDL = """
 CREATE TABLE IF NOT EXISTS provinces (
     id INTEGER PRIMARY KEY,
     province_name TEXT NOT NULL,
@@ -49,6 +49,11 @@ CREATE TABLE IF NOT EXISTS regencies (
     longitude REAL DEFAULT 0.0
 );
 
+CREATE TABLE IF NOT EXISTS metrics (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS ai_report (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     report_text TEXT NOT NULL,
@@ -57,27 +62,46 @@ CREATE TABLE IF NOT EXISTS ai_report (
 """
 
 
+def ensure_schema_file() -> str:
+    """
+    Memastikan file DDL schema.sql tersedia di artifact/deployment/schema.sql.
+    """
+    if os.path.exists(SCHEMA_SQL):
+        with open(SCHEMA_SQL, "r", encoding="utf-8") as f:
+            return f.read()
+    else:
+        os.makedirs(os.path.dirname(SCHEMA_SQL), exist_ok=True)
+        with open(SCHEMA_SQL, "w", encoding="utf-8") as f:
+            f.write(DEFAULT_SCHEMA_DDL.strip())
+        return DEFAULT_SCHEMA_DDL
+
+
 def build_sqlite_seed_database(
     df_prov: pd.DataFrame,
     df_reg: pd.DataFrame,
     labels_map: dict,
-    full_report_text: str
+    full_report_text: str,
+    schema_ddl: str,
 ) -> sqlite3.Connection:
     """
     Membangun in-memory database SQLite dan mengisi data tabel menggunakan Pandas to_sql.
     """
     conn = sqlite3.connect(":memory:")
     conn.execute("PRAGMA foreign_keys = ON;")
-    conn.executescript(SCHEMA_DDL)
+    conn.executescript(schema_ddl)
 
     # 1. Siapkan DataFrame terstruktur
     df_prov_db = prepare_provinces_for_db(df_prov)
     df_reg_db = prepare_regencies_for_db(df_reg)
-    df_report_db = pd.DataFrame([{
-        "id": 1,
-        "report_text": full_report_text,
-        "labels_json": json.dumps(labels_map, ensure_ascii=False)
-    }])
+    df_report_db = pd.DataFrame(
+        [
+            {
+                "id": 1,
+                "report_text": full_report_text,
+                "labels_json": json.dumps(labels_map, ensure_ascii=False),
+            }
+        ]
+    )
 
     # 2. Masukkan data ke SQLite melalui Pandas to_sql
     df_prov_db.to_sql("provinces", conn, if_exists="append", index=False)
@@ -89,17 +113,28 @@ def build_sqlite_seed_database(
 
 def export_seed_sql_from_sqlite(conn: sqlite3.Connection, output_path: str):
     """
-    Mengekspor seluruh skema dan data dari koneksi SQLite menjadi file SQL seed resmi.
+    Mengekspor data dari koneksi SQLite menjadi file SQL seed resmi.
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("-- Cloudflare D1 SQL Seed Generated via Pandas & SQLite3\n")
+        f.write("BEGIN TRANSACTION;\n")
         for statement in conn.iterdump():
-            f.write(f"{statement}\n")
+            if statement.startswith("INSERT INTO") or statement.startswith(
+                "DELETE FROM"
+            ):
+                f.write(f"{statement}\n")
+        f.write("COMMIT;\n")
 
 
 def run_deploy_store():
-    print("=== Menjalankan Modul Pembangkitan Database Seed SQL (Pandas + SQLite3) ===")
+    print(
+        "=== Menjalankan Modul Pembangkitan Database Seed SQL (Pandas +"
+        " SQLite3) ==="
+    )
+    schema_ddl = ensure_schema_file()
+    print(f"Skema DDL Database D1 dimuat dari : {SCHEMA_SQL}")
+
     df_prov, df_reg, selected_features = load_merged_deployment_data()
 
     # 1. Pemuatan atau pembangkitan interpretasi klaster
@@ -110,10 +145,14 @@ def run_deploy_store():
             interp_data = json.load(f)
             labels_map = interp_data.get("labels_map", {})
     else:
-        labels_map, full_report_text, _ = generate_cluster_interpretation(df_reg, selected_features)
+        labels_map, full_report_text, _ = generate_cluster_interpretation(
+            df_reg, selected_features
+        )
 
     # 2. Bangun database in-memory & ekspor SQL
-    conn = build_sqlite_seed_database(df_prov, df_reg, labels_map, full_report_text)
+    conn = build_sqlite_seed_database(
+        df_prov, df_reg, labels_map, full_report_text, schema_ddl
+    )
     export_seed_sql_from_sqlite(conn, SEED_SQL)
 
     # 3. Verifikasi jumlah baris langsung dari query SQLite

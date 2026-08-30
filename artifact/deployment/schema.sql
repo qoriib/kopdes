@@ -1,10 +1,7 @@
--- Recreate schema to ensure all CRISP-DM research indicator columns exist
-DROP TABLE IF EXISTS ai_report;
-DROP TABLE IF EXISTS metrics;
-DROP TABLE IF EXISTS regencies;
-DROP TABLE IF EXISTS provinces;
+-- Cloudflare D1 Database Schema
+-- Generated & Managed by CRISP-DM Deployment Pipeline
 
-CREATE TABLE provinces (
+CREATE TABLE IF NOT EXISTS provinces (
     id INTEGER PRIMARY KEY,
     province_name TEXT NOT NULL,
     total_koperasi INTEGER DEFAULT 0,
@@ -22,7 +19,7 @@ CREATE TABLE provinces (
     longitude REAL DEFAULT 0.0
 );
 
-CREATE TABLE regencies (
+CREATE TABLE IF NOT EXISTS regencies (
     id INTEGER PRIMARY KEY,
     province_id INTEGER NOT NULL REFERENCES provinces(id) ON DELETE CASCADE,
     regency_name TEXT NOT NULL,
@@ -42,12 +39,12 @@ CREATE TABLE regencies (
     longitude REAL DEFAULT 0.0
 );
 
-CREATE TABLE metrics (
+CREATE TABLE IF NOT EXISTS metrics (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL
 );
 
-CREATE TABLE ai_report (
+CREATE TABLE IF NOT EXISTS ai_report (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     report_text TEXT NOT NULL,
     labels_json TEXT NOT NULL
