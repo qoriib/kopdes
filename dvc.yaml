@@ -10,28 +10,33 @@ stages:
       - src/outs/1_understanding.ipynb
       - data/1_understanding/cleaned_provinces.csv
       - data/1_understanding/cleaned_regencies.csv
+      - data/1_understanding/feature_evaluation.json
 
   preparation:
-    cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb
+    cmd: papermill src/2_preparation.ipynb src/outs/2_preparation.ipynb -p MAX_VIF ${preparation.max_vif} -p MIN_CV ${preparation.min_cv} -p SKEWNESS_THRESHOLD ${preparation.skewness_threshold}
     deps:
       - src/2_preparation.ipynb
       - src/config.py
       - data/1_understanding/cleaned_provinces.csv
       - data/1_understanding/cleaned_regencies.csv
-      - data/2_preparation/province.json
-      - data/2_preparation/regency.json
+      - data/1_understanding/feature_evaluation.json
+    params:
+      - preparation.max_vif
+      - preparation.min_cv
+      - preparation.skewness_threshold
     outs:
       - src/outs/2_preparation.ipynb
-      - data/2_preparation/cleaned_provinces.csv
-      - data/2_preparation/cleaned_regencies.csv
+      - data/2_preparation/prepared_provinces.csv
+      - data/2_preparation/prepared_regencies.csv
       - data/2_preparation/scaled_features.csv
+      - data/2_preparation/feature_selection.json
 
   modeling:
     cmd: papermill src/3_modeling.ipynb src/outs/3_modeling.ipynb -p K_MIN ${modeling.k_min} -p K_MAX ${modeling.k_max} -p RANDOM_STATE ${modeling.random_state}
     deps:
       - src/3_modeling.ipynb
       - src/config.py
-      - data/2_preparation/cleaned_regencies.csv
+      - data/2_preparation/prepared_regencies.csv
       - data/2_preparation/scaled_features.csv
     params:
       - modeling.k_min
@@ -59,8 +64,11 @@ stages:
     deps:
       - src/5_deployment.ipynb
       - src/config.py
-      - data/2_preparation/cleaned_provinces.csv
+      - data/2_preparation/prepared_provinces.csv
       - data/3_modeling/clustered_regencies.csv
+      - data/2_preparation/feature_selection.json
+      - data/5_deployment/province.json
+      - data/5_deployment/regency.json
     params:
       - deployment.model
       - deployment.max_tokens

@@ -1,5 +1,4 @@
-/cleaned_provinces.csv
-/cleaned_regencies.csv
+/prepared_provinces.csv
+/prepared_regencies.csv
 /scaled_features.csv
-/province.json
-/regency.json
+/feature_selection.json

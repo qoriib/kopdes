@@ -17,16 +17,15 @@ RAW_PROVINCES_CSV = os.path.join(SCRAPE_DIR, "scraped_provinces.csv")
 RAW_REGENCIES_CSV = os.path.join(SCRAPE_DIR, "scraped_regencies.csv")
 UNDERSTANDING_PROVINCES_CSV = os.path.join(UNDERSTANDING_DIR, "cleaned_provinces.csv")
 UNDERSTANDING_REGENCIES_CSV = os.path.join(UNDERSTANDING_DIR, "cleaned_regencies.csv")
-GEO_PROVINCES_JSON = os.path.join(PREPARATION_DIR, "province.json")
-GEO_REGENCIES_JSON = os.path.join(PREPARATION_DIR, "regency.json")
+GEO_PROVINCES_JSON = os.path.join(DEPLOYMENT_DIR, "province.json")
+GEO_REGENCIES_JSON = os.path.join(DEPLOYMENT_DIR, "regency.json")
 
-CLEANED_PROVINCES_CSV = os.path.join(PREPARATION_DIR, "cleaned_provinces.csv")
-CLEANED_REGENCIES_CSV = os.path.join(PREPARATION_DIR, "cleaned_regencies.csv")
+PREPARED_PROVINCES_CSV = os.path.join(PREPARATION_DIR, "prepared_provinces.csv")
+PREPARED_REGENCIES_CSV = os.path.join(PREPARATION_DIR, "prepared_regencies.csv")
 SCALED_FEATURES_CSV = os.path.join(PREPARATION_DIR, "scaled_features.csv")
 
 CLUSTERED_REGENCIES_CSV = os.path.join(MODELING_DIR, "clustered_regencies.csv")
 MODEL_PKL = os.path.join(MODELS_DIR, "kmeans_model.pkl")
-
 SEED_SQL = os.path.join(DEPLOYMENT_DIR, "seed.sql")
 
 # Raw Scraped Column Mappings
@@ -60,17 +59,6 @@ REGENCY_COLUMN_MAPPING = {
     'Nilai Transaksi (2026)': 'nilai_transaksi'
 }
 
-# Shared Feature Definitions
+FEATURE_EVALUATION_JSON = os.path.join(UNDERSTANDING_DIR, "feature_evaluation.json")
+FEATURE_SELECTION_JSON = os.path.join(PREPARATION_DIR, "feature_selection.json")
 
-FEATURE_COLUMNS = [
-    'total_koperasi',
-    'rasio_nib',
-    'rasio_npwp',
-    'rasio_rat',
-    'simpanan_pokok',
-    'simpanan_wajib',
-    'volume_transaksi',
-    'nilai_transaksi'
-]
-
-SELECTED_FEATURES = FEATURE_COLUMNS

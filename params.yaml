@@ -1,3 +1,8 @@
+preparation:
+  max_vif: 10.0
+  min_cv: 10.0
+  skewness_threshold: 2.0
+
 modeling:
   k_min: 2
   k_max: 10
