@@ -9,8 +9,6 @@ modeling:
   fallback_k: 3
   random_state: 42
 
-evaluation:
-  target_silhouette_min: 0.50
 
 deployment:
   model: "@cf/openai/gpt-oss-120b"

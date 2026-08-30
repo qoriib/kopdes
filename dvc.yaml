@@ -46,7 +46,7 @@ stages:
       - artifact/3_modeling/agglomerative_model.pkl
 
   evaluation:
-    cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb -p TARGET_SILHOUETTE_MIN ${evaluation.target_silhouette_min}
+    cmd: papermill src/4_evaluation.ipynb src/outs/4_evaluation.ipynb
     deps:
       - src/4_evaluation.ipynb
       - src/config.py
@@ -54,8 +54,6 @@ stages:
       - artifact/2_preparation/feature_selection.json
       - artifact/3_modeling/kmeans_model.pkl
       - artifact/3_modeling/agglomerative_model.pkl
-    params:
-      - evaluation.target_silhouette_min
     outs:
       - src/outs/4_evaluation.ipynb
       - artifact/4_evaluation/clustered_regencies.csv

@@ -151,7 +151,6 @@ Notebook ini menentukan jumlah klaster optimal dan melatih model klasterisasi:
 
 ### 4. `src/4_evaluation.ipynb` — Evaluation
 Notebook ini memuat model terlatih, mengevaluasi perbandingan metrik, memilih model terbaik, dan menghasilkan data terklaster:
-- **Injeksi Parameter**: `TARGET_SILHOUETTE_MIN` (default: `0.50`).
 - **Pemuatan Model & Komparasi Metrik**:
   - Memuat model `artifact/3_modeling/kmeans_model.pkl` dan `artifact/3_modeling/agglomerative_model.pkl`.
   - Menghitung metrik validasi internal: *Silhouette Coefficient*, *Calinski-Harabasz Index*, dan *Davies-Bouldin Index*.
@@ -165,8 +164,6 @@ Notebook ini memuat model terlatih, mengevaluasi perbandingan metrik, memilih mo
 - **Artefak Output**:
   - `artifact/4_evaluation/clustered_regencies.csv`
   - `artifact/4_evaluation/model_comparison.json`
-- **Metrik Target**:
-  - Membandingkan skor terhadap target batas kelayakan klasterisasi (`TARGET_SILHOUETTE_MIN`).
 
 ---
 
