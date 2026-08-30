@@ -10,8 +10,17 @@ permissions:
   issues: write
 
 env:
+  # Cloudflare R2 / S3 Credentials
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  # Cloudflare Account & API Credentials (used by DVC, Wrangler, D1 & Pages)
+  CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+  # R2 Storage Configuration
+  R2_BUCKET: kopdes
+  R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
 
 jobs:
   scrape:
@@ -59,20 +68,29 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run DVC Pipeline
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: dvc repro
 
-      - name: Generate & Post CML Reports
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate Reports & Upload Plots to R2
         run: |
+          upload_to_r2() {
+            local file_path="$1"
+            local filename=$(basename "$file_path")
+            local key="reports/${filename}"
+            local endpoint="https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com"
+            local base_url="${R2_PUBLIC_URL:-https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}}"
+
+            aws s3 cp "$file_path" "s3://${R2_BUCKET}/${key}" \
+              --endpoint-url "$endpoint" \
+              --content-type "image/png" > /dev/null
+
+            echo "${base_url}/${key}"
+          }
+
           for stage in 1_understanding 3_modeling 4_evaluation; do
             jupyter nbconvert --to markdown --no-input src/outs/${stage}.ipynb --output-dir src/outs
             for img in src/outs/${stage}_files/*.png; do
               [ -f "$img" ] || continue
-              url=$(cml publish "$img")
+              url=$(upload_to_r2 "$img")
               filename=$(basename "$img")
               sed -i "s|](${stage}_files/${filename})|]($url)|g" src/outs/${stage}.md
             done
@@ -80,20 +98,20 @@ jobs:
           done
 
       - name: Apply Remote Database Migrations
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/backend
-          npx wrangler d1 migrations apply simkopdes_db --remote
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: 'web/backend'
+          command: d1 migrations apply simkopdes_db --remote
 
       - name: Seed Remote Database
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/backend
-          npx wrangler d1 execute simkopdes_db --remote --file=../../data/5_deployment/seed.sql
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: 'web/backend'
+          command: d1 execute simkopdes_db --remote --file=../../data/5_deployment/seed.sql
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -149,12 +167,12 @@ jobs:
           npm ci
 
       - name: Deploy Worker
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/backend
-          npx wrangler deploy --minify
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: 'web/backend'
+          command: deploy --minify
 
   deploy_frontend:
     name: Deploy Frontend
@@ -179,9 +197,9 @@ jobs:
           npm run build
 
       - name: Deploy to Cloudflare Pages
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-        run: |
-          cd web/frontend
-          npx wrangler pages deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: 'web/frontend'
+          command: pages deploy
