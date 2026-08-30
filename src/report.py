@@ -1,5 +1,6 @@
 import os
 import glob
+import re
 import subprocess
 import boto3
 
@@ -16,7 +17,7 @@ def get_s3_client():
 def export_and_upload_reports():
     stages = ["1_understanding", "3_modeling", "4_evaluation"]
     account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
-    bucket = os.environ.get("R2_BUCKET", "kopdes-cml")
+    bucket = os.environ.get("R2_BUCKET", "kopdes")
     public_url = os.environ.get("R2_PUBLIC_URL") or f"https://{account_id}.r2.cloudflarestorage.com/{bucket}"
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
 
@@ -53,6 +54,13 @@ def export_and_upload_reports():
                 ExtraArgs={"ContentType": "image/png"}
             )
             image_url = f"{public_url}/{key}"
+
+            # Replace markdown image syntax ![alt](path) with HTML <img> tag
+            img_pattern = rf'!\[(.*?)\]\({re.escape(f"{stage}_files/{filename}")}\)'
+            img_tag = f'<img src="{image_url}" alt="{filename}" />'
+            content = re.sub(img_pattern, img_tag, content)
+
+            # Fallback for any other remaining relative path references
             content = content.replace(f"{stage}_files/{filename}", image_url)
 
         with open(md_file, "w", encoding="utf-8") as f:
