@@ -1,48 +1,58 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from config import (
     RAW_PROVINCES_CSV,
-    RAW_REGENCIES_CSV,
-    GEO_PROVINCES_JSON
+    RAW_REGENCIES_CSV
 )
 from scrape_util import (
-    SCRAPE_BASE_URL_TEMPLATE,
-    SCRAPE_TABLE_INDEX,
     SCRAPE_MAX_WORKERS,
     load_scraped_province_ids,
     scrape_single_regency
 )
 
 print("=== Scraping Data Tingkat Kabupaten/Kota ===")
-prov_ids = load_scraped_province_ids(GEO_PROVINCES_JSON, RAW_PROVINCES_CSV)
 
-if not prov_ids:
+# Ambil daftar ID / nomor urut provinsi dari file CSV hasil scraping provinsi
+province_ids = load_scraped_province_ids(RAW_PROVINCES_CSV)
+
+# Validasi ketersediaan data ID provinsi
+if not province_ids:
     print("Tidak ada ID provinsi yang ditemukan. Pastikan data provinsi telah discrape terlebih dahulu.")
 else:
-    print(f"Memulai scraping {len(prov_ids)} kabupaten/kota dengan {SCRAPE_MAX_WORKERS} worker threads...")
-    all_rows = []
-    final_headers = []
+    print(f"Memulai scraping {len(province_ids)} kabupaten/kota dengan {SCRAPE_MAX_WORKERS} worker threads...")
 
+    all_regencies_rows = []
+    final_table_headers = []
+
+    # Jalankan proses scraping secara paralel menggunakan ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=SCRAPE_MAX_WORKERS) as executor:
-        futures = {
-            executor.submit(scrape_single_regency, pid, SCRAPE_BASE_URL_TEMPLATE, SCRAPE_TABLE_INDEX): pid
-            for pid in prov_ids
-        }
-        for future in as_completed(futures):
-            pid = futures[future]
-            try:
-                h, r = future.result()
-                if h and not final_headers:
-                    # Prepend province_id to raw table headers
-                    final_headers = ['province_id'] + h
-                all_rows.extend(r)
-                print(f"Provinsi ID {pid}: Berhasil mengekstrak {len(r)} baris kabupaten/kota.")
-            except Exception as e:
-                print(f"Provinsi ID {pid} gagal diekstrak: {e}")
+        
+        # Daftarkan setiap task scraping ke executor secara eksplisit
+        active_futures = {}
+        for province_id in province_ids:
+            future_task = executor.submit(scrape_single_regency, province_id)
+            active_futures[future_task] = province_id
 
-    if final_headers and all_rows:
-        df_reg = pd.DataFrame(all_rows, columns=final_headers)
-        df_reg.to_csv(RAW_REGENCIES_CSV, index=False)
-        print(f"Ekstraksi data kabupaten/kota selesai ({len(df_reg)} entri).")
+        # Kumpulkan hasil scraping dari task yang selesai
+        for future_task in as_completed(active_futures):
+            province_id = active_futures[future_task]
+            try:
+                table_headers, table_rows = future_task.result()
+
+                # Tetapkan header tabel jika belum diatur
+                if table_headers and not final_table_headers:
+                    final_table_headers = ["province_id"] + table_headers
+
+                all_regencies_rows.extend(table_rows)
+                print(f"Provinsi ID {province_id}: Berhasil mengekstrak {len(table_rows)} baris kabupaten/kota.")
+
+            except Exception as error_message:
+                print(f"Provinsi ID {province_id} gagal diekstrak: {error_message}")
+
+    # Simpan hasil akhir ke file CSV
+    if final_table_headers and all_regencies_rows:
+        regencies_dataframe = pd.DataFrame(all_regencies_rows, columns=final_table_headers)
+        regencies_dataframe.to_csv(RAW_REGENCIES_CSV, index=False)
+        print(f"Ekstraksi data kabupaten/kota selesai ({len(regencies_dataframe)} entri).")
     else:
         print("Tidak ada data kabupaten/kota yang berhasil diekstrak.")
