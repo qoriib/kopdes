@@ -14,9 +14,11 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  # Cloudflare Account & API Credentials (used by DVC, Wrangler, D1 & Pages)
+  # Cloudflare Account & API Credentials (used by DVC, Wrangler, D1, Pages & AI Gateway)
   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
   CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  CLOUDFLARE_AI_GATEWAY_ID: ${{ vars.CLOUDFLARE_AI_GATEWAY_ID || 'simkopdes' }}
+  CLOUDFLARE_AI_MODEL: ${{ vars.CLOUDFLARE_AI_MODEL || '@cf/meta/llama-3.3-70b-instruct' }}
 
 jobs:
   scrape:

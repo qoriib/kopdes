@@ -4,6 +4,12 @@ import os
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SRC_DIR)
 
+# Cloudflare Workers AI & AI Gateway Configuration (sesuai environment variable main.yml)
+CLOUDFLARE_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID") or os.getenv("CF_ACCOUNT_ID", "")
+CLOUDFLARE_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN") or os.getenv("CF_API_TOKEN", "")
+CLOUDFLARE_AI_GATEWAY_ID = os.getenv("CLOUDFLARE_AI_GATEWAY_ID") or os.getenv("CF_AI_GATEWAY_ID", "simkopdes")
+CLOUDFLARE_AI_MODEL = os.getenv("CLOUDFLARE_AI_MODEL") or os.getenv("CF_AI_MODEL", "@cf/meta/llama-3.3-70b-instruct")
+
 ARTIFACT_DIR = os.path.join(BASE_DIR, "artifact")
 SCRAPE_DIR = os.path.join(ARTIFACT_DIR, "scrape")
 UNDERSTANDING_DIR = os.path.join(ARTIFACT_DIR, "1_understanding")
@@ -71,4 +77,3 @@ REGENCY_COLUMN_MAPPING = {
 
 FEATURE_EVALUATION_JSON = os.path.join(UNDERSTANDING_DIR, "feature_evaluation.json")
 FEATURE_SELECTION_JSON = os.path.join(PREPARATION_DIR, "feature_selection.json")
-
