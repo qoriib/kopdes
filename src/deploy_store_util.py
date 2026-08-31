@@ -156,8 +156,7 @@ def dump_tables_to_sql(table_data_map: dict[str, pd.DataFrame], output_path: str
             dataframe_filtered.to_sql(table_name, sqlite_connection, if_exists="append", index=False)
 
     sql_statements = [
-        f"-- Cloudflare D1 SQL Seed (Snapshot Date: {snapshot_date})",
-        "BEGIN TRANSACTION;"
+        f"-- Cloudflare D1 SQL Seed (Snapshot Date: {snapshot_date})"
     ]
 
     for statement in sqlite_connection.iterdump():
@@ -165,10 +164,8 @@ def dump_tables_to_sql(table_data_map: dict[str, pd.DataFrame], output_path: str
             replaced_statement = statement.replace("INSERT INTO", "INSERT OR REPLACE INTO")
             sql_statements.append(replaced_statement)
 
-    sql_statements.append("COMMIT;\n")
-
     output_file = open(output_path, "w", encoding="utf-8")
-    output_file.write("\n".join(sql_statements))
+    output_file.write("\n".join(sql_statements) + "\n")
     output_file.close()
 
     sqlite_connection.close()
