@@ -1,11 +1,10 @@
 import os
 import pandas as pd
 from bs4 import BeautifulSoup
-from playwright.sync_api import Page, sync_playwright, TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError
 
 # KONFIGURASI PARAMETER SCRAPING
 SCRAPE_TABLE_INDEX = 2
-SCRAPE_MAX_WORKERS = 5
 SCRAPE_TARGET_URL = "https://simkopdes.go.id/pers/dashboard"
 SCRAPE_BASE_URL_TEMPLATE = "https://simkopdes.go.id/pers/dashboard/district/{id}"
 
@@ -15,10 +14,10 @@ def parse_table_from_html(html_content: str, target_index: int = 2) -> tuple[lis
     soup = BeautifulSoup(html_content, "html.parser")
     table_elements = soup.find_all("table")
 
-    if not table_elements or len(table_elements) <= target_index:
+    if not table_elements:
         return [], []
 
-    selected_table = table_elements[target_index]
+    selected_table = table_elements[target_index - 1]
 
     # Ekstrak header tabel
     header_names = []
@@ -93,25 +92,3 @@ def load_scraped_province_ids(raw_prov_csv: str) -> list:
         print(f"Gagal membaca ID provinsi dari {raw_prov_csv}: {error_message}")
 
     return province_ids
-
-
-# FUNGSI SCRAPING KABUPATEN/KOTA BERDASARKAN ID PROVINSI
-def scrape_single_regency(province_id: int) -> tuple[list, list]:
-    target_district_url = SCRAPE_BASE_URL_TEMPLATE.format(id=province_id)
-
-    with sync_playwright() as playwright_instance:
-        browser = playwright_instance.chromium.launch(headless=True)
-        page = browser.new_page()
-        table_headers, table_rows = scrape_table_with_pagination(
-            page,
-            target_district_url,
-            target_table_index=SCRAPE_TABLE_INDEX
-        )
-        browser.close()
-
-    labeled_rows_with_province_id = []
-    for row_data in table_rows:
-        row_with_id = [province_id] + row_data
-        labeled_rows_with_province_id.append(row_with_id)
-
-    return table_headers, labeled_rows_with_province_id
