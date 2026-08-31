@@ -1,11 +1,54 @@
-@import "@fontsource-variable/figtree";
-
-:root {
-  font-family: 'Figtree Variable', 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-html, body {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100%;
+}
+
+/* Integrasi Styling Leaflet dengan CSS Variables Astryx */
+.leaflet-container {
+  font-family: var(--font-family-body) !important;
+  border-radius: var(--radius-element);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-body) !important;
+  z-index: 1;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--color-background-popover) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: var(--radius-element) !important;
+  box-shadow: var(--shadow-med) !important;
+  border: 1px solid var(--color-border);
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-tip {
+  background: var(--color-background-popover) !important;
+}
+
+.leaflet-popup-content {
+  margin: var(--spacing-2) var(--spacing-3) !important;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.leaflet-bar {
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-low) !important;
+  border-radius: var(--radius-inner) !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: var(--color-background-surface) !important;
+  color: var(--color-text-primary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--color-overlay-hover) !important;
 }
