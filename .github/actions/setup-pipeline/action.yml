@@ -35,9 +35,8 @@ runs:
         key: venv-${{ runner.os }}-${{ inputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
     - name: Install Dependencies
-      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       shell: bash
-      run: poetry install --no-interaction --no-root
+      run: poetry install --no-interaction
 
     - name: DVC Pull
       shell: bash
