@@ -23,7 +23,7 @@ jobs:
     name: Web Scraping - SIMKOPDES Ingestion
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -32,13 +32,11 @@ jobs:
 
       - name: Install Playwright
         shell: bash
-        run: playwright install chromium --with-deps
+        run: poetry run playwright install chromium --with-deps
 
-      - name: Run Scraper Scripts
+      - name: Run Scraper via Taskipy
         shell: bash
-        run: |
-          python src/scrape_provinces.py
-          python src/scrape_regencies.py
+        run: poetry run task scrape
 
       - name: Push Pipeline Data & Git State
         uses: ./.github/actions/push-pipeline
@@ -46,7 +44,7 @@ jobs:
           commit-message: "auto: update scrape stage artifacts [skip ci]"
 
       - name: Upload Scrape Files
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: scrape-files
           path: |
@@ -58,7 +56,7 @@ jobs:
     needs: scrape
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -66,7 +64,7 @@ jobs:
         uses: ./.github/actions/setup-pipeline
 
       - name: Run DVC Pipeline
-        run: dvc repro
+        run: poetry run dvc repro
 
       - name: Setup CML
         uses: iterative/setup-cml@v2
@@ -85,7 +83,7 @@ jobs:
             if [ -f "$nb" ]; then
               stage=$(basename "$nb" .ipynb)
               echo "Processing $nb ($stage)..."
-              jupyter nbconvert --to markdown --no-input "$nb" --output-dir src/outs
+              poetry run jupyter nbconvert --to markdown --no-input "$nb" --output-dir src/outs
               
               if [ -d "src/outs/${stage}_files" ]; then
                 for img in src/outs/${stage}_files/*.png; do
@@ -104,13 +102,8 @@ jobs:
             fi
           done
 
-      - name: Generate AI Cluster Interpretation & Report
-        run: python src/deploy_interpret.py
-
-      - name: Generate Database Seed SQL (Data & Interpretation)
-        run: |
-          python src/deploy_store_data.py
-          python src/deploy_store_interpret.py
+      - name: Generate AI Cluster Interpretation & Database Seed SQL
+        run: poetry run task deploy_prepare
 
       - name: Apply Remote Database Migrations
         uses: cloudflare/wrangler-action@v4
@@ -136,14 +129,14 @@ jobs:
           commit-message: "auto: update pipeline artifacts [skip ci]"
 
       - name: Upload Notebook Reports
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: notebook-reports
           path: |
             src/outs/**
 
       - name: Upload Prepared Files
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: prepared-files
           path: |
@@ -151,7 +144,7 @@ jobs:
             artifact/2_preparation/feature_selection.json
 
       - name: Upload Modeling Files
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: modeling-files
           path: |
@@ -159,7 +152,7 @@ jobs:
             artifact/3_modeling/agglomerative_model.pkl
 
       - name: Upload Evaluation Files
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: evaluation-files
           path: |
@@ -167,7 +160,7 @@ jobs:
             artifact/4_evaluation/model_comparison.json
 
       - name: Upload Deployment Files
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: deployment-files
           path: |
@@ -181,12 +174,12 @@ jobs:
     needs: pipeline
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
-          node-version: 23
+          node-version: 22
 
       - name: Install dependencies
         run: |
@@ -206,12 +199,12 @@ jobs:
     needs: pipeline
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v4
         with:
-          node-version: 23
+          node-version: 22
 
       - name: Install dependencies
         run: |

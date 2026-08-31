@@ -45,7 +45,7 @@ interface SummaryData {
 interface Province {
   id: number
   province_name: string
-  jumlah_koperasi: number
+  total_koperasi: number
   koperasi_nib: number
   koperasi_npwp: number
   koperasi_rat: number
@@ -56,7 +56,7 @@ interface Regency {
   province_id: number
   province_name: string
   regency_name: string
-  jumlah_koperasi: number
+  total_koperasi: number
   koperasi_nib: number
   koperasi_npwp: number
   koperasi_rat: number
@@ -399,7 +399,7 @@ function ClusterMap({ regencies, labels, theme }: { regencies: Regency[], labels
               </span>
             </div>
             <div style="display: grid; grid-template-columns: auto auto; gap: 2px 8px; border-top: 1px solid #e5e7eb; padding-top: 6px;">
-              <span style="color: #4b5563;">Koperasi:</span><strong style="text-align: right;">${reg.jumlah_koperasi.toLocaleString()}</strong>
+              <span style="color: #4b5563;">Koperasi:</span><strong style="text-align: right;">${(reg.total_koperasi || 0).toLocaleString()}</strong>
               <span style="color: #4b5563;">NIB:</span><strong style="text-align: right;">${reg.koperasi_nib.toLocaleString()}</strong>
               <span style="color: #4b5563;">NPWP:</span><strong style="text-align: right;">${reg.koperasi_npwp.toLocaleString()}</strong>
               <span style="color: #4b5563;">RAT:</span><strong style="text-align: right;">${reg.koperasi_rat.toLocaleString()}</strong>

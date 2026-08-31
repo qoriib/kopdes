@@ -4,15 +4,19 @@ export interface RegencyRow {
   id: number;
   province_id: number;
   regency_name: string;
-  jumlah_koperasi: number;
+  total_koperasi: number;
   koperasi_nib: number;
   koperasi_npwp: number;
   koperasi_rat: number;
+  simpanan_pokok?: number;
+  simpanan_wajib?: number;
+  volume_transaksi?: number;
   nilai_transaksi: number;
   cluster_label: number;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   province_name?: string; // from join
+  upload_date?: string;
 }
 
 export class Regency extends BaseModel<RegencyRow> {
@@ -94,7 +98,7 @@ export class Regency extends BaseModel<RegencyRow> {
   }> {
     const sql = `
       SELECT 
-        SUM(jumlah_koperasi) as total_koperasi,
+        SUM(total_koperasi) as total_koperasi,
         SUM(koperasi_nib) as total_nib,
         SUM(koperasi_npwp) as total_npwp,
         SUM(koperasi_rat) as total_rat,
@@ -116,7 +120,7 @@ export class Regency extends BaseModel<RegencyRow> {
       SELECT 
         cluster_label,
         COUNT(*) as count,
-        AVG(jumlah_koperasi) as avg_koperasi,
+        AVG(total_koperasi) as avg_koperasi,
         AVG(koperasi_nib) as avg_nib,
         AVG(koperasi_npwp) as avg_npwp,
         AVG(koperasi_rat) as avg_rat,

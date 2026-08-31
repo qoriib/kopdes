@@ -1,10 +1,8 @@
 import os
 import json
 from config import INTERPRETATION_JSON, AI_REPORT_MD
-from deploy_util import (
-    load_merged_deployment_data,
-    generate_cluster_typology,
-)
+from deploy_store_util import load_merged_deployment_data
+from deploy_interpret_util import generate_cluster_typology
 
 print("=== Menjalankan Analisis Interpretasi & Tipologi Klaster ===")
 

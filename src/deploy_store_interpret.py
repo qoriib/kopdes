@@ -1,12 +1,10 @@
 import json
+import datetime
 import pandas as pd
 from config import SEED_INTERPRET_SQL, INTERPRETATION_JSON, AI_REPORT_MD
-from deploy_util import (
-    get_current_snapshot_date,
-    dump_tables_to_sql,
-)
+from deploy_store_util import dump_tables_to_sql
 
-snapshot_date = get_current_snapshot_date()
+snapshot_date = datetime.date.today().isoformat()
 print(f"=== Menyimpan Seeder Interpretasi AI (Snapshot: {snapshot_date}) ===")
 
 complete_report_markdown = open(AI_REPORT_MD, "r", encoding="utf-8").read()

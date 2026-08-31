@@ -223,8 +223,8 @@ kopdes/
 │       └── wrangler.json      # Konfigurasi Cloudflare Pages
 ├── dvc.yaml                   # Definisi DAG Pipeline DVC
 ├── params.yaml                # Parameter hyperparameter pipeline
-├── pyproject.toml             # Python package configuration
-└── requirements.txt           # Python dependencies
+├── pyproject.toml             # Python package & Poetry configuration
+├── poetry.lock                # Locked Python dependencies
 ```
 
 ---
@@ -232,7 +232,7 @@ kopdes/
 ## 💻 Panduan Instalasi & Penggunaan Lokal
 
 ### Prasyarat
-- **Python** $\ge$ 3.10
+- **Python** $\ge$ 3.10 & **Poetry**
 - **Node.js** $\ge$ 20 & **npm**
 - **Git** & **DVC**
 
@@ -263,28 +263,23 @@ R2_PUBLIC_URL=https://<your_r2_public_url>
 
 ---
 
-### 2. Setup Python & DVC Data Pipeline
+### 2. Setup Python & Task Runner (Taskipy)
 
 ```bash
-# Buat dan aktifkan virtual environment
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# Linux/macOS:
-source .venv/bin/activate
+# Install dependencies menggunakan Poetry
+poetry install
 
-# Install dependencies Python
-pip install -r requirements.txt
-pip install -e .
+# Install browser Chromium untuk Playwright
+poetry run task playwright_install
 
-# Install browser Chromium untuk scraping (Playwright)
-playwright install chromium --with-deps
+# Jalankan task scraping
+poetry run task scrape
 
 # Unduh dataset cache dari DVC remote (Cloudflare R2)
-dvc pull
+poetry run dvc pull
 
 # Jalankan seluruh pipeline CRISP-DM
-dvc repro
+poetry run task dvc_repro
 ```
 
 ---

@@ -12,7 +12,7 @@ runs:
   steps:
     - name: DVC Push
       shell: bash
-      run: dvc push
+      run: poetry run dvc push
 
     - name: Commit and Push All Changes
       shell: bash

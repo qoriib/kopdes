@@ -1,13 +1,43 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "kopdes"
 version = "1.0.0"
 description = "CRISP-DM Analytics & MLOps Pipeline for SIMKOPDES"
-authors = [{ name = "Qoriib" }]
-requires-python = ">=3.10"
+authors = ["Qoriib"]
+packages = [{ include = "*", from = "src" }]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+beautifulsoup4 = "^4.0.0"
+dvc = "^3.0.0"
+dvc-s3 = "^3.0.0"
+ipykernel = "^6.0.0"
+kneed = "^0.8.5"
+matplotlib = "^3.0.0"
+nbconvert = "^7.0.0"
+numpy = "^1.24.0"
+pandas = "^2.0.0"
+papermill = "^2.0.0"
+playwright = "^1.0.0"
+pyyaml = "^6.0.0"
+scikit-learn = "^1.0.0"
+seaborn = "^0.13.0"
+tabulate = "^0.9.0"
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.0.0"
+
+[tool.taskipy.tasks]
+scrape_provinces = { cmd = "python src/scrape_provinces.py", help = "Scrape data tabel tingkat provinsi" }
+scrape_regencies = { cmd = "python src/scrape_regencies.py", help = "Scrape data tabel tingkat kabupaten/kota" }
+scrape = { cmd = "task scrape_provinces && task scrape_regencies", help = "Jalankan seluruh proses scraping (provinsi lalu kabupaten)" }
+playwright_install = { cmd = "playwright install chromium", help = "Install browser Chromium untuk Playwright" }
+dvc_repro = { cmd = "dvc repro", help = "Jalankan pipeline CRISP-DM melalui DVC" }
+deploy_interpret = { cmd = "python src/deploy_interpret.py", help = "Generate analisis interpretasi & laporan tipologi klaster" }
+deploy_store_data = { cmd = "python src/deploy_store_data.py", help = "Generate SQL seeder data wilayah (provinsi & kabupaten)" }
+deploy_store_interpret = { cmd = "python src/deploy_store_interpret.py", help = "Generate SQL seeder laporan interpretasi AI" }
+deploy_seed = { cmd = "task deploy_store_data && task deploy_store_interpret", help = "Generate seluruh file SQL seeder database" }
+deploy_prepare = { cmd = "task deploy_interpret && task deploy_seed", help = "Jalankan interpretasi dan generate seluruh seeder SQL" }

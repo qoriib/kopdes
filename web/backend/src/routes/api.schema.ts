@@ -51,10 +51,17 @@ export const SummaryResponseSchema = z.object({
 export const ProvinceRowSchema = z.object({
   id: z.number(),
   province_name: z.string(),
-  jumlah_koperasi: z.number(),
+  total_koperasi: z.number(),
   koperasi_nib: z.number(),
   koperasi_npwp: z.number(),
-  koperasi_rat: z.number()
+  koperasi_rat: z.number(),
+  simpanan_pokok: z.number().optional(),
+  simpanan_wajib: z.number().optional(),
+  volume_transaksi: z.number().optional(),
+  nilai_transaksi: z.number().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  upload_date: z.string().optional()
 }).openapi('ProvinceRow');
 
 export const ProvincesResponseSchema = z.object({
@@ -66,15 +73,19 @@ export const RegencyRowSchema = z.object({
   id: z.number(),
   province_id: z.number(),
   regency_name: z.string(),
-  jumlah_koperasi: z.number(),
+  total_koperasi: z.number(),
   koperasi_nib: z.number(),
   koperasi_npwp: z.number(),
   koperasi_rat: z.number(),
+  simpanan_pokok: z.number().optional(),
+  simpanan_wajib: z.number().optional(),
+  volume_transaksi: z.number().optional(),
   nilai_transaksi: z.number(),
   cluster_label: z.number(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
-  province_name: z.string().optional()
+  province_name: z.string().optional(),
+  upload_date: z.string().optional()
 }).openapi('RegencyRow');
 
 export const RegenciesResponseSchema = z.object({
