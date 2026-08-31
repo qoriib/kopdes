@@ -869,12 +869,12 @@ stages:
     deps:
     - path: artifact/scrape/scraped_provinces.csv
       hash: md5
-      md5: d8e25afa473b9a0e4bedc4e8879f4a88
-      size: 4067
+      md5: 643c8a7eb8f35455f5a348b6ded12d1e
+      size: 4069
     - path: artifact/scrape/scraped_regencies.csv
       hash: md5
-      md5: 5096e88535527c2a567fab970faff370
-      size: 36533
+      md5: cbc9799768a59d075d779e85ebb0fa82
+      size: 36535
     - path: src/1_understanding.ipynb
       hash: md5
       md5: 3caf8cf0348050f8dc2236bc3053bd33

@@ -1,5 +1,5 @@
 outs:
-- md5: d8e25afa473b9a0e4bedc4e8879f4a88
-  size: 4067
+- md5: 643c8a7eb8f35455f5a348b6ded12d1e
+  size: 4069
   hash: md5
   path: scraped_provinces.csv
